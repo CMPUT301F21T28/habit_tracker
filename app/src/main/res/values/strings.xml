@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Habit Tracker</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="StringEdit">Edit</string>
+    <string name="StringHabitTitle">Habit Title</string>
+    <string name="StringHabitReason">Habit Reason</string
+        >
+    <string name="StringDatOofStarting">Date of Starting</string>
+    <string name="StringRepeat">Repeat</string>
+    <string name="StringVisualIndicator">Visual Indicator</string>
 </resources>

@@ -27,5 +27,14 @@
         android:id="@+id/habitListFragment"
         android:name="com.example.habit_tracker.HabitListFragment"
         android:label="fragment_habit_list"
-        tools:layout="@layout/fragment_habit_list" />
+        tools:layout="@layout/fragment_habit_list" >
+        <action
+            android:id="@+id/action_habitListFragment_to_habitAddFragment"
+            app:destination="@id/habitAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/habitAddFragment"
+        android:name="com.example.habit_tracker.HabitAddFragment"
+        android:label="fragment_habit_add"
+        tools:layout="@layout/fragment_habit_add" />
 </navigation>

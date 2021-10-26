@@ -16,10 +16,9 @@ import android.view.ViewGroup;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class MainPageFragment extends Fragment {
+public class HabitAddFragment extends Fragment {
 
-
-    public MainPageFragment() {
+    public HabitAddFragment() {
         // Required empty public constructor
     }
 
@@ -32,19 +31,7 @@ public class MainPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_page, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getView().findViewById(R.id.mine_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_mainPageFragment_to_habitListFragment);
-            }
-        });
+        return inflater.inflate(R.layout.fragment_habit_add, container, false);
     }
 
 }

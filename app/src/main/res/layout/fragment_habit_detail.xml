@@ -7,6 +7,4 @@
     tools:context=".HabitDetailFragment">
 
 
-    <include layout="@layout/fragment_habit_general"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

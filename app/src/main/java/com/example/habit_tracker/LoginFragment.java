@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class LoginFragment extends Fragment {
     private Button signInButton;
     private EditText editTextUsername, editTextPassword;
+    private TextView navToSignup;
     FirebaseFirestore db;
 
     Button toLoginButton;
@@ -71,8 +73,17 @@ public class LoginFragment extends Fragment {
         signInButton = (Button) getView().findViewById(R.id.Nav_to_mainpage);
         editTextUsername = (EditText) getView().findViewById(R.id.username);
         editTextPassword = (EditText) getView().findViewById(R.id.password);
+        navToSignup = (TextView) getView().findViewById(R.id.Nav_to_signup);
 
         db = FirebaseFirestore.getInstance();
+
+        navToSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_loginFragment_to_signupFragment);
+            }
+        });
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,13 +135,13 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        getView().findViewById(R.id.toSignup).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_loginFragment_to_signupFragment);
-            }
-        });
+//        getView().findViewById(R.id.toSignup).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                NavController controller = Navigation.findNavController(view);
+//                controller.navigate(R.id.action_loginFragment_to_signupFragment);
+//            }
+//        });
     }
 
 }

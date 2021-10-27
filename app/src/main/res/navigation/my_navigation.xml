@@ -29,12 +29,38 @@
         android:label="fragment_habit_list"
         tools:layout="@layout/fragment_habit_list" >
         <action
+            android:id="@+id/action_habitListFragment_to_habitDetailFragment"
+            app:destination="@id/habitDetailFragment" />
+        <action
             android:id="@+id/action_habitListFragment_to_habitAddFragment"
             app:destination="@id/habitAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/habitDetailFragment"
+        android:name="com.example.habit_tracker.HabitDetailFragment"
+        android:label="fragment_habit_detail"
+        tools:layout="@layout/fragment_habit_detail" >
+        <action
+            android:id="@+id/action_habitDetailFragment_to_habitEditFragment"
+            app:destination="@id/habitEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/habitEditFragment"
+        android:name="com.example.habit_tracker.HabitEditFragment"
+        android:label="fragment_habit_edit"
+        tools:layout="@layout/fragment_habit_edit" >
+        <action
+            android:id="@+id/action_habitEditFragment_to_habitDetailFragment"
+            app:destination="@id/habitDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitAddFragment"
         android:name="com.example.habit_tracker.HabitAddFragment"
         android:label="fragment_habit_add"
-        tools:layout="@layout/fragment_habit_add" />
+        tools:layout="@layout/fragment_habit_add" >
+        <action
+            android:id="@+id/action_habitAddFragment_to_habitListFragment"
+            app:destination="@id/habitListFragment" />
+    </fragment>
+
 </navigation>

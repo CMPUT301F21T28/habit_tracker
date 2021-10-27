@@ -59,6 +59,7 @@
         android:layout_marginLeft="10pt"
         android:layout_marginRight="10pt"
         android:hint="Please enter your password here."
+        android:inputType="textPassword"
         android:minHeight="48dp" />
 
     <Button

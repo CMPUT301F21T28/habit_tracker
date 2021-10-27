@@ -12,12 +12,15 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
+
+    Button toLoginButton;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -32,7 +35,9 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        return view;
     }
 
     @Override
@@ -43,6 +48,14 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_loginFragment_to_mainPageFragment);
+            }
+        });
+
+        getView().findViewById(R.id.toSignup).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_loginFragment_to_signupFragment);
             }
         });
     }

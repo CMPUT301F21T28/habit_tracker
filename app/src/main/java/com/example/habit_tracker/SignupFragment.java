@@ -67,9 +67,8 @@ public class SignupFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_signup, container, false);
-
-        return view;
+        return LayoutInflater.from(getActivity()).inflate(R.layout.fragment_signup, null);
+        // return inflater.inflate(R.layout.fragment_signup, container, false);
     }
 
     @Override

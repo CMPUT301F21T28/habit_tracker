@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.habit_tracker.LoginFragment"
-        android:label="fragment_login"
+        android:label="Login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_mainPageFragment"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/mainPageFragment"
         android:name="com.example.habit_tracker.MainPageFragment"
-        android:label="fragment_main_page"
+        android:label="Main"
         tools:layout="@layout/fragment_main_page" >
         <action
             android:id="@+id/action_mainPageFragment_to_habitListFragment"
@@ -26,15 +26,41 @@
     <fragment
         android:id="@+id/habitListFragment"
         android:name="com.example.habit_tracker.HabitListFragment"
-        android:label="fragment_habit_list"
+        android:label="Habit List"
         tools:layout="@layout/fragment_habit_list" >
+        <action
+            android:id="@+id/action_habitListFragment_to_habitDetailFragment"
+            app:destination="@id/habitDetailFragment" />
         <action
             android:id="@+id/action_habitListFragment_to_habitAddFragment"
             app:destination="@id/habitAddFragment" />
     </fragment>
     <fragment
+        android:id="@+id/habitDetailFragment"
+        android:name="com.example.habit_tracker.HabitDetailFragment"
+        android:label="Habit Detail"
+        tools:layout="@layout/fragment_habit_detail" >
+        <action
+            android:id="@+id/action_habitDetailFragment_to_habitEditFragment"
+            app:destination="@id/habitEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/habitEditFragment"
+        android:name="com.example.habit_tracker.HabitEditFragment"
+        android:label="Edit A Habit"
+        tools:layout="@layout/fragment_habit_edit" >
+        <action
+            android:id="@+id/action_habitEditFragment_to_habitDetailFragment"
+            app:destination="@id/habitDetailFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/habitAddFragment"
         android:name="com.example.habit_tracker.HabitAddFragment"
-        android:label="fragment_habit_add"
-        tools:layout="@layout/fragment_habit_add" />
+        android:label="Add A Habit"
+        tools:layout="@layout/fragment_habit_add" >
+        <action
+            android:id="@+id/action_habitAddFragment_to_habitListFragment"
+            app:destination="@id/habitListFragment" />
+    </fragment>
+
 </navigation>

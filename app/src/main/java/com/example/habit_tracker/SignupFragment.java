@@ -67,29 +67,32 @@ public class SignupFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return LayoutInflater.from(getActivity()).inflate(R.layout.fragment_signup, null);
-        // return inflater.inflate(R.layout.fragment_signup, container, false);
+        return inflater.inflate(R.layout.fragment_signup, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        // intializing connection to firestore
+        db = FirebaseFirestore.getInstance();
         // bind editText fields to their variable
-        username = getView().findViewById(R.id.editText_username);
-        realName = getView().findViewById(R.id.editText_name);
-        gender = getView().findViewById(R.id.editText_gender);
-        email = getView().findViewById(R.id.editText_email_address);
-        firstPassword = getView().findViewById(R.id.editText_first_password);
-        secondPassword = getView().findViewById(R.id.editText_second_password);
-        signupButton = getView().findViewById(R.id.signupButton);
-        returnToLoginButton = getView().findViewById(R.id.returnToLoginFloatingActionButton);
+        username = (EditText) getView().findViewById(R.id.editText_username);
+        realName = (EditText) getView().findViewById(R.id.editText_name);
+        gender = (EditText) getView().findViewById(R.id.editText_gender);
+        email = (EditText) getView().findViewById(R.id.editText_email_address);
+        firstPassword = (EditText) getView().findViewById(R.id.editText_first_password);
+        secondPassword = (EditText) getView().findViewById(R.id.editText_second_password);
+        signupButton = (Button) getView().findViewById(R.id.signupButton);
+        returnToLoginButton = (FloatingActionButton) getView().findViewById(R.id.returnToLoginFloatingActionButton);
 
         returnToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                NavController controller = Navigation.findNavController(view);
+//                controller.navigate(R.id.action_signupFragment_to_loginFragment);
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_signupFragment_to_loginFragment);
+                Toast.makeText(getContext(), "Return to Login Clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -97,15 +100,42 @@ public class SignupFragment extends DialogFragment {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // **** check if fields are valid
+                // **** check if fields are valid, setError on those that arent valid
+                // **** if all fields are valid, check if username already exists
+                // **** if username does exist, return error
+                // **** if username does NOT exist, then we sign them up
                 final boolean[] isValid = {true};
                 // check if username valid
-                if (0 >= username.getText().toString().length() || username.toString().length() >= 20) {
+                if (0 >= username.getText().toString().length() || username.getText().toString().length() >= 20) {
+                    isValid[0] = false;
                     username.setError("Username not valid. Please ensure that it is between 0 and 20 characters.");
+                    return;
                 }
+
+                // check realname - as long as not empty
+                if (realName.getText().toString().isEmpty()) {
+                    isValid[0] = false;
+                    realName.setError("This field cannot be empty.");
+                    return;
+                }
+
+                // check if password is empty
+                if (firstPassword.getText().toString().isEmpty()) {
+                    isValid[0] = false;
+                    firstPassword.setError("Password cannot be empty. Please try again.");
+                    return;
+                }
+
+                // check password matching
+                if (!firstPassword.getText().toString().equals(secondPassword.getText().toString())) {
+                    isValid[0] = false;
+                    secondPassword.setError("Passwords do not match. Please try again.");
+                    return;
+                }
+
                 // check if username already exists in db
                 // https://stackoverflow.com/questions/52861391/firestore-checking-if-username-already-exists
-
+                Toast.makeText(getContext(), username.getText().toString(), Toast.LENGTH_SHORT).show();
                 DocumentReference usersRef = db.collection("Users").document(username.getText().toString());
                 usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -113,73 +143,45 @@ public class SignupFragment extends DialogFragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
+                                // if the username is taken
                                 Log.d("Check Username", "Username already exists.");
-                                username.setError("Username already exists. Please choose another");
                                 isValid[0] = false;
-                            } else {
+                                username.setError("Username already exists. Please choose another");
+                                return;
+                            } else { // if the username is not taken
                                 Log.d("Check Username", "Username is not taken.");
+                                // username not taken
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("username", username.getText().toString());
+                                data.put("realname", realName.getText().toString());
+                                data.put("gender", gender.getText().toString());
+                                data.put("emailaddress", email.getText().toString());
+                                data.put("password", firstPassword.getText().toString());
+                                CollectionReference Users = db.collection("Users");
+                                Users.document(username.getText().toString()).set(data)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(getContext(), "Successful Registration. Welcome to the Habit Tracker!", Toast.LENGTH_SHORT).show();
+                                                NavController controller = Navigation.findNavController(view);
+                                                controller.navigate(R.id.action_signupFragment_to_loginFragment);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getContext(), "Registration Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
                             }
                         } else {
                             Log.d("Document Get", "Failed");
                             Toast.makeText(getContext(), "Error accessing database", Toast.LENGTH_SHORT).show();
                             isValid[0] = false;
+                            return;
                         }
                     }
                 });
-
-                // check realname - as long as not empty
-                if (realName.getText().toString().isEmpty()) {
-                    realName.setError("This field cannot be empty.");
-                    isValid[0] = false;
-                }
-
-                // check if password is empty
-                if (firstPassword.getText().toString().isEmpty()) {
-                    firstPassword.setError("Password cannot be empty. Please try again.");
-                    isValid[0] = false;
-                }
-
-                // check password matching
-                if (!firstPassword.getText().toString().equals(secondPassword.getText().toString())) {
-                    secondPassword.setError("Passwords do not match. Please try again.");
-                    isValid[0] = false;
-                }
-
-                // **** if not all fields are valid return errors
-                // **** if all fields are valid write to the database
-                if (isValid[0] == false) {
-                    // there are errors
-                    Toast.makeText(getContext(), "Some fields are invalid. Please try again.", Toast.LENGTH_LONG).show();
-                } else {
-                    // no errors
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("username", username.getText().toString());
-                    data.put("realname", realName.getText().toString());
-                    data.put("gender", gender.getText().toString());
-                    data.put("emailaddress", email.getText().toString());
-                    data.put("password", firstPassword.getText().toString());
-                    CollectionReference Users = db.collection("Users");
-                    Users.document(username.getText().toString()).set(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getContext(), "Successful Registration. Welcome to the Habit Tracker!", Toast.LENGTH_SHORT).show();
-                                    // Sets all fields empty in even of success
-                                    username.setText("");
-                                    realName.setText("");
-                                    gender.setText("");
-                                    email.setText("");
-                                    firstPassword.setText("");
-                                    secondPassword.setText("");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getContext(), "Registration Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                }
             }
         });
     }

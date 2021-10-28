@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_habitListFragment_to_habitAddFragment"
             app:destination="@id/habitAddFragment" />
+        <action
+            android:id="@+id/action_habitListFragment_to_addHabbitEventFragment"
+            app:destination="@id/addHabbitEventFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitDetailFragment"
@@ -74,5 +77,18 @@
             android:id="@+id/action_signupFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addHabbitEventFragment"
+        android:name="com.example.habit_tracker.AddHabbitEventFragment"
+        android:label="fragment_add_habbit_event"
+        tools:layout="@layout/fragment_add_habbit_event" >
+        <action
+            android:id="@+id/action_addHabbitEventFragment_to_addEventButtomClickedFragment"
+            app:destination="@id/addEventButtomClickedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEventButtomClickedFragment"
+        android:name="com.example.habit_tracker.AddEventButtomClickedFragment"
+        android:label="AddEventButtomClickedFragment" />
 
 </navigation>

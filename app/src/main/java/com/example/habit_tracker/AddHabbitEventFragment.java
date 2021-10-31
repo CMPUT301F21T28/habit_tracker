@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -85,6 +89,10 @@ public class AddHabbitEventFragment extends Fragment {
                 getActivity(),android.R.layout.simple_list_item_1,event_list);
         listView.setAdapter(listViewAdapter);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String habitId = "test";
+        final CollectionReference collectionReference = db.collection("Habbit_events");
+
         FloatingActionButton add_event = getView().findViewById(R.id.floatingActionButtonAdd);
         add_event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +100,11 @@ public class AddHabbitEventFragment extends Fragment {
                 //move to next fragment
                 //Intent intent = new Intent(AddHabbitEventFragment.this,AddEventButtomClickedFragment.class);
                 //startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("habit",habitId);
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_addHabbitEventFragment_to_addEventButtomClickedFragment);
+
 
             }
         });

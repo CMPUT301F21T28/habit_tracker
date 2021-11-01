@@ -1,91 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainPageFragment">
 
-
-    <ListView
-        android:id="@+id/habit_list"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text=""
-        android:textIsSelectable="true"
-        android:textSize="36sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_above="@+id/bottom_navigation">
 
-
-    </ListView>
-
-    <LinearLayout
-        android:id="@+id/friends_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
-
-        <ImageButton
-            android:id="@+id/imageButton_friends"
-            android:layout_width="210dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_friends"
-            android:clickable="false"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-        </ImageButton>
-
-        <TextView
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/button_mine"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Friends"
-            android:textSize="18dp"
-            android:clickable="false"
-            android:textColor="@color/purple_500"/>
+            android:text="Mine" />
+    </FrameLayout>
 
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/mine_button"
-        android:clickable="true"
-        android:layout_width="wrap_content"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_alignParentBottom="true"
+        android:background="#8A2BE2"
+        app:itemRippleColor="@color/white"
+        app:itemIconTint="@color/icon_color"
+        app:menu="@menu/bottom_navigation">
 
-        <ImageButton
-            android:id="@+id/imageButton_mine"
-            android:layout_width="210dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_mine"
-            android:clickable="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-        </ImageButton>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:clickable="false"
-            android:text="Mine"
-            android:textSize="18dp"
-            android:textColor="@color/purple_500"/>
-
-
-    </LinearLayout>
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
 
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

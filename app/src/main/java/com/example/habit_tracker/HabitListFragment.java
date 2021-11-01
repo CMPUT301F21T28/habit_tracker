@@ -19,6 +19,7 @@ import android.view.ViewGroup;
  */
 public class HabitListFragment extends Fragment {
 
+    private static final String TAG = "MyActivity";
 
     public HabitListFragment() {
         // Required empty public constructor
@@ -33,6 +34,7 @@ public class HabitListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d(TAG, "onCreate: runable");
         return inflater.inflate(R.layout.fragment_habit_list, container, false);
     }
     @Override

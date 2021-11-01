@@ -1,13 +1,23 @@
 package com.example.habit_tracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class MainActivity extends AppCompatActivity {
+
+    FirebaseFirestore db;
+    Fragment fragment;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     NavController navController;
 

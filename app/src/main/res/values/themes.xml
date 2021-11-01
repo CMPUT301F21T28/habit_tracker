@@ -13,4 +13,15 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="signup_rules">
+        <item name="android:textColor">#cc1b26</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:layout_gravity">start</item>
+    </style>
+    <style name="signup_labels">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
 </resources>

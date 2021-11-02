@@ -127,8 +127,10 @@ public class HabitListFragment extends Fragment {
         getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", userName);
                 NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_habitListFragment_to_habitAddFragment);
+                controller.navigate(R.id.action_habitListFragment_to_habitAddFragment, bundle);
             }
         });
 

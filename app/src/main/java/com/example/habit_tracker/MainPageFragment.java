@@ -18,6 +18,8 @@ import android.view.ViewGroup;
  */
 public class MainPageFragment extends Fragment {
 
+    private String username;
+
 
     public MainPageFragment() {
         // Required empty public constructor
@@ -32,7 +34,11 @@ public class MainPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_page, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main_page, container, false);
+        Bundle bundle = this.getArguments();
+        username = bundle.getString("username");
+
+        return rootView;
     }
 
     @Override
@@ -41,8 +47,11 @@ public class MainPageFragment extends Fragment {
         getView().findViewById(R.id.mine_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", username);
+
                 NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_mainPageFragment_to_habitListFragment);
+                controller.navigate(R.id.action_mainPageFragment_to_habitListFragment, bundle);
             }
         });
     }

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -63,7 +64,7 @@ public class HabitListFragment extends Fragment {
         if (bundle.containsKey("habitID")) {
             habitID = bundle.getString("habitID");
         }
-
+        /*
         db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("Users").document(userName).collection("HabitList");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -81,7 +82,7 @@ public class HabitListFragment extends Fragment {
         recyclerAdapter = new HabitListAdapter(getActivity(), s1, int1);
         habitList.setAdapter(recyclerAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        */
         return rootView;
     }
     @Override

@@ -3,7 +3,7 @@ package com.example.habit_tracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class habitDataList implements Parcelable {
+public class Habit implements Parcelable {
     private String userName;
     private String habitName;
     private String habitID;
@@ -12,7 +12,7 @@ public class habitDataList implements Parcelable {
     private String repeat;
     private Boolean isPrivate;
 
-    habitDataList(String userName, String habitName, String habitID, String dateOfStarting, String reason, String repeat, boolean isPrivate) {
+    Habit(String userName, String habitName, String habitID, String dateOfStarting, String reason, String repeat, boolean isPrivate) {
         this.userName = userName;
         this.habitName = habitName;
         this.habitID = habitID;
@@ -22,7 +22,7 @@ public class habitDataList implements Parcelable {
         this.isPrivate = isPrivate;
     }
 
-    protected habitDataList(Parcel in) {
+    protected Habit(Parcel in) {
         userName = in.readString();
         habitName = in.readString();
         habitID = in.readString();
@@ -33,15 +33,15 @@ public class habitDataList implements Parcelable {
         isPrivate = tmpIsPrivate == 0 ? null : tmpIsPrivate == 1;
     }
 
-    public static final Creator<habitDataList> CREATOR = new Creator<habitDataList>() {
+    public static final Creator<Habit> CREATOR = new Creator<Habit>() {
         @Override
-        public habitDataList createFromParcel(Parcel in) {
-            return new habitDataList(in);
+        public Habit createFromParcel(Parcel in) {
+            return new Habit(in);
         }
 
         @Override
-        public habitDataList[] newArray(int size) {
-            return new habitDataList[size];
+        public Habit[] newArray(int size) {
+            return new Habit[size];
         }
     };
 

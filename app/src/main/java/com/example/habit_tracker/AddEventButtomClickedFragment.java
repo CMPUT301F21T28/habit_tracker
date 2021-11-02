@@ -92,7 +92,7 @@ public class AddEventButtomClickedFragment extends Fragment {
         EditText editTextEventCommit = view.findViewById(R.id.editTextComments);
 
         TextView test = getView().findViewById(R.id.textView5);
-        String habit = "0NyZLjRumQo45JOmXish";//getArguments().getString("habit");
+        String habit = getArguments().getString("habitId");//"0NyZLjRumQo45JOmXish";//getArguments().getString("habit");
 
         Image image = null;
         ImageView imageView;
@@ -127,10 +127,13 @@ public class AddEventButtomClickedFragment extends Fragment {
                     data.put("event name",event_name);
                     data.put("event Commit",event_commit);
                     data.put("event image",image);
+                    //System.currentTimeMillis() return long
 
+                    /*
                     collectionReference
                             .document(habit)
                             .set(data)
+                            //.add(data)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
@@ -145,8 +148,12 @@ public class AddEventButtomClickedFragment extends Fragment {
                                     Toast.makeText(getContext(),"submit fail",Toast.LENGTH_SHORT).show();
                                 }
                             });
-
-                     //*/
+                    //*/
+                    collectionReference.document(habit)
+                            .collection(event_name + String.valueOf(System.currentTimeMillis()))
+                            .add(data);
+                    NavController controller = Navigation.findNavController(view);
+                    controller.navigate(R.id.action_addEventButtomClickedFragment_to_addHabbitEventFragment);
                 }else{
                     Toast.makeText(getContext(),"need a event name",Toast.LENGTH_SHORT).show();
                 }

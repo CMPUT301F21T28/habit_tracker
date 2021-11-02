@@ -82,7 +82,7 @@ public class AddHabbitEventFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //implement my thing here
-        //event_list.add("event1");
+        event_list.add("event1");
         //event_list.add("evwnt2");
         ListView listView = view.findViewById(R.id.list_view);
         ArrayAdapter listViewAdapter = new ArrayAdapter<String>(
@@ -101,9 +101,9 @@ public class AddHabbitEventFragment extends Fragment {
                 //Intent intent = new Intent(AddHabbitEventFragment.this,AddEventButtomClickedFragment.class);
                 //startActivity(intent);
                 Bundle bundle = new Bundle();
-                bundle.putString("habit",testHabitId);
+                bundle.putString("habitId",testHabitId);
                 NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_addHabbitEventFragment_to_addEventButtomClickedFragment);
+                controller.navigate(R.id.action_addHabbitEventFragment_to_addEventButtomClickedFragment,bundle);
 
 
             }

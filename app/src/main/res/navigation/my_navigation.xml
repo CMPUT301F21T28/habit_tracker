@@ -92,6 +92,10 @@
     <fragment
         android:id="@+id/addEventButtomClickedFragment"
         android:name="com.example.habit_tracker.AddEventButtomClickedFragment"
-        android:label="AddEventButtomClickedFragment" />
+        android:label="AddEventButtomClickedFragment" >
+        <action
+            android:id="@+id/action_addEventButtomClickedFragment_to_addHabbitEventFragment"
+            app:destination="@id/addHabbitEventFragment" />
+    </fragment>
 
 </navigation>

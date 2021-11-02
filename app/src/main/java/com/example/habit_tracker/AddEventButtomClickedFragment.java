@@ -150,8 +150,24 @@ public class AddEventButtomClickedFragment extends Fragment {
                             });
                     //*/
                     collectionReference.document(habit)
-                            .collection(event_name + String.valueOf(System.currentTimeMillis()))
-                            .add(data);
+                            .collection("EventList")//(event_name + String.valueOf(System.currentTimeMillis()))
+                            .document(event_name + String.valueOf(System.currentTimeMillis()))
+                            .set(data)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(getContext(),"submit success",Toast.LENGTH_SHORT).show();
+                                    //NavController controller = Navigation.findNavController(view);
+                                    //controller.navigate(R.id.action_Add);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(),"submit fail",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            //.add(data);
                     NavController controller = Navigation.findNavController(view);
                     controller.navigate(R.id.action_addEventButtomClickedFragment_to_addHabbitEventFragment);
                 }else{

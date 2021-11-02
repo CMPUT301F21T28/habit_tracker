@@ -1,6 +1,7 @@
 package com.example.habit_tracker;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,11 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -91,7 +97,19 @@ public class AddHabbitEventFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String testHabitId = "0NyZLjRumQo45JOmXish";
-        //final CollectionReference collectionReference = db.collection("Habit_events");
+        final CollectionReference collectionReference = db.collection("habit")
+                .document(testHabitId).collection("EventList");
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                event_list.clear();
+                for (QueryDocumentSnapshot doc: value){
+                    String event = doc.getId();
+                    event_list.add(event);
+                }
+                listViewAdapter.notifyDataSetChanged();
+            }
+        });
 
         FloatingActionButton add_event = getView().findViewById(R.id.floatingActionButtonAdd);
         add_event.setOnClickListener(new View.OnClickListener() {

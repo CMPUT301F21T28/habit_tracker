@@ -22,8 +22,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +44,9 @@ public class HabitListFragment extends Fragment {
     String s1[] = {"Habit1", "habit2"};
     Integer int1[] = {1,2};
 
-    String userName = null;
+    ArrayList<Habit> habitDataList;
+
+    String userName = "qwe";
     String habitID = null;
 
     public HabitListFragment() {
@@ -58,41 +63,50 @@ public class HabitListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_habit_list, container, false);
 
+        /*
         Bundle bundle = this.getArguments();
         userName = bundle.getString("username");
 
         if (bundle.containsKey("habitID")) {
             habitID = bundle.getString("habitID");
         }
-        /*
-        db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("Users").document(userName).collection("HabitList");
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-            }
-        });
-
-
-
-
+         */
+        habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
-
-        recyclerAdapter = new HabitListAdapter(getActivity(), s1, int1);
+        recyclerAdapter = new HabitListAdapter(getActivity(), habitDataList);
         habitList.setAdapter(recyclerAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        */
+
         return rootView;
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        /*String deletedHabit = null;
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("Users").document("testuser").collection("HabitList");
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                habitDataList.clear();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                    String habitID = doc.getId();
+                    String habitName = (String) doc.getData().get("title");
+                    String habitDateOfStarting = (String) doc.getData().get("dateOfStarting");
+                    String habitReason = (String) doc.getData().get("reason");
+                    String habitRepeat = (String) doc.getData().get("repeat");
+                    //Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
+                    Boolean habitIsPrivate = false;
+                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
+                }
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        });
+        /*
+        Habit deletedHabit = null;
 
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -102,17 +116,11 @@ public class HabitListFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
                 int position = viewHolder.getAdapterPosition();
-
-
                 switch (direction) {
                     case ItemTouchHelper.LEFT:
                         Log.d(TAG, "onSwiped: Delete");
                         recyclerAdapter.notifyItemRemoved(position);
                         break;
-                    case ItemTouchHelper.RIGHT:
-
-                        break;
-
                 }
             }
         };

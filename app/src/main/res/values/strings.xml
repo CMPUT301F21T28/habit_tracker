@@ -9,5 +9,6 @@
     <string name="StringDatOofStarting">Date of Starting</string>
     <string name="StringRepeat">Repeat</string>
     <string name="StringVisualIndicator">Visual Indicator</string>
+    <string name="StringPrivate">Private or Public</string>
 
 </resources>

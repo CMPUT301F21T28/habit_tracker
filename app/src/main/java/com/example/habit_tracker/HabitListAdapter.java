@@ -11,16 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.ViewHolder> {
 
+    ArrayList<Habit> habits;
     String habit_name_list[];
     Integer habit_progress_list[];
     Context context;
 
-    public HabitListAdapter(Context ctx, String name_list[], Integer progress_list[]) {
+    public HabitListAdapter(Context ctx, ArrayList<Habit> habits) {
         context = ctx;
-        habit_name_list = name_list;
-        habit_progress_list = progress_list;
+        this.habits = habits;
     }
 
     @NonNull
@@ -33,7 +36,8 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.habitName.setText(habit_name_list[position]);
+        Habit habit = habits.get(position);
+        holder.habitName.setText(habit.getUserName());
         //TODO progress bar undone
     }
 

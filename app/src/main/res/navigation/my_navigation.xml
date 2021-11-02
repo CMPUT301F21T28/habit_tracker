@@ -74,5 +74,19 @@
             android:id="@+id/action_signupFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/viewHabitEventFragment"
+        android:name="com.example.habit_tracker.ViewHabitEventFragment"
+        android:label="fragment_view_habit_event"
+        tools:layout="@layout/fragment_view_habit_event" >
+        <action
+            android:id="@+id/action_viewHabitEventFragment_to_editHabitEventFragment"
+            app:destination="@id/editHabitEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editHabitEventFragment"
+        android:name="com.example.habit_tracker.EditHabitEventFragment"
+        android:label="fragment_edit_habit_event"
+        tools:layout="@layout/fragment_edit_habit_event" />
 
 </navigation>

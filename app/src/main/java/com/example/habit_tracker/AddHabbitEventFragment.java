@@ -82,16 +82,16 @@ public class AddHabbitEventFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //implement my thing here
-        event_list.add("event1");
-        event_list.add("evwnt2");
+        //event_list.add("event1");
+        //event_list.add("evwnt2");
         ListView listView = view.findViewById(R.id.list_view);
         ArrayAdapter listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),android.R.layout.simple_list_item_1,event_list);
         listView.setAdapter(listViewAdapter);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String habitId = "test";
-        final CollectionReference collectionReference = db.collection("Habbit_events");
+        String testHabitId = "0NyZLjRumQo45JOmXish";
+        //final CollectionReference collectionReference = db.collection("Habit_events");
 
         FloatingActionButton add_event = getView().findViewById(R.id.floatingActionButtonAdd);
         add_event.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +101,7 @@ public class AddHabbitEventFragment extends Fragment {
                 //Intent intent = new Intent(AddHabbitEventFragment.this,AddEventButtomClickedFragment.class);
                 //startActivity(intent);
                 Bundle bundle = new Bundle();
-                bundle.putString("habit",habitId);
+                bundle.putString("habit",testHabitId);
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_addHabbitEventFragment_to_addEventButtomClickedFragment);
 

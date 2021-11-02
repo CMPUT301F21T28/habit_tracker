@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_addHabbitEventFragment"
+            app:destination="@id/addHabbitEventFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainPageFragment"

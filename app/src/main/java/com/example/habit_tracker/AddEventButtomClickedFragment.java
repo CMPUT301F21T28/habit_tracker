@@ -92,11 +92,13 @@ public class AddEventButtomClickedFragment extends Fragment {
         EditText editTextEventCommit = view.findViewById(R.id.editTextComments);
 
         TextView test = getView().findViewById(R.id.textView5);
-        String habit = getArguments().getString("habit");
+        String habit = "0NyZLjRumQo45JOmXish";//getArguments().getString("habit");
 
         Image image = null;
         ImageView imageView;
         final File[] file = new File[1];
+
+        //test.setText(habit);
 
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +112,7 @@ public class AddEventButtomClickedFragment extends Fragment {
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("events");
+        final CollectionReference collectionReference = db.collection("habit"); //("events");
 
         Button submitButtom = view.findViewById(R.id.submitButton);
         submitButtom.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +127,7 @@ public class AddEventButtomClickedFragment extends Fragment {
                     data.put("event name",event_name);
                     data.put("event Commit",event_commit);
                     data.put("event image",image);
+
                     collectionReference
                             .document(habit)
                             .set(data)
@@ -142,6 +145,8 @@ public class AddEventButtomClickedFragment extends Fragment {
                                     Toast.makeText(getContext(),"submit fail",Toast.LENGTH_SHORT).show();
                                 }
                             });
+
+                     //*/
                 }else{
                     Toast.makeText(getContext(),"need a event name",Toast.LENGTH_SHORT).show();
                 }

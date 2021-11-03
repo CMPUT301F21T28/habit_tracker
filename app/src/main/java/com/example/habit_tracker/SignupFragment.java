@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,11 +50,9 @@ public class SignupFragment extends DialogFragment {
 
     // Defining edittext fields in the xml
     private Button signupButton;
-    private FloatingActionButton returnToLoginButton;
+    private TextView returnToLoginButton;
     private EditText username;
     private EditText realName;
-    private EditText gender;
-    private EditText email;
     private EditText firstPassword;
     private EditText secondPassword;
     private FirebaseFirestore db;
@@ -74,6 +73,20 @@ public class SignupFragment extends DialogFragment {
         return inflater.inflate(R.layout.fragment_signup, container, false);
     }
 
+    /**
+     * Called after the view is created. User Interface fields (eg. edittext) are bound to their variables,
+     * firestore db is initialised, and onClickListeners are set up for each button.
+     *
+     * returnToLoginButton - onclick listener is set up to return to the login fragment, discarding any
+     *      progress the user has made on this fragment
+     *
+     * signupButton - onclick listener starts the process of checking field validity, the
+     *      updating the database with the new user if all the information is valid.
+     *      It also returns a bundle with the user's username to the login fragment to
+     *      make signin more streamlined.
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -82,13 +95,14 @@ public class SignupFragment extends DialogFragment {
         // bind editText fields to their variable
         username = (EditText) getView().findViewById(R.id.editText_username);
         realName = (EditText) getView().findViewById(R.id.editText_name);
-        gender = (EditText) getView().findViewById(R.id.editText_gender);
-        email = (EditText) getView().findViewById(R.id.editText_email_address);
         firstPassword = (EditText) getView().findViewById(R.id.editText_first_password);
         secondPassword = (EditText) getView().findViewById(R.id.editText_second_password);
         signupButton = (Button) getView().findViewById(R.id.signupButton);
-        returnToLoginButton = (FloatingActionButton) getView().findViewById(R.id.returnToLoginFloatingActionButton);
+        returnToLoginButton = (TextView) getView().findViewById(R.id.returnToLoginTextView);
 
+        /**
+         * Clicking button returns to login
+         */
         returnToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,11 +110,14 @@ public class SignupFragment extends DialogFragment {
 //                controller.navigate(R.id.action_signupFragment_to_loginFragment);
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_signupFragment_to_loginFragment);
-                Toast.makeText(getContext(), "Return to Login Clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // setting onclick listeners for the buttons
+        /**
+         * Clicking button starts the process of checking field validity, the updating the database
+         * with the new user if all the information is valid. It also returns a bundle with the
+         * user's username to the login fragment to make signin easier.
+         */
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,6 +130,7 @@ public class SignupFragment extends DialogFragment {
                 if (0 >= username.getText().toString().length() || username.getText().toString().length() >= 20) {
                     isValid[0] = false;
                     username.setError("Username not valid. Please ensure that it is between 0 and 20 characters.");
+                    username.requestFocus();
                     return;
                 }
 
@@ -120,6 +138,7 @@ public class SignupFragment extends DialogFragment {
                 if (realName.getText().toString().isEmpty()) {
                     isValid[0] = false;
                     realName.setError("This field cannot be empty.");
+                    realName.requestFocus();
                     return;
                 }
 
@@ -127,6 +146,7 @@ public class SignupFragment extends DialogFragment {
                 if (firstPassword.getText().toString().isEmpty()) {
                     isValid[0] = false;
                     firstPassword.setError("Password cannot be empty. Please try again.");
+                    firstPassword.requestFocus();
                     return;
                 }
 
@@ -134,12 +154,12 @@ public class SignupFragment extends DialogFragment {
                 if (!firstPassword.getText().toString().equals(secondPassword.getText().toString())) {
                     isValid[0] = false;
                     secondPassword.setError("Passwords do not match. Please try again.");
+                    secondPassword.requestFocus();
                     return;
                 }
 
                 // check if username already exists in db
                 // https://stackoverflow.com/questions/52861391/firestore-checking-if-username-already-exists
-                Toast.makeText(getContext(), username.getText().toString(), Toast.LENGTH_SHORT).show();
                 DocumentReference usersRef = db.collection("Users").document(username.getText().toString());
                 usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -151,6 +171,7 @@ public class SignupFragment extends DialogFragment {
                                 Log.d("Check Username", "Username already exists.");
                                 isValid[0] = false;
                                 username.setError("Username already exists. Please choose another");
+                                username.requestFocus();
                                 return;
                             } else { // if the username is not taken
                                 Log.d("Check Username", "Username is not taken.");
@@ -168,8 +189,6 @@ public class SignupFragment extends DialogFragment {
                                 Map<String, Object> data = new HashMap<>();
                                 data.put("username", username.getText().toString());
                                 data.put("realname", realName.getText().toString());
-                                data.put("gender", gender.getText().toString());
-                                data.put("emailaddress", email.getText().toString());
                                 data.put("password", hashedPw);
                                 CollectionReference Users = db.collection("Users");
                                 Users.document(username.getText().toString()).set(data)
@@ -177,8 +196,11 @@ public class SignupFragment extends DialogFragment {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 Toast.makeText(getContext(), "Successful Registration. Welcome to the Habit Tracker!", Toast.LENGTH_SHORT).show();
+                                                Bundle bundle = new Bundle();
+                                                bundle.putString("username", username.getText().toString());
+
                                                 NavController controller = Navigation.findNavController(view);
-                                                controller.navigate(R.id.action_signupFragment_to_loginFragment);
+                                                controller.navigate(R.id.action_signupFragment_to_loginFragment, bundle);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -191,7 +213,6 @@ public class SignupFragment extends DialogFragment {
                         } else {
                             Log.d("Document Get", "Failed");
                             Toast.makeText(getContext(), "Error accessing database", Toast.LENGTH_SHORT).show();
-                            isValid[0] = false;
                             return;
                         }
                     }
@@ -237,13 +258,5 @@ public class SignupFragment extends DialogFragment {
         }
 
         return hexString.toString();
-    }
-
-    public void sendError(String message) {
-        new AlertDialog.Builder(getContext())
-                .setTitle("Error")
-                .setMessage(message)
-                .setNegativeButton("OK", null)
-                .show();
     }
 }

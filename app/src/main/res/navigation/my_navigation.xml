@@ -68,8 +68,8 @@
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.example.habit_tracker.SignupFragment"
-        android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup" >
+        android:label="Signup"
+        tools:layout="@layout/fragment_signup">
         <action
             android:id="@+id/action_signupFragment_to_loginFragment"
             app:destination="@id/loginFragment" />

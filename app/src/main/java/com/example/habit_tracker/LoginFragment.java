@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,7 +40,6 @@ public class LoginFragment extends Fragment {
     private EditText editTextUsername, editTextPassword;
     private TextView navToSignup;
     FirebaseFirestore db;
-
     Button toLoginButton;
 
     public LoginFragment() {
@@ -49,7 +49,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -76,9 +75,17 @@ public class LoginFragment extends Fragment {
         editTextUsername = (EditText) getView().findViewById(R.id.username);
         editTextPassword = (EditText) getView().findViewById(R.id.password);
         navToSignup = (TextView) getView().findViewById(R.id.Nav_to_signup);
-
         db = FirebaseFirestore.getInstance();
 
+        // Check if bundle from signup exists
+        try {
+            Bundle bundle = getArguments();
+            if (!bundle.isEmpty()) {
+                editTextUsername.setText(bundle.getString("username"));
+            }
+        } catch (Exception e) {}
+
+        // Defining the onclicklisteners
         navToSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,8 +133,13 @@ public class LoginFragment extends Fragment {
 
                                 if (correctPassword.equals(hashedPw)) {
                                     Log.d("Success", "Log in successful.");
+                                    // Creating bundle to pass information to next fragment
+                                    Bundle outgoingBundle = new Bundle();
+                                    outgoingBundle.putString("username", username);
+
+                                    // Navigating to the next fragment
                                     NavController controller = Navigation.findNavController(view);
-                                    controller.navigate(R.id.action_loginFragment_to_mainPageFragment);
+                                    controller.navigate(R.id.action_loginFragment_to_mainPageFragment, outgoingBundle);
 
                                 } else {
                                     Log.d("Check Password", "Password does not match.");

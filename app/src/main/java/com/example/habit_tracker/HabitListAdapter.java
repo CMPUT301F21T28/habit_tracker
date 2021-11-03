@@ -22,8 +22,6 @@ import java.util.ArrayList;
 public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.ViewHolder> {
 
     ArrayList<Habit> habits;
-    String habit_name_list[];
-    Integer habit_progress_list[];
     Context context;
 
     public HabitListAdapter(Context ctx, ArrayList<Habit> habits) {

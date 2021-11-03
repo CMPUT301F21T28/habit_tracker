@@ -14,10 +14,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -95,6 +99,7 @@ public class AddHabbitEventFragment extends Fragment {
                 getActivity(),android.R.layout.simple_list_item_1,event_list);
         listView.setAdapter(listViewAdapter);
 
+        //connecting to firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String testHabitId = "0NyZLjRumQo45JOmXish";
         final CollectionReference collectionReference = db.collection("habit")
@@ -111,6 +116,54 @@ public class AddHabbitEventFragment extends Fragment {
             }
         });
 
+        //long click list item to delete. return true will not triger clickListener
+        ArrayList<String> id_list = new ArrayList<>();
+        db.collection("habit").document(testHabitId).collection("EventList")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            id_list.add(document.getId());
+                            //Log.d("data from fire", document.getId() + " => " + document.getData());
+                        }
+
+                    }
+                });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getContext(),id_list.get(i),Toast.LENGTH_SHORT).show();
+                //parameter i should be the position of long click happened.
+                db.collection("habit").document(testHabitId)
+                        .collection("EventList")
+                        .document(id_list.get(i))
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getContext(),id_list.get(i)+" deleted",Toast.LENGTH_SHORT).show();
+                                listViewAdapter.notifyDataSetChanged();
+                            }
+                        });
+                /*
+                db.collection("habit").document(testHabitId).collection("EventList")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d("data from fire", document.getId() + " => " + document.getData());
+                                }
+
+                            }
+                        });//*/
+                return true;
+                //return false;
+            }
+        });
+
+        //press add button to add
         FloatingActionButton add_event = getView().findViewById(R.id.floatingActionButtonAdd);
         add_event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,5 +179,6 @@ public class AddHabbitEventFragment extends Fragment {
 
             }
         });
+
     }
 }

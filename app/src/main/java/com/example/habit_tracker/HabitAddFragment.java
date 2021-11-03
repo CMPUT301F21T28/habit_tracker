@@ -128,6 +128,7 @@ public class HabitAddFragment extends Fragment {
                     habitReason.setError("The reason should be less than 30 characters.");
                     return;
                 }
+
                 if (dateOfStarting.getText().toString().length() >= 0){
                     isValid[0] = checkDateValidity(dateOfStarting.getText().toString());
                     if (isValid[0] == false){
@@ -143,9 +144,9 @@ public class HabitAddFragment extends Fragment {
                     return;
                 }
 
-                if (isPrivate.getText().toString().equals("Yes")) {
+                if (isPrivate.getText().toString().toLowerCase().equals("yes")) {
                     isPrivateBoolean = true;
-                } else if (isPrivate.getText().toString().equals("No")){
+                } else if (isPrivate.getText().toString().toLowerCase().equals("no")){
                     isPrivateBoolean = false;
                 }else {
                     isValid[0] = false;
@@ -170,18 +171,20 @@ public class HabitAddFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Toast.makeText(getContext(), "Success - Successfully added this habit to the database", Toast.LENGTH_SHORT).show();
-
                                     Bundle bundle = new Bundle();
                                     bundle.putString("username", username);
 
                                     NavController controller = Navigation.findNavController(view);
-                                    controller.navigate(R.id.action_habitAddFragment_to_habitListFragment);
+                                    controller.navigate(R.id.action_habitAddFragment_to_habitListFragment, bundle);
+                                    Toast.makeText(getContext(), "Success - Successfully added this habit to the database", Toast.LENGTH_SHORT).show();
+
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    NavController controller = Navigation.findNavController(view);
+                                    controller.navigate(R.id.action_habitAddFragment_to_habitListFragment);
                                     Toast.makeText(getContext(), "Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
                                 }
                             });

@@ -70,7 +70,7 @@
         app:layout_constraintGuide_percent="0.90" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SUBMIT"
@@ -126,7 +126,7 @@
 
 
     <EditText
-        android:id="@+id/editText_habitTitle"
+        android:id="@+id/editText_habitTitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -139,7 +139,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
     <EditText
-        android:id="@+id/editText_habitReason"
+        android:id="@+id/editText_habitReason2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -151,7 +151,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <EditText
-        android:id="@+id/editText_dateOfStarting"
+        android:id="@+id/editText_dateOfStarting2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -163,7 +163,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
     <EditText
-        android:id="@+id/editText_repeat"
+        android:id="@+id/editText_repeat2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -175,16 +175,30 @@
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
-    <Switch
-        android:id="@+id/isPrivate"
-        android:layout_width="343dp"
-        android:layout_height="42dp"
+    <TextView
+        android:id="@+id/textView_isPrivate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Set the habit to be PRIVATE"
         android:layout_marginStart="8dp"
-        android:text="Set this habit to private"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <EditText
+        android:id="@+id/editText_isPrivate2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="Yes/No"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

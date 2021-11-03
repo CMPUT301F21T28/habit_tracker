@@ -45,6 +45,22 @@ public class Habit implements Parcelable {
         }
     };
 
+    void setRepeat(String repeat) {
+        this.repeat = repeat;
+    }
+    void setReason(String reason) {
+        this.reason = reason;
+    }
+    void setDateOfStarting(String dateOfStarting){
+        this.dateOfStarting = dateOfStarting;
+    }
+    void setPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+    void setHabitTitle(String habitName) {
+        this.habitName = habitName;
+    }
+
     String getUserName() {return this.userName;}
     String getHabitName() {return this.habitName;}
     String getHabitID() {return this.habitID;}

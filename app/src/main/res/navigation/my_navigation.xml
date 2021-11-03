@@ -53,8 +53,8 @@
         android:label="Edit A Habit"
         tools:layout="@layout/fragment_habit_edit" >
         <action
-            android:id="@+id/action_habitEditFragment_to_habitDetailFragment"
-            app:destination="@id/habitDetailFragment" />
+            android:id="@+id/action_habitEditFragment_to_habitListFragment"
+            app:destination="@id/habitListFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitAddFragment"

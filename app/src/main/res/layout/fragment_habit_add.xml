@@ -6,19 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HabitAddFragment">
 
-    <EditText
-        android:id="@+id/editText_repeat2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="For Example: twice a week"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
@@ -211,22 +198,23 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Set the habit to be PRIVATE"
+        android:layout_marginStart="8dp"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        app:layout_constraintVertical_bias="0.6" />
 
     <EditText
         android:id="@+id/editText_isPrivate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Yes/No"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 

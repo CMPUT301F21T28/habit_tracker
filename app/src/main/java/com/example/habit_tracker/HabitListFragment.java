@@ -41,13 +41,9 @@ public class HabitListFragment extends Fragment {
 
     FirebaseFirestore db;
 
-    String s1[] = {"Habit1", "habit2"};
-    Integer int1[] = {1,2};
-
     ArrayList<Habit> habitDataList;
 
-    String userName = "qwe";
-    String habitID = null;
+    String userName = null;
 
     public HabitListFragment() {
         // Required empty public constructor
@@ -63,15 +59,10 @@ public class HabitListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_habit_list, container, false);
 
-        /*
+
         Bundle bundle = this.getArguments();
         userName = bundle.getString("username");
 
-        if (bundle.containsKey("habitID")) {
-            habitID = bundle.getString("habitID");
-        }
-
-         */
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
         recyclerAdapter = new HabitListAdapter(getActivity(), habitDataList);
@@ -85,7 +76,7 @@ public class HabitListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("Users").document("testuser").collection("HabitList");
+        final CollectionReference collectionReference = db.collection("Users").document(userName).collection("HabitList");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {

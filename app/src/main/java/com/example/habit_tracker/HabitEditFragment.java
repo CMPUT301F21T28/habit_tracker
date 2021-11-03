@@ -35,9 +35,13 @@ public class HabitEditFragment extends Fragment {
     private EditText habitReason;
     private EditText dateOfStarting;
     private EditText repeat;
+    private EditText isPrivate;
     private FirebaseFirestore db;
     private String username;
-    private Boolean isPrivate;
+
+    private Habit habit;
+
+    private Boolean isPrivateBoolean;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,9 +54,19 @@ public class HabitEditFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_habit_edit, container, false);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null && bundle.containsKey("username")){
+            username = bundle.getString("username");
+            habit = bundle.getParcelable("Habit");
+        }
+
+
+
+
         return rootView;
     }
 
+    //the function to check if the string is in yyyy/mm/dd form
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static boolean checkDateValidity(final String date) {
         boolean valid = false;
@@ -75,32 +89,46 @@ public class HabitEditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
-        habitTitle = (EditText) getView().findViewById(R.id.editText_habitTitle);
-        habitReason = (EditText) getView().findViewById(R.id.editText_habitReason);
-        dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting);
-        repeat = (EditText) getView().findViewById(R.id.editText_repeat);
 
-        submitButton = (Button) getView().findViewById(R.id.submit_button);
+        habitTitle = (EditText) getView().findViewById(R.id.editText_habitTitle2);
+        habitReason = (EditText) getView().findViewById(R.id.editText_habitReason2);
+        dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting2);
+        repeat = (EditText) getView().findViewById(R.id.editText_repeat2);
+        isPrivate = (EditText) getView().findViewById(R.id.editText_isPrivate2);
 
-        CollectionReference collectionReference = db.collection("Users").document("testuser").collection("HabitList");
+        submitButton = (Button) getView().findViewById(R.id.button_submit);
+
+        habitTitle.setText(habit.getHabitName());
+        habitReason.setText(habit.getReason());
+        dateOfStarting.setText(habit.getDateOfStarting());
+        repeat.setText(habit.getRepeat());
+
+        if (habit.getIsPrivate() == false){
+            isPrivate.setText("No");
+        } else if (habit.getIsPrivate() == true){
+            isPrivate.setText("Yes");
+        }
+
+        CollectionReference collectionReference = db.collection("Users").document(username).collection("HabitList");
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 final boolean[] isValid = {true};
-
+                //Check if the habit title is between 0~20 characters.
                 if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
                     isValid[0] = false;
                     habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
                     return;
                 }
-
+                //Check if the habit reason is less than 30 characters.
                 if (30 <= habitReason.getText().toString().length()) {
                     isValid[0] = false;
                     habitReason.setError("The reason should be less than 30 characters.");
                     return;
                 }
+                //Check if the date entered is in the form of yyyy/mm/dd
                 if (dateOfStarting.getText().toString().length() >= 0){
                     isValid[0] = checkDateValidity(dateOfStarting.getText().toString());
                     if (isValid[0] == false){
@@ -109,10 +137,21 @@ public class HabitEditFragment extends Fragment {
                     }
 
                 }
-
+                //check the length of the string
                 if (repeat.getText().toString().length() >= 30){
                     isValid[0] = false;
                     repeat.setError("Please enter a string less than 30 characters");
+                    return;
+                }
+
+                //set the isPrivate to be true if the user enters yes, false if the user enters no.
+                if (isPrivate.getText().toString().toLowerCase().equals("yes")) {
+                    isPrivateBoolean = true;
+                } else if (isPrivate.getText().toString().toLowerCase().equals("no")){
+                    isPrivateBoolean = false;
+                }else {
+                    isValid[0] = false;
+                    isPrivate.setError("Your input should be Yes or No.");
                     return;
                 }
 
@@ -123,21 +162,36 @@ public class HabitEditFragment extends Fragment {
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", repeat.getText().toString());
                     data.put("dateOfStarting", dateOfStarting.getText().toString());
+                    data.put("isPrivate", isPrivateBoolean.toString());
+
+                    habit.setHabitTitle(habitTitle.getText().toString());
+                    habit.setDateOfStarting(dateOfStarting.getText().toString());
+                    habit.setReason(habitReason.getText().toString());
+                    habit.setRepeat(repeat.getText().toString());
+                    habit.setPrivate(isPrivateBoolean);
+
                     collectionReference
-                            .document("dc691246-b4cf-42dc-aac1-b2c1d729c4af")
+                            .document(habit.getHabitID())
                             .set(data)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Toast.makeText(getContext(), "Success - Successfully added this habit to the database", Toast.LENGTH_SHORT).show();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("username", username);
+                                    bundle.putParcelable("Habit", habit);
+
                                     NavController controller = Navigation.findNavController(view);
-                                    controller.navigate(R.id.action_habitAddFragment_to_habitListFragment);
+                                    controller.navigate(R.id.action_habitEditFragment_to_habitListFragment, bundle);
+                                    //Toast.makeText(getContext(), "Success - Successfully added this habit to the database", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getContext(), "Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
+
+                                    NavController controller = Navigation.findNavController(view);
+                                    controller.navigate(R.id.action_habitEditFragment_to_habitListFragment);
+                                    //Toast.makeText(getContext(), "Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
                                 }
                             });
 

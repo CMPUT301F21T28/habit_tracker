@@ -64,6 +64,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 //        getView().findViewById(R.id.Nav_to_mainpage).setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -126,8 +127,12 @@ public class LoginFragment extends Fragment {
 
                                 if (correctPassword.equals(hashedPw)) {
                                     Log.d("Success", "Log in successful.");
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("username", username);
+
                                     NavController controller = Navigation.findNavController(view);
-                                    controller.navigate(R.id.action_loginFragment_to_mainPageFragment);
+                                    controller.navigate(R.id.action_loginFragment_to_mainPageFragment, bundle);
 
                                 } else {
                                     Log.d("Check Password", "Password does not match.");

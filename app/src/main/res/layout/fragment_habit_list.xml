@@ -6,19 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".HabitListFragment">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/habit_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="84dp"
-        android:text=""
-        android:textIsSelectable="true"
-        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-    </ListView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <include layout="@layout/fragment_one"></include>
 

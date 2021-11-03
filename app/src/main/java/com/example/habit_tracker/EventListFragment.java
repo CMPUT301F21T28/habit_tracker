@@ -1,7 +1,5 @@
 package com.example.habit_tracker;
 
-import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,13 +8,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
@@ -30,10 +26,10 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AddHabbitEventFragment#newInstance} factory method to
+ * Use the {@link EventListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddHabbitEventFragment extends Fragment {
+public class EventListFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +41,7 @@ public class AddHabbitEventFragment extends Fragment {
     private String mParam2;
     private ArrayList<String> event_list = new ArrayList<>();
 
-    public AddHabbitEventFragment() {
+    public EventListFragment() {
         // Required empty public constructor
     }
 
@@ -58,8 +54,8 @@ public class AddHabbitEventFragment extends Fragment {
      * @return A new instance of fragment AddHabbitEventFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddHabbitEventFragment newInstance(String param1, String param2) {
-        AddHabbitEventFragment fragment = new AddHabbitEventFragment();
+    public static EventListFragment newInstance(String param1, String param2) {
+        EventListFragment fragment = new EventListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,7 +76,7 @@ public class AddHabbitEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_habbit_event, container, false);
+        return inflater.inflate(R.layout.fragment_event_list, container, false);
     }
 
     @Override

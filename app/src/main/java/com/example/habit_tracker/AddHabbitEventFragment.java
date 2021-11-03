@@ -39,6 +39,8 @@ import java.util.ArrayList;
  */
 public class AddHabbitEventFragment extends Fragment {
 
+    private HabitEvent habitevent;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,6 +92,7 @@ public class AddHabbitEventFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         //implement my thing here
         event_list.add("event1");
@@ -180,5 +183,33 @@ public class AddHabbitEventFragment extends Fragment {
             }
         });
 
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                    long arg3) {
+                Bundle bundle = new Bundle();
+
+                bundle.putString("HabitID", "0NyZLjRumQo45JOmXish" );
+                bundle.putParcelable("EventList", habitevent);
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_addHabbitEventFragment_to_viewHabitEventFragment);
+
+
+                    }
+        });
+
+
+        /*listView.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_addHabbitEventFragment_to_viewHabitEventFragment);
+            }
+        });*/
+
     }
 }
+

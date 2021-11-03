@@ -88,14 +88,36 @@
         <action
             android:id="@+id/action_addHabbitEventFragment_to_addEventButtomClickedFragment"
             app:destination="@id/addEventButtomClickedFragment" />
+        <action
+            android:id="@+id/action_addHabbitEventFragment_to_viewHabitEventFragment"
+            app:destination="@id/viewHabitEventFragment" />
     </fragment>
     <fragment
         android:id="@+id/addEventButtomClickedFragment"
         android:name="com.example.habit_tracker.AddEventButtomClickedFragment"
-        android:label="AddEventButtomClickedFragment" >
+        android:label="fragment_add_event_buttom_clicked"
+        tools:layout="@layout/fragment_add_event_buttom_clicked" >
         <action
             android:id="@+id/action_addEventButtomClickedFragment_to_addHabbitEventFragment"
             app:destination="@id/addHabbitEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editHabitEventFragment"
+        android:name="com.example.habit_tracker.EditHabitEventFragment"
+        android:label="fragment_edit_habit_event"
+        tools:layout="@layout/fragment_edit_habit_event" >
+        <action
+            android:id="@+id/action_editHabitEventFragment_to_addHabbitEventFragment"
+            app:destination="@id/addHabbitEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewHabitEventFragment"
+        android:name="com.example.habit_tracker.ViewHabitEventFragment"
+        android:label="fragment_view_habit_event"
+        tools:layout="@layout/fragment_view_habit_event" >
+        <action
+            android:id="@+id/action_viewHabitEventFragment_to_editHabitEventFragment"
+            app:destination="@id/editHabitEventFragment" />
     </fragment>
 
 </navigation>

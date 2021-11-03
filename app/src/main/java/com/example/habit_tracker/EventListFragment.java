@@ -11,9 +11,13 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -30,6 +34,8 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class EventListFragment extends Fragment {
+
+    private HabitEvent habitevent;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,6 +89,7 @@ public class EventListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         //implement my thing here
         event_list.add("event1");
         //event_list.add("evwnt2");
@@ -91,6 +98,7 @@ public class EventListFragment extends Fragment {
                 getActivity(),android.R.layout.simple_list_item_1,event_list);
         listView.setAdapter(listViewAdapter);
 
+        //connecting to firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String testHabitId = "0NyZLjRumQo45JOmXish";
         final CollectionReference collectionReference = db.collection("habit")
@@ -107,6 +115,54 @@ public class EventListFragment extends Fragment {
             }
         });
 
+        //long click list item to delete. return true will not triger clickListener
+        ArrayList<String> id_list = new ArrayList<>();
+        db.collection("habit").document(testHabitId).collection("EventList")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            id_list.add(document.getId());
+                            //Log.d("data from fire", document.getId() + " => " + document.getData());
+                        }
+
+                    }
+                });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getContext(),id_list.get(i),Toast.LENGTH_SHORT).show();
+                //parameter i should be the position of long click happened.
+                db.collection("habit").document(testHabitId)
+                        .collection("EventList")
+                        .document(id_list.get(i))
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getContext(),id_list.get(i)+" deleted",Toast.LENGTH_SHORT).show();
+                                listViewAdapter.notifyDataSetChanged();
+                            }
+                        });
+                /*
+                db.collection("habit").document(testHabitId).collection("EventList")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d("data from fire", document.getId() + " => " + document.getData());
+                                }
+
+                            }
+                        });//*/
+                return true;
+                //return false;
+            }
+        });
+
+        //press add button to add
         FloatingActionButton add_event = getView().findViewById(R.id.floatingActionButtonAdd);
         add_event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,5 +178,34 @@ public class EventListFragment extends Fragment {
 
             }
         });
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                    long arg3) {
+                Bundle bundle = new Bundle();
+
+                bundle.putString("HabitID", "0NyZLjRumQo45JOmXish" );
+                bundle.putParcelable("EventList", habitevent);
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_addHabbitEventFragment_to_viewHabitEventFragment);
+
+
+                    }
+        });
+
+
+        /*listView.setOnItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_addHabbitEventFragment_to_viewHabitEventFragment);
+            }
+        });*/
+
     }
 }
+

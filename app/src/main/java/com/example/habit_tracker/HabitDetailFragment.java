@@ -44,7 +44,10 @@ public class HabitDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_habit_detail, container, false);
 
         Bundle bundle = this.getArguments();
-        habit = bundle.getParcelable("Habit");
+        if (bundle != null && bundle.containsKey("username")){
+            habit = bundle.getParcelable("Habit");
+        }
+
 
         habitTitle = rootView.findViewById(R.id.textView_habitTitle);
         habitReason = rootView.findViewById(R.id.textView_habitReason);
@@ -53,7 +56,7 @@ public class HabitDetailFragment extends Fragment {
         visualIndicator = rootView.findViewById(R.id.progressBar_visualIndicator);
         percentage = rootView.findViewById(R.id.textView_percentage);
         isPrivate = rootView.findViewById(R.id.textView_private);
-        edit = rootView.findViewById(R.id.button);
+        edit = rootView.findViewById(R.id.button_edit);
 
         habitTitle.setText(habit.getHabitName());
         habitReason.setText(habit.getReason());
@@ -69,15 +72,18 @@ public class HabitDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle bundle = new Bundle();
 
-        bundle.putString("username", habit.getUserName());
-        bundle.putParcelable("Habit", habit);
 
-        edit = getView().findViewById(R.id.button);
+        edit = getView().findViewById(R.id.button_edit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Bundle bundle = new Bundle();
+
+                bundle.putString("username", habit.getUserName());
+                bundle.putParcelable("Habit", habit);
+
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_habitDetailFragment_to_habitEditFragment, bundle);
             }

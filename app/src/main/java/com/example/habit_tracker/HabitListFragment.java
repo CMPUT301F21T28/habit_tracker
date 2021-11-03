@@ -2,8 +2,6 @@ package com.example.habit_tracker;
 
 import android.os.Bundle;
 
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,12 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -53,10 +49,9 @@ public class HabitListFragment extends Fragment {
 
     ArrayList<Habit> habitDataList;
 
-    Habit deletedHabit = null;
+    String userName = null;
 
-    String userName = "qwe";
-    String habitID = null;
+    Habit deletedHabit = null;
 
     CollectionReference collectionReference;
 
@@ -74,15 +69,10 @@ public class HabitListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_habit_list, container, false);
 
-        /*
+
         Bundle bundle = this.getArguments();
         userName = bundle.getString("username");
 
-        if (bundle.containsKey("habitID")) {
-            habitID = bundle.getString("habitID");
-        }
-
-         */
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
         recyclerAdapter = new HabitListAdapter(getActivity(), habitDataList);
@@ -121,6 +111,7 @@ public class HabitListFragment extends Fragment {
                 recyclerAdapter.notifyDataSetChanged();
             }
         });
+
 
         // add a habit (go to new fragment)
         getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {

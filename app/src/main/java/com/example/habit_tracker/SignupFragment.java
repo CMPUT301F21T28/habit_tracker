@@ -33,6 +33,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Document;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,13 +154,23 @@ public class SignupFragment extends DialogFragment {
                                 return;
                             } else { // if the username is not taken
                                 Log.d("Check Username", "Username is not taken.");
+
+                                // **** hashing pw
+                                String hashedPw = null;
+                                try {
+                                    hashedPw = toHexString(getSHA(firstPassword.getText().toString()));
+                                } catch (NoSuchAlgorithmException e) {
+                                    // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
+                                    e.printStackTrace();
+                                }
+
                                 // username not taken
                                 Map<String, Object> data = new HashMap<>();
                                 data.put("username", username.getText().toString());
                                 data.put("realname", realName.getText().toString());
                                 data.put("gender", gender.getText().toString());
                                 data.put("emailaddress", email.getText().toString());
-                                data.put("password", firstPassword.getText().toString());
+                                data.put("password", hashedPw);
                                 CollectionReference Users = db.collection("Users");
                                 Users.document(username.getText().toString()).set(data)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -184,6 +198,45 @@ public class SignupFragment extends DialogFragment {
                 });
             }
         });
+    }
+
+    /**
+     * Hashing support function. SRC: https://www.geeksforgeeks.org/sha-256-hash-in-java/
+     * @param input
+     *      string to be hashed
+     * @return
+     *      returns the hashed result as a bytearray
+     * @throws NoSuchAlgorithmException
+     *      if the hash function specified does not exist. SHOULD NOT OCCUR
+     */
+    public static byte[] getSHA(String input) throws NoSuchAlgorithmException
+    {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        return md.digest(input.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Hashing support function. SRC: https://www.geeksforgeeks.org/sha-256-hash-in-java/
+     * @param hash
+     *      byte array input of something that is hashed in SHA256
+     * @return
+     *      returns the string representation of the hash in hex
+     */
+    public static String toHexString(byte[] hash)
+    {
+        // Convert byte array into signum representation
+        BigInteger number = new BigInteger(1, hash);
+
+        // Convert message digest into hex value
+        StringBuilder hexString = new StringBuilder(number.toString(16));
+
+        // Pad with leading zeros
+        while (hexString.length() < 32)
+        {
+            hexString.insert(0, '0');
+        }
+
+        return hexString.toString();
     }
 
     public void sendError(String message) {

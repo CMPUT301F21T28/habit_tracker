@@ -78,6 +78,15 @@ public class LoginFragment extends Fragment {
         editTextPassword = (EditText) getView().findViewById(R.id.password);
         navToSignup = (TextView) getView().findViewById(R.id.Nav_to_signup);
 
+        Button testButton = getView().findViewById(R.id.testbutton3);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_loginFragment_to_addHabbitEventFragment);
+            }
+        });
+
         db = FirebaseFirestore.getInstance();
 
         navToSignup.setOnClickListener(new View.OnClickListener() {

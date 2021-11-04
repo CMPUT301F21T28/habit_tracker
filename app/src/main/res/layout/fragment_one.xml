@@ -11,15 +11,14 @@
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <Switch
-            android:id="@+id/taday_habit_switch"
+            android:id="@+id/today_habit_switch"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:text="Today's Habits"
+            android:text="Today's Habits (coming in next version)"
             android:textColor="@color/purple_500"
-            android:textSize="25dp"/>
+            android:textSize="20dp"/>
 
 
     </LinearLayout>

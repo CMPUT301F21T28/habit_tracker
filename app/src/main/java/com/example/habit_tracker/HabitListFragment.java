@@ -39,8 +39,6 @@ import java.util.HashMap;
  * create an instance of this fragment.
  */
 public class HabitListFragment extends Fragment {
-    
-    private static final String TAG = "MyActivity";
 
     RecyclerView habitList;
     HabitListAdapter recyclerAdapter;
@@ -84,7 +82,7 @@ public class HabitListFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(habitList);
 
         // prompt user how to interact
-        Toast.makeText(getActivity(), "Right Swipe to Delete, Left Swipe to See Events", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Right Swipe to Delete, Long Press to See Events", Toast.LENGTH_SHORT).show();
 
         return rootView;
     }
@@ -127,10 +125,10 @@ public class HabitListFragment extends Fragment {
     }
 
     // swipe to delete & drag to reorder the list
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            // TODO drage to reorder the list (possible solution: put arrayList in mainActivity
+            // TODO drag to reorder the list (possible solution: put arrayList in mainActivity)
             /*
             int fromPosition = viewHolder.getAdapterPosition();
             int toPosition = target.getAdapterPosition();
@@ -174,11 +172,6 @@ public class HabitListFragment extends Fragment {
                             });
                         }
                     }).show();
-                    break;
-                case ItemTouchHelper.LEFT:
-
-                    // TODO link to the event fragment
-
                     break;
             }
         }

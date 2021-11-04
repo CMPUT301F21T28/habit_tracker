@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,9 @@ import java.util.HashMap;
 
 public class EventAddFragment extends Fragment {
 
+    private static final String TAG = "MyActivity";
+
     String username = null;
-    Habit habit = null;
     String habitID = null;
 
     public EventAddFragment() {
@@ -52,8 +54,9 @@ public class EventAddFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
-        habit = bundle.getParcelable("habitID");
-        habitID = habit.getHabitID();
+        habitID = bundle.getString("habitID");
+
+        Log.d(TAG, "onCreateView: habit id" + habitID);
 
         return rootView;
     }
@@ -87,31 +90,36 @@ public class EventAddFragment extends Fragment {
         */
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("habit").document(habitID).collection("EventList");
+        final CollectionReference collectionReference = db.collection("habit");
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //submit something.
+                Bundle bundle = new Bundle();
+                bundle.putString("username", username);
+                bundle.putString("habitID", habitID);
+
                 String event_name = editTextEventName.getText().toString();
                 String event_commit = editTextEventCommit.getText().toString();
 
                 HashMap<String,Object> data = new HashMap<>();
                 if (event_name.length()>0){
                     data.put("event name",event_name);
-                    data.put("event Commit",event_commit);
+                    data.put("event comment",event_commit);
                     //data.put("event image",image);
                     //System.currentTimeMillis() return long
 
-                    collectionReference
+                    Log.d(TAG, "onClick: " + habitID);
+                    collectionReference.document(habitID).collection("EventList")
                             .document(event_name + String.valueOf(System.currentTimeMillis()))
                             .set(data)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(getContext(),"submit success",Toast.LENGTH_SHORT).show();
-                                    //NavController controller = Navigation.findNavController(view);
-                                    //controller.navigate(R.id.action_Add);
+
+                                    NavController controller = Navigation.findNavController(view);
+                                    controller.navigate(R.id.action_eventAddFragment_to_eventListFragment, bundle);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -120,9 +128,6 @@ public class EventAddFragment extends Fragment {
                                     Toast.makeText(getContext(),"submit fail",Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            //.add(data);
-                    NavController controller = Navigation.findNavController(view);
-                    controller.navigate(R.id.action_addEventButtomClickedFragment_to_addHabbitEventFragment);
                 }else{
                     Toast.makeText(getContext(),"need a event name",Toast.LENGTH_SHORT).show();
                 }

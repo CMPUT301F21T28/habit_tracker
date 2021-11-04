@@ -2,6 +2,7 @@ package com.example.habit_tracker;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +11,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.ViewHolder> {
+
+    private static final String TAG = "MyActivity";
 
     ArrayList<Habit> habits;
     Context context;
@@ -56,6 +56,22 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
                 controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                // TODO change to a button implementation in the future update
+                Bundle bundle = new Bundle();
+                bundle.putString("username", habit.getUserName());
+                bundle.putParcelable("Habit", habit);
+                Log.d(TAG, "onLongClick: habit id " +habit.getHabitID());
+
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -72,6 +88,8 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
             super(itemView);
             habitName = itemView.findViewById(R.id.habit_name_row);
             habitProgress = itemView.findViewById(R.id.habit_progress_row);
+            // TODO make habit progress re-visible after find solution for progress
+            habitProgress.setVisibility(View.INVISIBLE);
         }
     }
 }

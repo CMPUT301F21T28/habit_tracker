@@ -2,10 +2,12 @@ package com.example.habit_tracker;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -20,6 +22,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.habit_tracker.validation.StringNotEmptyRule;
+import com.example.habit_tracker.validation.UsernameLengthRule;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,14 +42,19 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SignupFragment} factory method to
  * create an instance of this fragment.
  */
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class SignupFragment extends DialogFragment {
 
     // Defining edittext fields in the xml
@@ -57,8 +66,18 @@ public class SignupFragment extends DialogFragment {
     private EditText secondPassword;
     private FirebaseFirestore db;
 
+    Predicate<String> nonEmpty = new StringNotEmptyRule();
+    Predicate<String> lengthRule = new UsernameLengthRule();
+
+    HashMap<EditText, List<Predicate<String>>> ruleManifest ;
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public SignupFragment() {
         // Required empty public constructor
+        ruleManifest = (HashMap<EditText, List<Predicate<String>>>) Map.of(
+                username, Arrays.asList(nonEmpty,lengthRule)
+        );
+
     }
 
     @Override
@@ -119,8 +138,29 @@ public class SignupFragment extends DialogFragment {
          * user's username to the login fragment to make signin easier.
          */
         signupButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
+
+
+                Predicate<String> rule = new StringNotEmptyRule();
+                Predicate<String> rule2 = new UsernameLengthRule();
+
+                boolean valid = Arrays.asList(username.getText().toString(), firstPassword.getText().toString(), secondPassword.getText().toString())
+                        .stream()
+                        .allMatch(rule);
+
+                List<String> strings =Arrays.asList(username.getText().toString(), firstPassword.getText().toString(), secondPassword.getText().toString())
+                        ;
+                    strings
+                        .stream()
+                        .filter(s->!rule.test(s))// negating the filter
+                        .filter(rule2)
+                        .collect(Collectors.toList());
+
+
+
+
                 // **** check if fields are valid, setError on those that arent valid
                 // **** if all fields are valid, check if username already exists
                 // **** if username does exist, return error
@@ -128,7 +168,6 @@ public class SignupFragment extends DialogFragment {
                 final boolean[] isValid = {true};
                 // check if username valid
                 if (0 >= username.getText().toString().length() || username.getText().toString().length() >= 20) {
-                    isValid[0] = false;
                     username.setError("Username not valid. Please ensure that it is between 0 and 20 characters.");
                     username.requestFocus();
                     return;

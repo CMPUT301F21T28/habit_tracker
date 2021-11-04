@@ -12,7 +12,7 @@ public class Habit implements Parcelable {
     private String repeat;
     private Boolean isPrivate;
 
-    Habit(String userName, String habitName, String habitID, String dateOfStarting, String reason, String repeat, boolean isPrivate) {
+    public Habit(String userName, String habitName, String habitID, String dateOfStarting, String reason, String repeat, boolean isPrivate) {
         this.userName = userName;
         this.habitName = habitName;
         this.habitID = habitID;

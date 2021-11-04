@@ -1,7 +1,9 @@
 package com.example.habit_tracker;
 
-public class SignupFragmentTest {
+//import com.robotium.solo.Solo;
 
+public class SignupFragmentTest {
+    //private Solo solo;
     // Test Categories
     // Testing Entering in
 

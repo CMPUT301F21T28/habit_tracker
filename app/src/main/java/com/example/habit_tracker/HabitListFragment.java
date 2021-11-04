@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.example.habit_tracker.eventlisteners.HabitListListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -94,23 +95,26 @@ public class HabitListFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users").document(userName).collection("HabitList");
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                habitDataList.clear();
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
-                    String habitID = doc.getId();
-                    String habitName = (String) doc.getData().get("title");
-                    String habitDateOfStarting = (String) doc.getData().get("dateOfStarting");
-                    String habitReason = (String) doc.getData().get("reason");
-                    String habitRepeat = (String) doc.getData().get("repeat");
-                    //Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
-                    Boolean habitIsPrivate = false;
-                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
-                }
-                recyclerAdapter.notifyDataSetChanged();
-            }
-        });
+        HabitListListener listener = new HabitListListener(habitDataList, userName);
+        collectionReference.addSnapshotListener(listener);
+
+        //        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+//                habitDataList.clear();
+//                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+//                    String habitID = doc.getId();
+//                    String habitName = (String) doc.getData().get("title");
+//                    String habitDateOfStarting = (String) doc.getData().get("dateOfStarting");
+//                    String habitReason = (String) doc.getData().get("reason");
+//                    String habitRepeat = (String) doc.getData().get("repeat");
+//                    //Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
+//                    Boolean habitIsPrivate = false;
+//                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
+//                }
+//                recyclerAdapter.notifyDataSetChanged();
+//            }
+//        });
 
 
         // add a habit (go to new fragment)

@@ -39,6 +39,7 @@ public class LoginFragment extends Fragment {
     private EditText editTextUsername, editTextPassword;
     private TextView navToSignup;
     FirebaseFirestore db;
+    boolean loginSuccess = false;
 
     Button toLoginButton;
 
@@ -61,18 +62,103 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+    /**
+     * This function validates user input. It checks if any of the fields is empty and if the username and password is a valid match.
+     * Then it calls setLoginSuccess to proceed to the next step
+     * @param username
+     * @param password
+     * @param view
+     */
+    public void validateInput(String username, String password, View view){
+        if(username.isEmpty()){
+            setLoginSuccess(false,view,username);
+        }
+        if(password.isEmpty()){
+            setLoginSuccess(false,view,username);
+        }
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference usernameRef = db.collection("Users");
+        Query query = usernameRef.whereEqualTo("username", username);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        String correctPassword = documentSnapshot.getString("password");
+
+                        // Converting password to hashed password
+                        String hashedPw = null;
+                        try {
+                            hashedPw = toHexString(getSHA(password));
+                        } catch (NoSuchAlgorithmException e) {
+                            // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
+                            e.printStackTrace();
+                        }
+                        // If password is correct
+                        if (correctPassword.equals(hashedPw)) {
+                            Log.d("Success", "Log in successful.");
+                            setLoginSuccess(true,view,username);
+
+                        } else {
+                            // If password is incorrect
+                            Log.d("Check Password", "Password does not match.");
+                            setLoginSuccess(false,view,username);
+                        }
+                    }
+                } if(task.getResult().size() == 0 ){
+                    // If username does not exist in firestore
+                    Log.d("Failure", "User not Exists");
+                    setLoginSuccess(false,view,username);
+                    //You can store new user information here
+
+                }
+
+            }
+        });
+    }
+
+    /**
+     * After validating user input, this function decides if the user could go to the main page or throw an error saying input is invalid.
+     * @param value
+     * @param view
+     * @param username
+     */
+    private void setLoginSuccess(boolean value, View view, String username){
+        loginSuccess = value;
+        if (value == true){
+            //takes successful logged in users to the main page
+            Bundle bundle = new Bundle();
+            bundle.putString("username", username);
+            NavController controller = Navigation.findNavController(view);
+            controller.navigate(R.id.action_loginFragment_to_mainPageFragment, bundle);
+        }
+        else {
+            //asks unsuccessful users to retry
+            Log.d("Failure", "login failed");
+            editTextUsername.setError("Login failed. Please check your username and password.");
+            editTextPassword.setError("Login failed. Please check your username and password.");
+        }
+    }
+
+    /**
+     * testing function for user input validation
+     * @return
+     * returns boolean of if user input is valid
+     */
+    public boolean getLoginSuccess(){
+        return loginSuccess;
+    }
+
+    /**
+     * This function sets up the fragment of log in. It takes the user input of username and password, then calls the function that checks if it matches any record in firestore database.
+     * If it does, it leads the user to the main page. Otherwise, it suggests the user that either username does not exist or password does not match.
+     * The user can choose to retry if password does not match or sign up if username does not exist
+     * @param
+     * view, bundle
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        getView().findViewById(R.id.Nav_to_mainpage).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_loginFragment_to_mainPageFragment);
-//            }
-//        });
-        //View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_login, null);
         signInButton = (Button) getView().findViewById(R.id.Nav_to_mainpage);
         editTextUsername = (EditText) getView().findViewById(R.id.username);
         editTextPassword = (EditText) getView().findViewById(R.id.password);
@@ -93,71 +179,11 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 String username = editTextUsername.getText().toString();
                 String password = editTextPassword.getText().toString();
+                validateInput(username,password,view);
 
-                if(username.isEmpty()){
-                    //Log.d("Fail", "empty field");
-                    editTextUsername.setError("Username is required!");
-                    editTextUsername.requestFocus();
-                    return;
-                }
-                if(password.isEmpty()){
-                    //Log.d("Fail", "empty field");
-                    editTextPassword.setError("Password is required!");
-                    editTextPassword.requestFocus();
-                    return;
-                }
-
-                final CollectionReference usernameRef = db.collection("Users");
-                Query query = usernameRef.whereEqualTo("username", username);
-                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                String correctPassword = documentSnapshot.getString("password");
-
-                                // Converting password to hashed password
-                                String hashedPw = null;
-                                try {
-                                    hashedPw = toHexString(getSHA(password));
-                                } catch (NoSuchAlgorithmException e) {
-                                    // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
-                                    e.printStackTrace();
-                                }
-
-                                if (correctPassword.equals(hashedPw)) {
-                                    Log.d("Success", "Log in successful.");
-
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("username", username);
-
-                                    NavController controller = Navigation.findNavController(view);
-                                    controller.navigate(R.id.action_loginFragment_to_mainPageFragment, bundle);
-
-                                } else {
-                                    Log.d("Check Password", "Password does not match.");
-                                    editTextPassword.setError("Password is incorrect. Please try again.");
-                                }
-                            }
-                        } if(task.getResult().size() == 0 ){
-                            Log.d("Failure", "User not Exists");
-                            editTextUsername.setError("User does not exist. Please sign up first.");
-                            //You can store new user information here
-
-                        }
-
-                    }
-                });
             }
         });
 
-//        getView().findViewById(R.id.toSignup).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_loginFragment_to_signupFragment);
-//            }
-//        });
     }
 
     /**

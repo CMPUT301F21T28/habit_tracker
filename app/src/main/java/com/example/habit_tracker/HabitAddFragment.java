@@ -128,6 +128,7 @@ public class HabitAddFragment extends Fragment {
             public void onClick(View view) {
                 final boolean[] isValid = {true};
 
+                // TODO: Extract these out to serperate functions -- darren
                 if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
                     isValid[0] = false;
                     habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");

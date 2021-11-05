@@ -81,6 +81,7 @@ public class EventEditFragment extends Fragment {
                 if ( 20 <= commentContent.getText().toString().length()) {
                     isValid[0] = false;
                     commentContent.setError("Comment may not valid. Please ensure that it is between 0 and 20 characters.");
+                    commentContent.requestFocus();
                     return;
                 }
 //                TODO location & image
@@ -92,10 +93,10 @@ public class EventEditFragment extends Fragment {
 
                 HashMap<String, String> data = new HashMap<>();
 
+                // isValid doesnt actually do anything... please check this -- darren
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
                     //data.put("Location", locationContent.getText().toString());
-
 
                     event.setEventComment(commentContent.getText().toString());
                     //habitevent.setEventLocation(locationContent.getText().toString());

@@ -128,7 +128,8 @@ public class HabitEditFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 final boolean[] isValid = {true};
-                //Check if the habit title is between 0~20 characters.
+                // TODO: Possibly extract it out -- darren
+                // Check if the habit title is between 0~20 characters.
                 if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
                     isValid[0] = false;
                     habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");

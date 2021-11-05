@@ -128,7 +128,6 @@ public class SignupFragment extends DialogFragment {
                 final boolean[] isValid = {true};
                 // check if username valid
                 if (0 >= username.getText().toString().length() || username.getText().toString().length() >= 20) {
-                    isValid[0] = false;
                     username.setError("Username not valid. Please ensure that it is between 0 and 20 characters.");
                     username.requestFocus();
                     return;
@@ -136,7 +135,6 @@ public class SignupFragment extends DialogFragment {
 
                 // check realname - as long as not empty
                 if (realName.getText().toString().isEmpty()) {
-                    isValid[0] = false;
                     realName.setError("This field cannot be empty.");
                     realName.requestFocus();
                     return;
@@ -144,7 +142,6 @@ public class SignupFragment extends DialogFragment {
 
                 // check if password is empty
                 if (firstPassword.getText().toString().isEmpty()) {
-                    isValid[0] = false;
                     firstPassword.setError("Password cannot be empty. Please try again.");
                     firstPassword.requestFocus();
                     return;
@@ -152,7 +149,6 @@ public class SignupFragment extends DialogFragment {
 
                 // check password matching
                 if (!firstPassword.getText().toString().equals(secondPassword.getText().toString())) {
-                    isValid[0] = false;
                     secondPassword.setError("Passwords do not match. Please try again.");
                     secondPassword.requestFocus();
                     return;

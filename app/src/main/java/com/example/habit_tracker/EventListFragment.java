@@ -43,6 +43,7 @@ public class EventListFragment extends Fragment {
     RecyclerView eventList;
     EventListAdapter recyclerAdapter;
 
+    // maybe implement this as a seperate class?
     ArrayList<Event> eventDataList;
 
     FirebaseFirestore db;

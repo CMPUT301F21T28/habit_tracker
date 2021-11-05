@@ -132,7 +132,7 @@ public class LoginFragment extends Fragment {
                                     e.printStackTrace();
                                 }
 
-                                if (correctPassword.equals(hashedPw)) {
+                                if (validPassword(password,correctPassword)) {
                                     Log.d("Success", "Log in successful.");
                                     // Creating bundle to pass information to next fragment
                                     Bundle outgoingBundle = new Bundle();
@@ -159,13 +159,22 @@ public class LoginFragment extends Fragment {
             }
         });
 
-//        getView().findViewById(R.id.toSignup).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_loginFragment_to_signupFragment);
-//            }
-//        });
+    }
+
+    public boolean validPassword(String inputPassword, String dbPassword){
+        // Converting password to hashed password
+        String hashedPw = null;
+        try {
+            hashedPw = toHexString(getSHA(inputPassword));
+        } catch (NoSuchAlgorithmException e) {
+            // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
+            e.printStackTrace();
+        }
+        if (dbPassword.equals(hashedPw)){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

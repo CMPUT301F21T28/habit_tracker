@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -68,7 +67,7 @@ public class EventEditFragment extends Fragment {
         submit= (Button) getView().findViewById(R.id.Submit);
 
 
-        commentContent.setText(event.getEventComment());
+        commentContent.setText(event.getComment());
         //locationContent.setText(habitevent.getEventLocation());
 
 
@@ -101,7 +100,7 @@ public class EventEditFragment extends Fragment {
                     event.setEventComment(commentContent.getText().toString());
                     //habitevent.setEventLocation(locationContent.getText().toString());
 
-                    data.put("event name", event.getEventName());
+                    data.put("event name", event.getName());
                     collectionReference
                             .document(event.getEventID())
                             .set(data)

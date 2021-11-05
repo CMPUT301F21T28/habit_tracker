@@ -1,6 +1,5 @@
 package com.example.habit_tracker;
 
-import android.media.Ringtone;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,14 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
@@ -33,7 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -264,8 +257,8 @@ public class EventListFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             HashMap<String, String> data = new HashMap<>();
-                            data.put("event name", deletedEvent.getEventName());
-                            data.put("event comment", deletedEvent.getEventComment());
+                            data.put("event name", deletedEvent.getName());
+                            data.put("event comment", deletedEvent.getComment());
                             collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {

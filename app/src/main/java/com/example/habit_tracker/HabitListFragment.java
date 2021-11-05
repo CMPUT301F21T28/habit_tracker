@@ -7,20 +7,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -28,10 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -62,6 +56,13 @@ public class HabitListFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for HabitAddFragment, extract necessities (e.g. username) from bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,6 +87,14 @@ public class HabitListFragment extends Fragment {
 
         return rootView;
     }
+
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Connect to firebase DB, retrieve habits fields to local and store in Habit instance and pass to recyclerView
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -109,7 +118,6 @@ public class HabitListFragment extends Fragment {
                 recyclerAdapter.notifyDataSetChanged();
             }
         });
-
 
         // add a habit (go to new fragment)
         getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {
@@ -159,8 +167,8 @@ public class HabitListFragment extends Fragment {
                         public void onClick(View view) {
                             //habitDataList.add(position, deletedHabit);
                             HashMap<String, String> data = new HashMap<>();
-                            data.put("title", deletedHabit.getUserName());
-                            data.put("reason", deletedHabit.getReason());
+                            data.put("title", deletedHabit.getName());
+                            data.put("reason", deletedHabit.getComment());
                             data.put("repeat", deletedHabit.getRepeat());
                             data.put("dateOfStarting", deletedHabit.getDateOfStarting());
                             data.put("isPrivate", Boolean.toString(deletedHabit.getIsPrivate()));

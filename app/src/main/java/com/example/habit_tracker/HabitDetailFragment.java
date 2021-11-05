@@ -8,15 +8,12 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 public class HabitDetailFragment extends Fragment {
 
@@ -37,6 +34,14 @@ public class HabitDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for HabitDetailFragment
+     * Extract necessities (e.g. username, instance of Habit class) from bundle, set TextViews to their corresponding values
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,7 +53,6 @@ public class HabitDetailFragment extends Fragment {
             habit = bundle.getParcelable("Habit");
         }
 
-
         habitTitle = rootView.findViewById(R.id.textView_habitTitle);
         habitReason = rootView.findViewById(R.id.textView_habitReason);
         dateOfStarting = rootView.findViewById(R.id.textView_dateOfStarting);
@@ -58,8 +62,8 @@ public class HabitDetailFragment extends Fragment {
         isPrivate = rootView.findViewById(R.id.textView_private);
         edit = rootView.findViewById(R.id.button_edit);
 
-        habitTitle.setText(habit.getHabitName());
-        habitReason.setText(habit.getReason());
+        habitTitle.setText(habit.getName());
+        habitReason.setText(habit.getComment());
         dateOfStarting.setText(habit.getDateOfStarting());
         repeat.setText(habit.getRepeat());
         isPrivate.setText(Boolean.toString(habit.getIsPrivate()));
@@ -68,11 +72,15 @@ public class HabitDetailFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
 
         edit = getView().findViewById(R.id.button_edit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +89,7 @@ public class HabitDetailFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
 
-                bundle.putString("username", habit.getUserName());
+                bundle.putString("username", habit.getUsername());
                 bundle.putParcelable("Habit", habit);
 
                 NavController controller = Navigation.findNavController(view);

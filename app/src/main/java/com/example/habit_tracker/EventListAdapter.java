@@ -22,6 +22,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     Context context;
     private static final String TAG = "MyActivity";
 
+    /**
+     * EventListAdapter is a customized list. It stores data retrieved from firebase
+     * @param ctx
+     * @param events
+     */
     public EventListAdapter(Context ctx, ArrayList<Event> events) {
         this.context = ctx;
         this.events = events;
@@ -35,6 +40,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         return new ViewHolder(view);
     }
 
+    /**
+     * Create the view of recyclerView
+     * Short Click； cause Fragment change to event detail Fragment.
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Event event = events.get(position);
@@ -64,6 +75,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         TextView eventName;
         ProgressBar progressBar;
 
+        /**
+         * Create a row's view of recyclerView
+         * @param itemView
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             progressBar = itemView.findViewById(R.id.habit_progress_row);

@@ -59,6 +59,14 @@ public class EventListFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for EventAddFragment.
+     * Extract necessary element (e.g username, habitID) from Bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,6 +98,14 @@ public class EventListFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Initialize all other parts that changes fragment status.
+     * Connecting to firebase, retrieve events field and pass to recyclerView.
+     * fragments changes controlled by Navigation.
+     * Swap item right to delete.
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

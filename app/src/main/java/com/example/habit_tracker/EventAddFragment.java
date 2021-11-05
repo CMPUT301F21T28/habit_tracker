@@ -42,11 +42,22 @@ public class EventAddFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for EventAddFragment, extract necessities (e.g. username, habitID) from bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return rootView
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,6 +72,13 @@ public class EventAddFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * connecting to firebase DB, sending file to firebase.
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

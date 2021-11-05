@@ -3,7 +3,7 @@ package com.example.habit_tracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Habit implements Parcelable {
+public class Habit implements Parcelable, Info {
     private String userName;
     private String habitName;
     private String habitID;
@@ -61,13 +61,13 @@ public class Habit implements Parcelable {
         this.habitName = habitName;
     }
 
-    String getUserName() {return this.userName;}
-    String getHabitName() {return this.habitName;}
-    String getHabitID() {return this.habitID;}
-    String getDateOfStarting() {return this.dateOfStarting;}
-    String getReason() {return this.reason;}
-    String getRepeat() {return  this.repeat;}
-    Boolean getIsPrivate() {return this.isPrivate;}
+    public String getUsername() {return this.userName;}
+    public String getName() {return this.habitName;}
+    public String getHabitID() {return this.habitID;}
+    public String getDateOfStarting() {return this.dateOfStarting;}
+    public String getComment() {return this.reason;}
+    public String getRepeat() {return  this.repeat;}
+    public Boolean getIsPrivate() {return this.isPrivate;}
 
     @Override
     public int describeContents() {

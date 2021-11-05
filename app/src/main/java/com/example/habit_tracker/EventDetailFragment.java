@@ -57,8 +57,8 @@ public class EventDetailFragment extends Fragment {
         Image = rootView.findViewById(R.id.PictureContent);
         */
 
-        eventName.setText(event.getEventName());
-        commentContent.setText(event.getEventComment());
+        eventName.setText(event.getName());
+        commentContent.setText(event.getComment());
         //locationContent.setText(habitevent.getEventLocation());
 
         return rootView;

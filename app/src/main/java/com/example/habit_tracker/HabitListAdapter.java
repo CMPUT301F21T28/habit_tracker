@@ -40,7 +40,7 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Habit habit = habits.get(position);
-        holder.habitName.setText(habit.getHabitName());
+        holder.habitName.setText(habit.getName());
 
         //TODO progress bar undone
 
@@ -48,7 +48,7 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("username", habit.getUserName());
+                bundle.putString("username", habit.getUsername());
                 bundle.putParcelable("Habit", habit);
 
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
@@ -62,7 +62,7 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
             public boolean onLongClick(View view) {
                 // TODO change to a button implementation in the future update
                 Bundle bundle = new Bundle();
-                bundle.putString("username", habit.getUserName());
+                bundle.putString("username", habit.getUsername());
                 bundle.putParcelable("Habit", habit);
                 Log.d(TAG, "onLongClick: habit id " +habit.getHabitID());
 

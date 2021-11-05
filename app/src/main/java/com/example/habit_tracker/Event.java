@@ -3,7 +3,7 @@ package com.example.habit_tracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Event implements Parcelable
+public class Event implements Parcelable, Info
 {
     private String username;
     private String habitID;
@@ -52,11 +52,11 @@ public class Event implements Parcelable
     }
     //void setEventLocation(String Location){ this.eventLocation = Location;}
 
-    String getUsername() {return this.username;}
-    String getHabitID() {return this.habitID;}
-    String getEventID() {return this.eventID;}
-    String getEventName() {return this.eventName;}
-    String getEventComment() {return this.eventComment;}
+    public String getUsername() {return this.username;}
+    public String getHabitID() {return this.habitID;}
+    public String getEventID() {return this.eventID;}
+    public String getName() {return this.eventName;}
+    public String getComment() {return this.eventComment;}
     //String getEventLocation() {return this.eventLocation;}
 
     @Override

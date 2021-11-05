@@ -2,7 +2,6 @@ package com.example.habit_tracker;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Event event = events.get(position);
-        holder.eventName.setText(event.getEventName());
+        holder.eventName.setText(event.getName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

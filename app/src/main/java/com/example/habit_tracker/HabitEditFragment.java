@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,7 +26,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.HashMap;
-import java.util.UUID;
 
 public class HabitEditFragment extends Fragment {
     private Button submitButton;
@@ -98,8 +96,8 @@ public class HabitEditFragment extends Fragment {
 
         submitButton = (Button) getView().findViewById(R.id.button_submit);
 
-        habitTitle.setText(habit.getHabitName());
-        habitReason.setText(habit.getReason());
+        habitTitle.setText(habit.getName());
+        habitReason.setText(habit.getComment());
         dateOfStarting.setText(habit.getDateOfStarting());
         repeat.setText(habit.getRepeat());
 

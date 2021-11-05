@@ -8,15 +8,12 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 public class HabitDetailFragment extends Fragment {
 
@@ -58,8 +55,8 @@ public class HabitDetailFragment extends Fragment {
         isPrivate = rootView.findViewById(R.id.textView_private);
         edit = rootView.findViewById(R.id.button_edit);
 
-        habitTitle.setText(habit.getHabitName());
-        habitReason.setText(habit.getReason());
+        habitTitle.setText(habit.getName());
+        habitReason.setText(habit.getComment());
         dateOfStarting.setText(habit.getDateOfStarting());
         repeat.setText(habit.getRepeat());
         isPrivate.setText(Boolean.toString(habit.getIsPrivate()));
@@ -81,7 +78,7 @@ public class HabitDetailFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
 
-                bundle.putString("username", habit.getUserName());
+                bundle.putString("username", habit.getUsername());
                 bundle.putParcelable("Habit", habit);
 
                 NavController controller = Navigation.findNavController(view);

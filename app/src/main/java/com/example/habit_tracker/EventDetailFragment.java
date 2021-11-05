@@ -53,6 +53,7 @@ public class EventDetailFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
 
+        // maybe add validation check for bundle arguments? - darren
         username = bundle.getString("username");
         habitID = bundle.getString("habitID");
         event = bundle.getParcelable("Event");

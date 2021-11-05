@@ -103,7 +103,7 @@ public class EventAddFragment extends Fragment {
                 String event_commit = editTextEventCommit.getText().toString();
 
                 HashMap<String,Object> data = new HashMap<>();
-                if (event_name.length()>0){
+                if (event_name.length()>0 && event_commit.length() <= 20 ){
                     data.put("event name",event_name);
                     data.put("event comment",event_commit);
                     //data.put("event image",image);
@@ -129,7 +129,7 @@ public class EventAddFragment extends Fragment {
                                 }
                             });
                 }else{
-                    Toast.makeText(getContext(),"need a event name",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Invalid information.",Toast.LENGTH_SHORT).show();
                 }
 
             }

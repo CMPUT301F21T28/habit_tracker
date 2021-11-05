@@ -83,7 +83,7 @@ public class HabitAddFragment extends Fragment {
      * @return A boolean specify if the input date is valid
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static boolean checkDateValidity(final String date) {
+    public boolean checkDateValidity(final String date) {
         boolean valid = false;
         try {
 
@@ -98,6 +98,19 @@ public class HabitAddFragment extends Fragment {
             valid = false;
         }
         return valid;
+    }
+
+    /**
+     * Check if the input title, reason, date are valid
+     * @param editTextView, lower, upper
+     * @return A boolean specify if the input date is valid
+     */
+    public boolean checkInputValidity(EditText editTextView, int lower, int upper){
+        if (editTextView.getText().toString().length() < lower || editTextView.getText().toString().length() > upper){
+            editTextView.setError("Not valid. Please ensure that it is between " +lower + " and "+ upper + " characters.");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -126,32 +139,16 @@ public class HabitAddFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                final boolean[] isValid = {true};
-
-                if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
-                    isValid[0] = false;
-                    habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
+                //Check if input is in range
+                boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,0,30)
+                        && checkInputValidity(dateOfStarting,0,10000);
+                if (inputValid == false){
                     return;
                 }
-
-                if (30 <= habitReason.getText().toString().length()) {
-                    isValid[0] = false;
-                    habitReason.setError("The reason should be less than 30 characters.");
-                    return;
-                }
-
-                if (dateOfStarting.getText().toString().length() >= 0){
-                    isValid[0] = checkDateValidity(dateOfStarting.getText().toString());
-                    if (isValid[0] == false){
-                        dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
-                        return;
-                    }
-
-                }
-
-                if (repeat.getText().toString().length() >= 30){
-                    isValid[0] = false;
-                    repeat.setError("Please enter a string less than 30 characters.");
+                // Check if input date is valid
+                if (checkDateValidity(dateOfStarting.getText().toString()) == false){
+                    dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
+                    inputValid = false;
                     return;
                 }
 
@@ -160,7 +157,8 @@ public class HabitAddFragment extends Fragment {
                 } else if (isPrivate.getText().toString().toLowerCase().equals("no")){
                     isPrivateBoolean = false;
                 }else {
-                    isValid[0] = false;
+                    //isValid[0] = false;
+                    inputValid = false;
                     isPrivate.setError("Your input should be Yes or No.");
                     return;
                 }
@@ -171,7 +169,7 @@ public class HabitAddFragment extends Fragment {
                 UUID uuid = UUID.randomUUID();
                 String uuidString = uuid.toString();
 
-                if (isValid[0] == true) {
+                if (inputValid == true) {
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", repeat.getText().toString());

@@ -34,6 +34,14 @@ public class HabitDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for HabitDetailFragment
+     * Extract necessities (e.g. username, instance of Habit class) from bundle, set TextViews to their corresponding values
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,7 +52,6 @@ public class HabitDetailFragment extends Fragment {
         if (bundle != null && bundle.containsKey("username")){
             habit = bundle.getParcelable("Habit");
         }
-
 
         habitTitle = rootView.findViewById(R.id.textView_habitTitle);
         habitReason = rootView.findViewById(R.id.textView_habitReason);
@@ -65,11 +72,15 @@ public class HabitDetailFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
 
         edit = getView().findViewById(R.id.button_edit);
         edit.setOnClickListener(new View.OnClickListener() {

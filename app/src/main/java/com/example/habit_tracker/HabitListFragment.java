@@ -56,6 +56,13 @@ public class HabitListFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for HabitAddFragment, extract necessities (e.g. username) from bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,6 +87,14 @@ public class HabitListFragment extends Fragment {
 
         return rootView;
     }
+
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Connect to firebase DB, retrieve habits fields to local and store in Habit instance and pass to recyclerView
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -103,7 +118,6 @@ public class HabitListFragment extends Fragment {
                 recyclerAdapter.notifyDataSetChanged();
             }
         });
-
 
         // add a habit (go to new fragment)
         getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {

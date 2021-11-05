@@ -12,6 +12,16 @@ public class Habit implements Parcelable, Info {
     private String repeat;
     private Boolean isPrivate;
 
+    /**
+     * Habit Class has 7 variables, each co-responding to either a field in Habit or a reference (e.g. username)
+     * @param userName
+     * @param habitName
+     * @param habitID
+     * @param dateOfStarting
+     * @param reason
+     * @param repeat
+     * @param isPrivate
+     */
     Habit(String userName, String habitName, String habitID, String dateOfStarting, String reason, String repeat, boolean isPrivate) {
         this.userName = userName;
         this.habitName = habitName;

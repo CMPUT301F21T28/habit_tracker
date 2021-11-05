@@ -46,6 +46,13 @@ public class HabitEditFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for HabitAddFragment, extract necessities (e.g. username, instance of Habit class) from the bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,14 +64,14 @@ public class HabitEditFragment extends Fragment {
             username = bundle.getString("username");
             habit = bundle.getParcelable("Habit");
         }
-
-
-
-
         return rootView;
     }
 
-    //the function to check if the string is in yyyy/mm/dd form
+    /**
+     * Check if the input date is valid
+     * @param date
+     * @return A boolean specify if the input date is valid
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static boolean checkDateValidity(final String date) {
         boolean valid = false;
@@ -83,6 +90,13 @@ public class HabitEditFragment extends Fragment {
         return valid;
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -192,10 +206,7 @@ public class HabitEditFragment extends Fragment {
                                     //Toast.makeText(getContext(), "Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
                                 }
                             });
-
                 }
-
-
             }
         });
 

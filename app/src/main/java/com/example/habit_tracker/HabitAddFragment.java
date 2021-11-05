@@ -35,11 +35,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
- */
 public class HabitAddFragment extends Fragment {
 
     private Button submitButton;
@@ -52,7 +47,6 @@ public class HabitAddFragment extends Fragment {
     private String username;
     private Boolean isPrivateBoolean;
 
-
     public HabitAddFragment() {
         // Required empty public constructor
     }
@@ -62,6 +56,13 @@ public class HabitAddFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for HabitAddFragment, extract necessities (e.g. username) from bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,12 +73,15 @@ public class HabitAddFragment extends Fragment {
         if (bundle != null && bundle.containsKey("username")){
             username = bundle.getString("username");
         }
-
-
         return rootView;
 
     }
 
+    /**
+     * Check if the input date is valid
+     * @param date
+     * @return A boolean specify if the input date is valid
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static boolean checkDateValidity(final String date) {
         boolean valid = false;
@@ -96,6 +100,13 @@ public class HabitAddFragment extends Fragment {
         return valid;
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -36,6 +36,15 @@ public class EventDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for EventDetailFragment
+     * Extract necessities (e.g. username, instance of Habit class) from bundle, set TextViews to their corresponding values
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,6 +75,12 @@ public class EventDetailFragment extends Fragment {
 
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

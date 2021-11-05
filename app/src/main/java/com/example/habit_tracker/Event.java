@@ -12,6 +12,15 @@ public class Event implements Parcelable, Info
     private String eventComment;
     //private String eventLocation;
 
+    /**
+     * Habit Class has 5 variables, each co-responding to either a field in Event or a reference (e.g. username)
+     * @param username
+     * @param habitID
+     * @param eventID
+     * @param eventName
+     * @param eventComment
+     */
+
     // TODO location, picture
     Event(String username, String habitID, String eventID, String eventName, String eventComment) {
         this.username = username;

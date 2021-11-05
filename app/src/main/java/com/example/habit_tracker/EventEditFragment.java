@@ -42,6 +42,13 @@ public class EventEditFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for EventAddFragment, extract necessities (e.g. username, instance of Habit class) from the bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,7 +63,13 @@ public class EventEditFragment extends Fragment {
         return rootView;
     }
 
-
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_habitListFragment_to_habitAddFragment"
             app:destination="@id/habitAddFragment" />
+        <action
+            android:id="@+id/action_habitListFragment_to_eventListFragment"
+            app:destination="@id/eventListFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitDetailFragment"
@@ -73,6 +76,48 @@
         <action
             android:id="@+id/action_signupFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventListFragment"
+        android:name="com.example.habit_tracker.EventListFragment"
+        android:label="Event List"
+        tools:layout="@layout/fragment_event_list">
+        <action
+            android:id="@+id/action_eventListFragment_to_eventAddFragment"
+            app:destination="@id/eventAddFragment" />
+        <action
+            android:id="@+id/action_eventListFragment_to_habitListFragment"
+            app:destination="@id/habitListFragment" />
+        <action
+            android:id="@+id/action_eventListFragment_to_eventDetailFragment"
+            app:destination="@id/eventDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventAddFragment"
+        android:name="com.example.habit_tracker.EventAddFragment"
+        android:label="fragment_event_add"
+        tools:layout="@layout/fragment_event_add" >
+        <action
+            android:id="@+id/action_eventAddFragment_to_eventListFragment"
+            app:destination="@id/eventListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventDetailFragment"
+        android:name="com.example.habit_tracker.EventDetailFragment"
+        android:label="fragment_event_detail"
+        tools:layout="@layout/fragment_event_detail" >
+        <action
+            android:id="@+id/action_eventDetailFragment_to_eventEditFragment"
+            app:destination="@id/eventEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventEditFragment"
+        android:name="com.example.habit_tracker.EventEditFragment"
+        android:label="fragment_event_edit"
+        tools:layout="@layout/fragment_event_edit" >
+        <action
+            android:id="@+id/action_eventEditFragment_to_eventListFragment"
+            app:destination="@id/eventListFragment" />
     </fragment>
 
 </navigation>

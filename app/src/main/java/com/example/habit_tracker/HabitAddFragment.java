@@ -155,6 +155,7 @@ public class HabitAddFragment extends Fragment {
                 }
 
                 HashMap<String, String> data = new HashMap<>();
+                HashMap<String, String> event_data = new HashMap<>();
 
                 UUID uuid = UUID.randomUUID();
                 String uuidString = uuid.toString();

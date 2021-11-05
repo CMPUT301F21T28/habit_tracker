@@ -13,11 +13,19 @@ public class HabitTest {
 
     private Habit mockHabit;
 
+    /**
+     * Creates a mock habit into var mockHabit before each test is run.
+     */
     @BeforeEach
     public void createHabit(){
         mockHabit= new Habit("usernameMock","habitNameMock", "habitIDMock", "dateOfStartingMock", "reasonMock","repeatMock",false);
     }
 
+    /**
+     * Tesitng if the setRepeat of habit works
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testSetRepeat() throws NoSuchFieldException, IllegalAccessException {
         mockHabit.setRepeat("Monday");
@@ -26,6 +34,9 @@ public class HabitTest {
         assertEquals("Monday", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing if the setReason of Habit works
+     */
     @Test
     public void testSetReason() throws NoSuchFieldException, IllegalAccessException {
         mockHabit.setReason("Stay healthy");
@@ -34,6 +45,11 @@ public class HabitTest {
         assertEquals("Stay healthy", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing if setDateofStarting of Habit works
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testSetDateOfStarting() throws NoSuchFieldException, IllegalAccessException {
         mockHabit.setDateOfStarting("2020/10/12");
@@ -42,6 +58,11 @@ public class HabitTest {
         assertEquals("2020/10/12", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing if setPrivate of Habit works
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testSetPrivate() throws NoSuchFieldException, IllegalAccessException {
         mockHabit.setPrivate(true);
@@ -50,6 +71,11 @@ public class HabitTest {
         assertEquals(true, field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing if setHabitTitle of Habit works
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testSetHabitTitle() throws NoSuchFieldException, IllegalAccessException {
         mockHabit.setHabitTitle("New Title");
@@ -58,6 +84,11 @@ public class HabitTest {
         assertEquals("New Title", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing if testGetusername works
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testGetUsername() throws NoSuchFieldException, IllegalAccessException {
         final Field field = mockHabit.getClass().getDeclaredField("userName");
@@ -65,6 +96,11 @@ public class HabitTest {
         assertEquals("usernameMock", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing if getName of Habit works
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testGetName() throws NoSuchFieldException, IllegalAccessException {
         final Field field = mockHabit.getClass().getDeclaredField("habitName");
@@ -72,6 +108,11 @@ public class HabitTest {
         assertEquals("habitNameMock", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing if getHabitId of Habit class works
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testGetHabitID() throws NoSuchFieldException, IllegalAccessException {
         final Field field = mockHabit.getClass().getDeclaredField("habitID");
@@ -79,6 +120,11 @@ public class HabitTest {
         assertEquals("habitIDMock", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing if getSTartDate of Habit works
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testGetDateOfStarting() throws NoSuchFieldException, IllegalAccessException {
         final Field field = mockHabit.getClass().getDeclaredField("dateOfStarting");
@@ -86,6 +132,11 @@ public class HabitTest {
         assertEquals("dateOfStartingMock", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing get comment
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testGetComment() throws NoSuchFieldException, IllegalAccessException {
         final Field field = mockHabit.getClass().getDeclaredField("reason");
@@ -93,6 +144,11 @@ public class HabitTest {
         assertEquals("reasonMock", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing getRepeat
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testGetRepeat() throws NoSuchFieldException, IllegalAccessException {
         final Field field = mockHabit.getClass().getDeclaredField("repeat");
@@ -100,6 +156,11 @@ public class HabitTest {
         assertEquals("repeatMock", field.get(mockHabit), "Fields didn't match");
     }
 
+    /**
+     * Testing isPrivate
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Test
     public void testIsPrivate() throws NoSuchFieldException, IllegalAccessException {
         final Field field = mockHabit.getClass().getDeclaredField("isPrivate");

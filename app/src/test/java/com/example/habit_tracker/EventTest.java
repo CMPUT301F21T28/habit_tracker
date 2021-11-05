@@ -56,6 +56,9 @@ public class EventTest {
         assertEquals(mockEvent.getComment(), "mockComment");
     }
 
+    /**
+     * Testing the EventName setter for Event
+     */
     @Test
     public void setEventNameTest() {
         assertEquals(mockEvent.getName(), "mockName");
@@ -63,16 +66,19 @@ public class EventTest {
         assertEquals(mockEvent.getName(), "newMockName");
     }
 
+    /**
+     * Testing the EventComment setter for Event
+     */
     @Test
     public void setEventComment() {
         assertEquals(mockEvent.getComment(), "mockComment");
         mockEvent.setEventComment("newMockComment");
         assertEquals(mockEvent.getComment(), "newMockComment");
     }
-        //    void setEventComment(String Comment)
-    //
+
+
         // Supposed to fail: (function stub)
-    //    public int describeContents()
+        //    public int describeContents()
 
         // Dont have to test because part of superclass
         //    public void writeToParcel(Parcel parcel, int i)

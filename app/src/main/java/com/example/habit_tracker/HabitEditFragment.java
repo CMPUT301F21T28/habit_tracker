@@ -91,6 +91,19 @@ public class HabitEditFragment extends Fragment {
     }
 
     /**
+     * Check if the input title, reason, date are valid
+     * @param editTextView, lower, upper
+     * @return A boolean specify if the input date is valid
+     */
+    public boolean checkInputValidity(EditText editTextView, int lower, int upper){
+        if (editTextView.getText().toString().length() < lower || editTextView.getText().toString().length() > upper){
+            editTextView.setError("Not valid. Please ensure that it is between " +lower + " and "+ upper + " characters.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Initialize all other parts that could cause the fragment status change
      * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
      * Fragment change by navigation
@@ -127,35 +140,20 @@ public class HabitEditFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                final boolean[] isValid = {true};
-                // TODO: Possibly extract it out -- darren
-                // Check if the habit title is between 0~20 characters.
-                if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
-                    isValid[0] = false;
-                    habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
+                //final boolean[] isValid = {true};
+                //Check if input is in range
+                boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,0,30)
+                        && checkInputValidity(dateOfStarting,0,20) && checkInputValidity(repeat,0,30);
+                if (inputValid == false){
                     return;
                 }
-                //Check if the habit reason is less than 30 characters.
-                if (30 <= habitReason.getText().toString().length()) {
-                    isValid[0] = false;
-                    habitReason.setError("The reason should be less than 30 characters.");
+                // Check if input date is valid
+                if (checkDateValidity(dateOfStarting.getText().toString()) == false){
+                    dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
+                    inputValid = false;
                     return;
                 }
-                //Check if the date entered is in the form of yyyy/mm/dd
-                if (dateOfStarting.getText().toString().length() >= 0){
-                    isValid[0] = checkDateValidity(dateOfStarting.getText().toString());
-                    if (isValid[0] == false){
-                        dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
-                        return;
-                    }
 
-                }
-                //check the length of the string
-                if (repeat.getText().toString().length() >= 30){
-                    isValid[0] = false;
-                    repeat.setError("Please enter a string less than 30 characters");
-                    return;
-                }
 
                 //set the isPrivate to be true if the user enters yes, false if the user enters no.
                 if (isPrivate.getText().toString().toLowerCase().equals("yes")) {
@@ -163,14 +161,15 @@ public class HabitEditFragment extends Fragment {
                 } else if (isPrivate.getText().toString().toLowerCase().equals("no")){
                     isPrivateBoolean = false;
                 }else {
-                    isValid[0] = false;
+                    //isValid[0] = false;
+                    inputValid = false;
                     isPrivate.setError("Your input should be Yes or No.");
                     return;
                 }
 
                 HashMap<String, String> data = new HashMap<>();
 
-                if (isValid[0] == true) {
+                if (inputValid == true) {
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", repeat.getText().toString());

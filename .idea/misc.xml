@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_event_add.xml" value="0.24974358974358973" />
         <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_signup.xml" value="0.259375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.42552083333333335" />
@@ -15,6 +16,9 @@
         <entry key="app/src/main/res/layout/fragment_one.xml" value="0.42552083333333335" />
       </map>
     </option>
+  </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

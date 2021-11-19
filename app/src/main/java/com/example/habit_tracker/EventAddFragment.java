@@ -1,10 +1,18 @@
 package com.example.habit_tracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -37,6 +45,7 @@ public class EventAddFragment extends Fragment {
 
     String username = null;
     String habitID = null;
+    
 
     public EventAddFragment() {
         // Required empty public constructor
@@ -75,19 +84,47 @@ public class EventAddFragment extends Fragment {
         Image image = null;
         ImageView imageView;
         final File[] file = new File[1];
-
-
-        /* TODO image adding
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
+        ActivityResultLauncher<Intent> activityResultLauncher;
+
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        //
+                        Bundle b = result.getData().getExtras();
+                        Bitmap bitmap = (Bitmap) b.get("data");
+                        imageButton.setImageBitmap(bitmap);
+                    }
+                });
+
+
+        /* TODO image adding*/
+        //ImageButton imageButton = getView().findViewById(R.id.imageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //file[0] = new File(Environment.getExternalStorageDirectory(),System.currentTimeMillis()+habit+".jpg")
-                //Intent intent = new Intent(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file[0]));
-                //startActivityForResult(intent,100);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//EXTRA_OUTPUT, Uri.fromFile(file[0]));
+                activityResultLauncher.launch(intent);
+                //getActivity().startActivityForResult(intent,100);
+                /*
+                ActivityResultLauncher<Image> imageResult = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                        new ActivityResultCallback<Uri>() {
+                            @Override
+                            public void onActivityResult(Uri result) {
+                                //
+                            }
+                        })*/
             }
         });
-        */
+
+
+        LocationManager locationManager;
+
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,this);
+        //Location loaction = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("habit");

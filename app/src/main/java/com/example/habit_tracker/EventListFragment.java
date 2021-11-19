@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.habit_tracker.adapters.EventListAdapter;
+import com.example.habit_tracker.adapters.GenericAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -184,8 +186,6 @@ public class EventListFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", username);
                 bundle.putString("habitID", habitID);
-
-                Log.d(TAG, "onClick: habitID" + habitID);
 
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_eventListFragment_to_eventAddFragment,bundle);

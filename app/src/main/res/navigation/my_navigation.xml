@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_mainPageFragment_to_habitListFragment"
             app:destination="@id/habitListFragment" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_friendListFragment"
+            app:destination="@id/friendListFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitListFragment"
@@ -119,5 +122,10 @@
             android:id="@+id/action_eventEditFragment_to_eventListFragment"
             app:destination="@id/eventListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/friendListFragment"
+        android:name="com.example.habit_tracker.FriendListFragment"
+        android:label="fragment_friend_list"
+        tools:layout="@layout/fragment_friend_list" />
 
 </navigation>

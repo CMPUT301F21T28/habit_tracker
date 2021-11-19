@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.habit_tracker.adapters.HabitListAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
@@ -120,7 +121,7 @@ public class HabitListFragment extends Fragment {
         });
 
         // add a habit (go to new fragment)
-        getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.add_friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();

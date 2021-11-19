@@ -107,8 +107,6 @@ public class SignupFragment extends DialogFragment {
         returnToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_signupFragment_to_loginFragment);
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_signupFragment_to_loginFragment);
             }
@@ -214,48 +212,6 @@ public class SignupFragment extends DialogFragment {
             }
         });
     }
-
-    /**
-     * Checking if inputted username is valid (follows length guidelines)
-     * @param username
-     *      The String of the username that is being tested
-     * @return
-     *      return True if everything is ok
-     */
-    public static boolean checkUsernameValid(String username) {
-        // testing username bounds
-        return 0 < username.length() && username.length() < 20;
-    }
-
-    /**
-     * Checking if inputted username is valid (follow not null guidelines)
-     * @param realName
-     *      the String of the realname
-     * @return
-     *      return True if everything is ok
-     */
-    public static boolean checkRealnameValid(String realName) {
-        return !realName.isEmpty();
-    }
-
-    /**
-     * Checks if the password and the comfirm password fields are valid.
-     * (longer than 5 characters, passwords match)
-     * @param firstpass
-     *      the String of the firstpassword input
-     * @return
-     *      return True if everything is ok
-     */
-    public static boolean checkFirstPassValid(String firstpass) {
-        // check if password is empty
-        return firstpass.length() > 5;
-    }
-
-    public static boolean checkSecondPassValid(String firstpass, String secondpass) {
-        // check second pass password matching
-        return firstpass.equals(secondpass);
-    }
-
 
     /**
      * Hashing support function. SRC: https://www.geeksforgeeks.org/sha-256-hash-in-java/

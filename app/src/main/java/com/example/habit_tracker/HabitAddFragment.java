@@ -1,12 +1,17 @@
 package com.example.habit_tracker;
 
+import static android.content.ContentValues.TAG;
+
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,12 +24,16 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.CollationElementIterator;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
@@ -46,7 +55,14 @@ public class HabitAddFragment extends Fragment {
     private EditText habitTitle;
     private EditText habitReason;
     private EditText dateOfStarting;
-    private EditText repeat;
+//    private EditText repeat;
+    private TextView repeatDay;
+    private boolean[] selectedDay;
+    private ArrayList<Integer> dayList = new ArrayList<>();
+    private String[] dayArray = {"Monday", "Tuesday", "Wednesday",
+            "Thursday", "Friday", "Saturday", "Sunday"};
+    private String selectedDayString;
+
     private EditText isPrivate;
     private FirebaseFirestore db;
     private String username;
@@ -115,10 +131,83 @@ public class HabitAddFragment extends Fragment {
         habitTitle = (EditText) getView().findViewById(R.id.editText_habitTitle);
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason);
         dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting);
-        repeat = (EditText) getView().findViewById(R.id.editText_repeat);
+//        repeat = (EditText) getView().findViewById(R.id.editText_repeat);
+        repeatDay = (TextView) getView().findViewById(R.id.textView_select_day);
         isPrivate = (EditText) getView().findViewById(R.id.editText_isPrivate);
 
         submitButton = (Button) getView().findViewById(R.id.submit_button);
+
+
+        //Initialize selected repeat day
+        //https://stackoverflow.com/questions/10207206/how-to-display-alertdialog-in-a-fragment
+        selectedDay = new boolean[dayArray.length];
+        repeatDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Log.d(TAG, "onClick: repeat clicked");
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        getContext()
+                    );
+                builder.setTitle("Select Day");
+                builder.setCancelable(false);
+                builder.setMultiChoiceItems(dayArray, selectedDay, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b){
+                            //WHen checkbox is selected add position in day list
+                            dayList.add(i);
+                            //Sort dayList
+                            Collections.sort(dayList);
+                        }else {
+                            //When checkbox is unselected, remove position from the list
+                            dayList.remove(i);
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (int j = 0; j < dayList.size(); j ++){
+                            //concat array value
+                            stringBuilder.append(dayArray[dayList.get(j)]);
+                            //check condition
+                            if (j != dayList.size() - 1) {
+                                stringBuilder.append(", ");
+                            }
+                        }
+                        //set text on textView
+                        selectedDayString = stringBuilder.toString();
+                        repeatDay.setText(selectedDayString);
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        //Use for loop
+                        for (int j = 0; j < selectedDay.length; j++) {
+                            //remove all selection
+                            selectedDay[j] = false;
+                            dayList.clear();
+                            repeatDay.setText("Select Day");
+                        }
+                    }
+                });
+                //show dialog
+                builder.show();
+
+            }
+        });
+
 
 
         CollectionReference collectionReference = db.collection("Users").document(username).collection("HabitList");
@@ -156,11 +245,11 @@ public class HabitAddFragment extends Fragment {
 
                 }
 
-                if (repeat.getText().toString().length() >= 30){
-                    isValid[0] = false;
-                    repeat.setError("Please enter a string less than 30 characters.");
-                    return;
-                }
+//                if (repeat.getText().toString().length() >= 30){
+//                    isValid[0] = false;
+//                    repeat.setError("Please enter a string less than 30 characters.");
+//                    return;
+//                }
 
                 if (isPrivate.getText().toString().toLowerCase().equals("yes")) {
                     isPrivateBoolean = true;
@@ -180,7 +269,7 @@ public class HabitAddFragment extends Fragment {
                 if (isValid[0]) {
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
-                    data.put("repeat", repeat.getText().toString());
+                    data.put("repeat", selectedDayString);
                     data.put("dateOfStarting", dateOfStarting.getText().toString());
                     data.put("isPrivate", isPrivateBoolean.toString());
                     collectionReference

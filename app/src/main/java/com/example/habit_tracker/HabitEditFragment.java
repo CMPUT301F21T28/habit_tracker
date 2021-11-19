@@ -1,11 +1,13 @@
 package com.example.habit_tracker;
 
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,6 +28,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class HabitEditFragment extends Fragment {
@@ -32,7 +37,14 @@ public class HabitEditFragment extends Fragment {
     private EditText habitTitle;
     private EditText habitReason;
     private EditText dateOfStarting;
-    private EditText repeat;
+
+    private TextView repeatDay;
+    private boolean[] selectedDay;
+    private ArrayList<Integer> dayList = new ArrayList<>();
+    private String[] dayArray = {"Monday", "Tuesday", "Wednesday",
+            "Thursday", "Friday", "Saturday", "Sunday"};
+    private String selectedDayString;
+
     private EditText isPrivate;
     private FirebaseFirestore db;
     private String username;
@@ -118,7 +130,7 @@ public class HabitEditFragment extends Fragment {
         habitTitle = (EditText) getView().findViewById(R.id.editText_habitTitle2);
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason2);
         dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting2);
-        repeat = (EditText) getView().findViewById(R.id.editText_repeat2);
+        repeatDay = (TextView) getView().findViewById(R.id.textView_select_day2);
         isPrivate = (EditText) getView().findViewById(R.id.editText_isPrivate2);
 
         submitButton = (Button) getView().findViewById(R.id.button_submit);
@@ -126,7 +138,80 @@ public class HabitEditFragment extends Fragment {
         habitTitle.setText(habit.getName());
         habitReason.setText(habit.getComment());
         dateOfStarting.setText(habit.getDateOfStarting());
-        repeat.setText(habit.getRepeat());
+        repeatDay.setText(habit.getRepeat());
+
+
+        selectedDay = new boolean[dayArray.length];
+        repeatDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Log.d(TAG, "onClick: repeat clicked");
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        getContext()
+                );
+                builder.setTitle("Select Day");
+                builder.setCancelable(false);
+                builder.setMultiChoiceItems(dayArray, selectedDay, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b){
+                            //WHen checkbox is selected add position in day list
+                            dayList.add(i);
+                            //Sort dayList
+                            Collections.sort(dayList);
+                        }else {
+                            //When checkbox is unselected, remove position from the list
+                            dayList.remove(i);
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (int j = 0; j < dayList.size(); j ++){
+                            //concat array value
+                            stringBuilder.append(dayArray[dayList.get(j)]);
+                            //check condition
+                            if (j != dayList.size() - 1) {
+                                stringBuilder.append(", ");
+                            }
+                        }
+                        //set text on textView
+                        selectedDayString = stringBuilder.toString();
+                        repeatDay.setText(selectedDayString);
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        //Use for loop
+                        for (int j = 0; j < selectedDay.length; j++) {
+                            //remove all selection
+                            selectedDay[j] = false;
+                            dayList.clear();
+                            repeatDay.setText("Select Day");
+                        }
+                    }
+                });
+                //show dialog
+                builder.show();
+
+            }
+        });
+
+
+
+
 
         if (habit.getIsPrivate() == false){
             isPrivate.setText("No");
@@ -143,7 +228,7 @@ public class HabitEditFragment extends Fragment {
                 //final boolean[] isValid = {true};
                 //Check if input is in range
                 boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,0,30)
-                        && checkInputValidity(dateOfStarting,0,20) && checkInputValidity(repeat,0,30);
+                        && checkInputValidity(dateOfStarting,0,20);
                 if (inputValid == false){
                     return;
                 }
@@ -172,14 +257,14 @@ public class HabitEditFragment extends Fragment {
                 if (inputValid == true) {
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
-                    data.put("repeat", repeat.getText().toString());
+                    data.put("repeat", selectedDayString);
                     data.put("dateOfStarting", dateOfStarting.getText().toString());
                     data.put("isPrivate", isPrivateBoolean.toString());
 
                     habit.setHabitTitle(habitTitle.getText().toString());
                     habit.setDateOfStarting(dateOfStarting.getText().toString());
                     habit.setReason(habitReason.getText().toString());
-                    habit.setRepeat(repeat.getText().toString());
+                    habit.setRepeat(selectedDayString);
                     habit.setPrivate(isPrivateBoolean);
 
                     collectionReference

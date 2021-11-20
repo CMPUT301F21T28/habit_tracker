@@ -1,9 +1,13 @@
 package com.example.habit_tracker;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -12,7 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Base64;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,12 +41,14 @@ public class EventDetailFragment extends Fragment {
     /*private TextView picture;
     private ImageView Image;*/
     private Button edit;
+    private ImageView imageView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +73,21 @@ public class EventDetailFragment extends Fragment {
         eventName.setText(event.getEventName());
         commentContent.setText(event.getEventComment());
         //locationContent.setText(habitevent.getEventLocation());
+
+        imageView = rootView.findViewById(R.id.imageView);
+        String imageString = event.getEventImage();
+        byte[] bitmapArray;
+        bitmapArray = Base64.getDecoder().decode(imageString);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray,0,bitmapArray.length);
+        imageView.setImageBitmap(bitmap);
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = db.collection("habit");
+//        DocumentReference documentReference = collectionReference.document(habitID)
+//                .collection("EventList").document(event.getEventID());
+        //documentReference;
+
+        //String eventID = event.getEventID();
+        //String imageString =
 
         return rootView;
 

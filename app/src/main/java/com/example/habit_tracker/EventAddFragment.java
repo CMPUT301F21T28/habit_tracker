@@ -3,10 +3,13 @@ package com.example.habit_tracker;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -15,6 +18,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -36,7 +40,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Base64;
 import java.util.HashMap;
 
 public class EventAddFragment extends Fragment {
@@ -86,7 +92,11 @@ public class EventAddFragment extends Fragment {
         final File[] file = new File[1];
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
         ActivityResultLauncher<Intent> activityResultLauncher;
+        Bitmap bit = null;
 
+        /**
+         *
+         */
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -94,6 +104,8 @@ public class EventAddFragment extends Fragment {
                         //
                         Bundle b = result.getData().getExtras();
                         Bitmap bitmap = (Bitmap) b.get("data");
+                        //bit = (Bitmap) b.get("data");
+                        //imageBitmap = (Bitmap) b.get("data");
                         imageButton.setImageBitmap(bitmap);
                     }
                 });
@@ -130,6 +142,7 @@ public class EventAddFragment extends Fragment {
         final CollectionReference collectionReference = db.collection("habit");
 
         submitButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
@@ -138,17 +151,32 @@ public class EventAddFragment extends Fragment {
 
                 String event_name = editTextEventName.getText().toString();
                 String event_commit = editTextEventCommit.getText().toString();
+                //Matrix image_matrix = imageButton.getImageMatrix()
+                Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+                byte[] imageByte = byteArrayOutputStream.toByteArray();
+                //String imageString = imageByte.toString();
+                //imageString.
+                String imageString = Base64.getEncoder().encodeToString(imageByte);
+
 
                 HashMap<String,Object> data = new HashMap<>();
                 if (event_name.length()>0){
                     data.put("event name",event_name);
                     data.put("event comment",event_commit);
+                    data.put("event image",imageString);
+                    //data.put("event image", imageData);
                     //data.put("event image",image);
                     //System.currentTimeMillis() return long
 
                     Log.d(TAG, "onClick: " + habitID);
+                    String eventID = event_name + String.valueOf(System.currentTimeMillis());
+
+
                     collectionReference.document(habitID).collection("EventList")
-                            .document(event_name + String.valueOf(System.currentTimeMillis()))
+                            .document(eventID)
+                            //.document(event_name + String.valueOf(System.currentTimeMillis()))
                             .set(data)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -165,6 +193,7 @@ public class EventAddFragment extends Fragment {
                                     Toast.makeText(getContext(),"submit fail",Toast.LENGTH_SHORT).show();
                                 }
                             });
+
                 }else{
                     Toast.makeText(getContext(),"need a event name",Toast.LENGTH_SHORT).show();
                 }

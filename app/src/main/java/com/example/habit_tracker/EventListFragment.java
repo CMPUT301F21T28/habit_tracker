@@ -122,8 +122,9 @@ public class EventListFragment extends Fragment {
                     String eventID = doc.getId();
                     String eventName = (String) doc.getData().get("event name");
                     String eventComment = (String) doc.getData().get("event comment");
+                    String eventImage = (String) doc.getData().get("event image");
                     // TODO image & location
-                    eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment));
+                    eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment, eventImage));
                 }
                 recyclerAdapter.notifyDataSetChanged();
             }

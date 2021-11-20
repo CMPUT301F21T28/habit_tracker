@@ -4,6 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_event_add.xml" value="0.24974358974358973" />
+        <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_event_detail.xml" value="0.25364583333333335" />
+        <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_event_edit.xml" value="0.24974358974358973" />
+        <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_event_list.xml" value="0.25364583333333335" />
+        <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_habit_edit.xml" value="0.1814814814814815" />
+        <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_habit_list.xml" value="0.25364583333333335" />
+        <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_login.xml" value="0.25364583333333335" />
+        <entry key="..\:/GitHub/301team/habit_tracker/app/src/main/res/layout/fragment_one.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_signup.xml" value="0.259375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.42552083333333335" />

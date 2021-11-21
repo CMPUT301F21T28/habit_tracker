@@ -127,11 +127,13 @@ public class FriendListFragment extends Fragment {
                     // TODO a delete query (next line is wrong)
                     // more information on array operations in firestore
                     // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
+                    removeFriend(username, deletedFriend.getUserName());
 
                     // TODO have a undo deletion step
                     Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            addFriend(username, deletedFriend.getUserName());
                         }
 //                        @Override
 //                        public void onClick(View view) {

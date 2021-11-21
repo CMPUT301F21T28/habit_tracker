@@ -38,6 +38,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -184,6 +185,8 @@ public class SignupFragment extends DialogFragment {
                                 data.put("username", username.getText().toString());
                                 data.put("realname", realName.getText().toString());
                                 data.put("password", hashedPw);
+                                data.put("friends", new ArrayList<Friend>());
+                                data.put("requests", new ArrayList<Friend>());
                                 CollectionReference Users = db.collection("Users");
                                 Users.document(username.getText().toString()).set(data)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {

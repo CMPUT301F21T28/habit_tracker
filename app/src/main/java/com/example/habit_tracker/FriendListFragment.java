@@ -17,10 +17,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.habit_tracker.adapters.FriendListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -75,6 +80,8 @@ public class FriendListFragment extends Fragment {
         requestList.setAdapter(requestRecyclerAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        updateFriendList(username);
+
         add_friend = (FloatingActionButton) rootView.findViewById(R.id.add_friend_button);
     }
 
@@ -108,13 +115,14 @@ public class FriendListFragment extends Fragment {
                 case ItemTouchHelper.RIGHT:
                     deletedFriend = friendDataList.get(position);
                     // TODO a delete query (next line is wrong)
-                    collectionReference.document(deletedFriend.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                        }
-                    });
+                    // more information on array operations in firestore
+                    // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
+                    DocumentReference usersRef = db.collection("Users").document(username);
+                    usersRef.update({
+                            "friends": FieldValue.arrayRemove(deletedFriend)
+                            });
 
-                    // TODO have a withdraw deletion step
+                    // TODO have a undo deletion step
                     Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -133,4 +141,24 @@ public class FriendListFragment extends Fragment {
             }
         }
     };
+
+    // get friends and friend requests from the user that is passed in
+    public void updateFriendList(String username) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        friendDataList = (ArrayList<Friend>) document.get("friends");
+                        friendRecyclerAdapter.notifyDataSetChanged();
+
+                        requestDataList = (ArrayList<Friend>) document.get("requests");
+                        requestRecyclerAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
+    }
 }

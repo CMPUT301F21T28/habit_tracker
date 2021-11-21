@@ -58,11 +58,16 @@ public class FriendListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        db = FirebaseFirestore.getInstance();
+
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_friend_list, container, false);
 
         Bundle bundle = this.getArguments();
         username = bundle.getString(username);
+
+        // TESTING
+        addFriend("hongwei22", new Friend("testFriend", "Actual Test Name"));
 
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);

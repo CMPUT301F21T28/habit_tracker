@@ -90,6 +90,8 @@ public class HabitListFragment extends Fragment {
         habitList.setAdapter(recyclerAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        todayRecyclerAdapter = new HabitListAdapter(getActivity(), todayHabitDataList);
+
         // initialize ItemTouchHelper for swipe & reorder function
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(habitList);
@@ -114,6 +116,7 @@ public class HabitListFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users").document(userName).collection("HabitList");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 habitDataList.clear();
@@ -129,34 +132,30 @@ public class HabitListFragment extends Fragment {
 //                    System.out.println(habitDataList);
                 }
                 recyclerAdapter.notifyDataSetChanged();
+
+                todayHabitDataList.clear();
+                for (Habit habit: habitDataList){
+                    String repeatString = habit.getRepeat();
+                    System.out.println("repeat String" + repeatString);
+                    LocalDate date = LocalDate.now();
+                    DayOfWeek dow = date.getDayOfWeek();
+                    String dayName = dow.getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
+                    System.out.println(dayName);
+                    if (repeatString.contains(dayName)) {
+                        //System.out.println("isChecked");
+                        todayHabitDataList.add(habit);
+                        //System.out.println("Add:" + habit.getName());
+                    }
+                }
             }
         });
-
 
         //Add filter to only show today's list.
         aSwitch = getView().findViewById(R.id.today_habit_switch);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    todayHabitDataList.clear();
-                    for (Habit habit: habitDataList){
-                        String repeatString = habit.getRepeat();
-                        System.out.println("repeat String" + repeatString);
-                        LocalDate date = LocalDate.now();
-                        DayOfWeek dow = date.getDayOfWeek();
-                        String dayName = dow.getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
-                        System.out.println(dayName);
-                        if (repeatString.contains(dayName)) {
-                            //System.out.println("isChecked");
-                            todayHabitDataList.add(habit);
-                            //System.out.println("Add:" + habit.getName());
-
-                        }
-
-                    }
-                    todayRecyclerAdapter = new HabitListAdapter(getActivity(), todayHabitDataList);
                     habitList.setAdapter(todayRecyclerAdapter);
                     todayRecyclerAdapter.notifyDataSetChanged();
                     //System.out.println(todayHabitDataList);
@@ -166,11 +165,6 @@ public class HabitListFragment extends Fragment {
                 }
             }
         });
-
-
-
-
-
 
         // add a habit (go to new fragment)
         getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {

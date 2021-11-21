@@ -126,6 +126,31 @@
         android:id="@+id/friendListFragment"
         android:name="com.example.habit_tracker.FriendListFragment"
         android:label="fragment_friend_list"
-        tools:layout="@layout/fragment_friend_list" />
+        tools:layout="@layout/fragment_friend_list" >
+        <action
+            android:id="@+id/action_friendListFragment_to_friendSearchFragment"
+            app:destination="@id/friendSearchFragment" />
+        <action
+            android:id="@+id/action_friendListFragment_to_friendInfoFragment"
+            app:destination="@id/friendInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendSearchFragment"
+        android:name="com.example.habit_tracker.FriendSearchFragment"
+        android:label="fragment_friend_search"
+        tools:layout="@layout/fragment_friend_search" >
+        <action
+            android:id="@+id/action_friendSearchFragment_to_friendListFragment"
+            app:destination="@id/friendListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendInfoFragment"
+        android:name="com.example.habit_tracker.FriendInfoFragment"
+        android:label="fragment_friend_info"
+        tools:layout="@layout/fragment_friend_info" >
+        <action
+            android:id="@+id/action_friendInfoFragment_to_friendListFragment"
+            app:destination="@id/friendListFragment" />
+    </fragment>
 
 </navigation>

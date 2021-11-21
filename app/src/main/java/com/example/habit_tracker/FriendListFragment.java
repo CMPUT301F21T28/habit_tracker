@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.habit_tracker.adapters.FriendListAdapter;
+import com.example.habit_tracker.adapters.FriendRequestAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -41,7 +42,7 @@ public class FriendListFragment extends Fragment {
     ArrayList<Friend> friendDataList;
 
     RecyclerView requestList;
-    FriendListAdapter requestRecyclerAdapter;
+    FriendRequestAdapter requestRecyclerAdapter;
     ArrayList<Friend> requestDataList;
 
     FloatingActionButton add_friend;
@@ -85,13 +86,11 @@ public class FriendListFragment extends Fragment {
 
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
-        requestRecyclerAdapter = new FriendListAdapter(getActivity(), requestDataList);
+        requestRecyclerAdapter = new FriendRequestAdapter(getActivity(), requestDataList);
         requestList.setAdapter(requestRecyclerAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateFriendList(username);
-        addFriend(username, new Friend("Another Test Username", "Another Test Realname"));
-        addRequest(username, new Friend("Another Test Request", "Another RealName Reqest"));
 
         add_friend = (FloatingActionButton) rootView.findViewById(R.id.add_friend_button);
 
@@ -101,7 +100,11 @@ public class FriendListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        friendRecyclerAdapter.notifyDataSetChanged();
+
+        // TODO use 'addSnapshotListener' to pull data from db, use for loop to add data to habitDataList (an ArrayList<Habit>),
+        //  can look up how I implement in HabitListFragment.java
+        //  for both request and friend list !!! (TWO IN TOTAL, HAVE DIFFERENT ARRAY ADAPTER)
+
         add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

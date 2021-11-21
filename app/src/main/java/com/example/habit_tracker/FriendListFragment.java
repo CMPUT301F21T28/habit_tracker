@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +47,10 @@ public class FriendListFragment extends Fragment {
     Friend deletedFriend;
     String username;
 
-    FirebaseFirestore db;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference;
+
+    private static final String TAG = "MyActivity";
 
     public FriendListFragment() {
         // Required empty public constructor
@@ -61,21 +64,21 @@ public class FriendListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        db = FirebaseFirestore.getInstance();
-
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_friend_list, container, false);
 
+        db = FirebaseFirestore.getInstance();
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
 
         friendDataList = new ArrayList<>();
+        friendDataList.add(new Friend("mingwei", "Mingwei"));
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
         friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList);
         friendList.setAdapter(friendRecyclerAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        // ItemTouchHelper helps to define the swipe function
+        //ItemTouchHelper helps to define the swipe function
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(friendList);
 
@@ -85,7 +88,7 @@ public class FriendListFragment extends Fragment {
         requestList.setAdapter(requestRecyclerAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateFriendList(username);
+        //updateFriendList(username);
 
         add_friend = (FloatingActionButton) rootView.findViewById(R.id.add_friend_button);
 
@@ -95,7 +98,7 @@ public class FriendListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        friendRecyclerAdapter.notifyDataSetChanged();
         add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,4 +182,5 @@ public class FriendListFragment extends Fragment {
             }
         });
     }
+
 }

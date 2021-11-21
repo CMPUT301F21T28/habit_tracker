@@ -74,6 +74,8 @@ public class FriendListFragment extends Fragment {
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
 
+        addRequest(username, new Friend("hello", "hello"));
+
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
         friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList);
@@ -86,7 +88,7 @@ public class FriendListFragment extends Fragment {
 
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
-        requestRecyclerAdapter = new FriendRequestAdapter(getActivity(), requestDataList);
+        requestRecyclerAdapter = new FriendRequestAdapter(getActivity(), requestDataList, username);
         requestList.setAdapter(requestRecyclerAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
 

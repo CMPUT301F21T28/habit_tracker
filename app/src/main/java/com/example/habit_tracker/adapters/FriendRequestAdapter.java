@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habit_tracker.Friend;
 import com.example.habit_tracker.R;
+import com.example.habit_tracker.Utility;
 
 import java.util.ArrayList;
 
@@ -19,10 +20,13 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     ArrayList<Friend> friends;
     Context context;
+    String currentUserUsername;
+    Utility firebaseUtils = new Utility();
 
-    public FriendRequestAdapter(Context ctx, ArrayList<Friend> friends) {
+    public FriendRequestAdapter(Context ctx, ArrayList<Friend> friends, String username) {
         context = ctx;
         this.friends = friends;
+        this.currentUserUsername = username;
     }
 
     @NonNull
@@ -43,6 +47,19 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             @Override
             public void onClick(View view) {
 
+                firebaseUtils.addFriend(currentUserUsername, friend);
+                firebaseUtils.removeRequest(currentUserUsername, friend);
+                friends.remove(friend);
+                FriendRequestAdapter.this.notifyDataSetChanged();
+            }
+        });
+
+        holder.denyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                firebaseUtils.removeRequest(currentUserUsername, friend);
+                friends.remove(friend);
+                FriendRequestAdapter.this.notifyDataSetChanged();
             }
         });
     }
@@ -65,4 +82,6 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             denyButton = itemView.findViewById(R.id.request_deny_button);
         }
     }
+
+
 }

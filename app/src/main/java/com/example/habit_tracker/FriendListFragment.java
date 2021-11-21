@@ -49,6 +49,9 @@ public class FriendListFragment extends Fragment {
     FirebaseFirestore db;
     CollectionReference collectionReference;
 
+    public FriendListFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class FriendListFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_friend_list, container, false);
 
         Bundle bundle = this.getArguments();
-        username = bundle.getString(username);
+        username = bundle.getString("username");
 
         // TESTING
         addFriend("hongwei22", new Friend("testFriend", "Actual Test Name"));
@@ -77,7 +80,7 @@ public class FriendListFragment extends Fragment {
 
         // ItemTouchHelper helps to define the swipe function
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
-        ItemTouchHelper.attachToRecyclerView(friendList);
+        itemTouchHelper.attachToRecyclerView(friendList);
 
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
@@ -88,6 +91,8 @@ public class FriendListFragment extends Fragment {
         updateFriendList(username);
 
         add_friend = (FloatingActionButton) rootView.findViewById(R.id.add_friend_button);
+
+        return rootView;
     }
 
     @Override

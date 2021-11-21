@@ -29,8 +29,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class FriendListFragment extends Fragment {
 
@@ -72,13 +74,12 @@ public class FriendListFragment extends Fragment {
         username = bundle.getString("username");
 
         friendDataList = new ArrayList<>();
-        friendDataList.add(new Friend("mingwei", "Mingwei"));
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
         friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList);
         friendList.setAdapter(friendRecyclerAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        //ItemTouchHelper helps to define the swipe function
+        // ItemTouchHelper helps to define the swipe function
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(friendList);
 
@@ -88,7 +89,9 @@ public class FriendListFragment extends Fragment {
         requestList.setAdapter(requestRecyclerAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        //updateFriendList(username);
+        updateFriendList(username);
+        addFriend(username, new Friend("Another Test Username", "Another Test Realname"));
+        addRequest(username, new Friend("Another Test Request", "Another RealName Reqest"));
 
         add_friend = (FloatingActionButton) rootView.findViewById(R.id.add_friend_button);
 
@@ -127,40 +130,42 @@ public class FriendListFragment extends Fragment {
                     // TODO a delete query (next line is wrong)
                     // more information on array operations in firestore
                     // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
-                    removeFriend(username, deletedFriend.getUserName());
+                    removeFriend(username, deletedFriend);
 
                     // TODO have a undo deletion step
                     Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            addFriend(username, deletedFriend.getUserName());
+                            addFriend(username, deletedFriend);
                         }
-//                        @Override
-//                        public void onClick(View view) {
-//                            HashMap<String, String> data = new HashMap<>();
-//                            data.put("event name", deletedEvent.getName());
-//                            data.put("event comment", deletedEvent.getComment());
-//                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void unused) {
-//                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                        }
                     }).show();
                     break;
             }
         }
     };
 
-    public void removeFriend(String username, String targetFriend) {
+    public void removeRequest(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
+        usersRef.update("requests", FieldValue.arrayRemove(targetFriend));
+        updateFriendList(username);
     }
 
-    public void addFriend(String username, String targetFriend) {
+    public void addRequest(String username, Friend targetFriend) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.update("requests", FieldValue.arrayUnion(targetFriend));
+        updateFriendList(username);
+    }
+
+    public void removeFriend(String username, Friend targetFriend) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
+        updateFriendList(username);
+    }
+
+    public void addFriend(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
+        updateFriendList(username);
     }
 
     // get friends and friend requests from the user that is passed in
@@ -172,10 +177,25 @@ public class FriendListFragment extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        friendDataList = (ArrayList<Friend>) document.get("friends");
-                        friendRecyclerAdapter.notifyDataSetChanged();
+                        friendDataList.clear();
+                        // Getting the array of friends
+                        ArrayList<Map> friends = (ArrayList<Map>) document.get("friends");
+                        for (Map<String, String> map : friends) {
+                            String username = map.get("userName");
+                            String realname = map.get("actualName");
+                            friendDataList.add(new Friend(username, realname));
+                        }
 
-                        requestDataList = (ArrayList<Friend>) document.get("requests");
+                        // Getting the array of requests
+                        ArrayList<Map> requests = (ArrayList<Map>) document.get("requests");
+                        for (Map<String, String> map : requests) {
+                            String username = map.get("userName");
+                            String realname = map.get("actualName");
+                            requestDataList.add(new Friend(username, realname));
+                        }
+
+                        // Update the adapaters
+                        friendRecyclerAdapter.notifyDataSetChanged();
                         requestRecyclerAdapter.notifyDataSetChanged();
                     }
                 }

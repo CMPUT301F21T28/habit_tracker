@@ -117,30 +117,41 @@ public class FriendListFragment extends Fragment {
                     // TODO a delete query (next line is wrong)
                     // more information on array operations in firestore
                     // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
-                    DocumentReference usersRef = db.collection("Users").document(username);
-                    usersRef.update({
-                            "friends": FieldValue.arrayRemove(deletedFriend)
-                            });
+                    removeFriend(username, deletedFriend);
 
                     // TODO have a undo deletion step
-                    Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            HashMap<String, String> data = new HashMap<>();
-                            data.put("event name", deletedEvent.getName());
-                            data.put("event comment", deletedEvent.getComment());
-                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            addFriend(username, deletedFriend);
                         }
+//                        @Override
+//                        public void onClick(View view) {
+//                            HashMap<String, String> data = new HashMap<>();
+//                            data.put("event name", deletedEvent.getName());
+//                            data.put("event comment", deletedEvent.getComment());
+//                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void unused) {
+//                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
                     }).show();
                     break;
             }
         }
     };
+
+    public void removeFriend(String username, Friend targetFriend) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
+    }
+
+    public void addFriend(String username, Friend targetFriend) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
+    }
 
     // get friends and friend requests from the user that is passed in
     public void updateFriendList(String username) {

@@ -250,11 +250,11 @@ public class HabitAddFragment extends Fragment {
 
                 }
 
-//                if (repeat.getText().toString().length() >= 30){
-//                    isValid[0] = false;
-//                    repeat.setError("Please enter a string less than 30 characters.");
-//                    return;
-//                }
+                if (selectedDayString == null){
+                    isValid[0] = false;
+                    repeatDay.setError("Please Select at least one day");
+                    return;
+                }
 
                 if (isPrivate.getText().toString().toLowerCase().equals("yes")) {
                     isPrivateBoolean = true;

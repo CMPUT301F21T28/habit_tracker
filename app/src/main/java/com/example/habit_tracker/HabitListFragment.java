@@ -1,9 +1,12 @@
 package com.example.habit_tracker;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,10 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.common.hash.HashingInputStream;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,21 +31,27 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
 public class HabitListFragment extends Fragment {
-
+    Switch aSwitch;
     RecyclerView habitList;
     HabitListAdapter recyclerAdapter;
+    HabitListAdapter todayRecyclerAdapter;
 
     FirebaseFirestore db;
 
     ArrayList<Habit> habitDataList;
+    ArrayList<Habit> todayHabitDataList = new ArrayList<Habit>();
 
     String userName = null;
 
@@ -114,10 +126,51 @@ public class HabitListFragment extends Fragment {
                     //Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
                     Boolean habitIsPrivate = false;
                     habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
+//                    System.out.println(habitDataList);
                 }
                 recyclerAdapter.notifyDataSetChanged();
             }
         });
+
+
+        //Add filter to only show today's list.
+        aSwitch = getView().findViewById(R.id.today_habit_switch);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    todayHabitDataList.clear();
+                    for (Habit habit: habitDataList){
+                        String repeatString = habit.getRepeat();
+                        System.out.println("repeat String" + repeatString);
+                        LocalDate date = LocalDate.now();
+                        DayOfWeek dow = date.getDayOfWeek();
+                        String dayName = dow.getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
+                        System.out.println(dayName);
+                        if (repeatString.contains(dayName)) {
+                            //System.out.println("isChecked");
+                            todayHabitDataList.add(habit);
+                            //System.out.println("Add:" + habit.getName());
+
+                        }
+
+                    }
+                    todayRecyclerAdapter = new HabitListAdapter(getActivity(), todayHabitDataList);
+                    habitList.setAdapter(todayRecyclerAdapter);
+                    todayRecyclerAdapter.notifyDataSetChanged();
+                    //System.out.println(todayHabitDataList);
+                }else {
+                    habitList.setAdapter(recyclerAdapter);
+                    recyclerAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+
+
+
+
 
         // add a habit (go to new fragment)
         getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {

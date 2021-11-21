@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -228,8 +229,9 @@ public class HabitEditFragment extends Fragment {
                 //final boolean[] isValid = {true};
                 //Check if input is in range
                 boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,0,30)
-                        && checkInputValidity(dateOfStarting,0,20);
+                        && checkInputValidity(dateOfStarting,0,20) && selectedDayString != null;
                 if (inputValid == false){
+                    Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // Check if input date is valid

@@ -247,28 +247,34 @@ public class EventListFragment extends Fragment {
             int position = viewHolder.getAdapterPosition();
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
-                    deletedEvent = eventDataList.get(position);
+
+                    // this was how to store something into a variable, if undo, push this saved data into db
+//                    deletedEvent = eventDataList.get(position);
+
+                    // TODO implement a delete pop-up to confirm deletion
+                    // This is how you delete a thing from db
                     collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                         }
                     });
 
-                    Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            HashMap<String, String> data = new HashMap<>();
-                            data.put("event name", deletedEvent.getName());
-                            data.put("event comment", deletedEvent.getComment());
-                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }).show();
-                    break;
+                    // this was how the undo works
+//                    Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            HashMap<String, String> data = new HashMap<>();
+//                            data.put("event name", deletedEvent.getName());
+//                            data.put("event comment", deletedEvent.getComment());
+//                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void unused) {
+//                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    }).show();
+//                    break;
             }
         }
     };

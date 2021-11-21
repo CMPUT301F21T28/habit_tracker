@@ -156,31 +156,36 @@ public class HabitListFragment extends Fragment {
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
 
-                    deletedHabit = habitDataList.get(position);
+                    // this was how to store something into a variable, if undo, push this saved data into db
+//                    deletedHabit = habitDataList.get(position);
+
+                    // TODO implement a delete pop-up to confirm deletion
+                    // This is how you delete a thing from db
                     collectionReference.document(habitDataList.get(position).getHabitID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                         }
                     });
 
-                    Snackbar.make(habitList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //habitDataList.add(position, deletedHabit);
-                            HashMap<String, String> data = new HashMap<>();
-                            data.put("title", deletedHabit.getName());
-                            data.put("reason", deletedHabit.getComment());
-                            data.put("repeat", deletedHabit.getRepeat());
-                            data.put("dateOfStarting", deletedHabit.getDateOfStarting());
-                            data.put("isPrivate", Boolean.toString(deletedHabit.getIsPrivate()));
-                            collectionReference.document(deletedHabit.getHabitID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }).show();
+                    // this was how the undo works
+//                    Snackbar.make(habitList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            //habitDataList.add(position, deletedHabit);
+//                            HashMap<String, String> data = new HashMap<>();
+//                            data.put("title", deletedHabit.getName());
+//                            data.put("reason", deletedHabit.getComment());
+//                            data.put("repeat", deletedHabit.getRepeat());
+//                            data.put("dateOfStarting", deletedHabit.getDateOfStarting());
+//                            data.put("isPrivate", Boolean.toString(deletedHabit.getIsPrivate()));
+//                            collectionReference.document(deletedHabit.getHabitID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void unused) {
+//                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    }).show();
                     break;
             }
         }

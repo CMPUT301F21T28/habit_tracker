@@ -69,9 +69,6 @@ public class FriendListFragment extends Fragment {
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
 
-        // TESTING
-        addFriend("hongwei22", new Friend("testFriend", "Actual Test Name"));
-
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
         friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList);
@@ -127,13 +124,13 @@ public class FriendListFragment extends Fragment {
                     // TODO a delete query (next line is wrong)
                     // more information on array operations in firestore
                     // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
-                    removeFriend(username, deletedFriend);
+                    removeFriend(username, deletedFriend.getUserName());
 
                     // TODO have a undo deletion step
                     Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            addFriend(username, deletedFriend);
+                            addFriend(username, deletedFriend.getUserName());
                         }
 //                        @Override
 //                        public void onClick(View view) {
@@ -153,12 +150,12 @@ public class FriendListFragment extends Fragment {
         }
     };
 
-    public void removeFriend(String username, Friend targetFriend) {
+    public void removeFriend(String username, String targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
     }
 
-    public void addFriend(String username, Friend targetFriend) {
+    public void addFriend(String username, String targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
     }

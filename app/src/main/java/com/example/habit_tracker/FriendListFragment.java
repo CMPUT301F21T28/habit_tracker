@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.habit_tracker.adapters.FriendListAdapter;
+import com.example.habit_tracker.adapters.FriendRequestAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,7 +40,7 @@ public class FriendListFragment extends Fragment {
     ArrayList<Friend> friendDataList;
 
     RecyclerView requestList;
-    FriendListAdapter requestRecyclerAdapter;
+    FriendRequestAdapter requestRecyclerAdapter;
     ArrayList<Friend> requestDataList;
 
     FloatingActionButton add_friend;
@@ -71,12 +72,7 @@ public class FriendListFragment extends Fragment {
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
 
-        // TESTING
-        //addFriend("hongwei22", new Friend("testFriend", "Actual Test Name"));
-
-
         friendDataList = new ArrayList<>();
-        friendDataList.add(new Friend("mingwei", "Mingwei"));
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
         friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList);
         friendList.setAdapter(friendRecyclerAdapter);
@@ -88,13 +84,9 @@ public class FriendListFragment extends Fragment {
 
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
-        requestRecyclerAdapter = new FriendListAdapter(getActivity(), requestDataList);
+        requestRecyclerAdapter = new FriendRequestAdapter(getActivity(), requestDataList);
         requestList.setAdapter(requestRecyclerAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        //updateFriendList(username);
-
-        add_friend = (FloatingActionButton) rootView.findViewById(R.id.add_friend_button);
 
         return rootView;
     }
@@ -102,7 +94,11 @@ public class FriendListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        friendRecyclerAdapter.notifyDataSetChanged();
+
+        // TODO use 'addSnapshotListener' to pull data from db, use for loop to add data to habitDataList (an ArrayList<Habit>),
+        //  can look up how I implement in HabitListFragment.java
+        //  for both request and friend list !!! (TWO IN TOTAL, HAVE DIFFERENT ARRAY ADAPTER)
+
         add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,13 +127,11 @@ public class FriendListFragment extends Fragment {
                     // TODO a delete query (next line is wrong)
                     // more information on array operations in firestore
                     // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
-                    removeFriend(username, deletedFriend);
 
                     // TODO have a undo deletion step
                     Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            addFriend(username, deletedFriend);
                         }
 //                        @Override
 //                        public void onClick(View view) {
@@ -157,34 +151,34 @@ public class FriendListFragment extends Fragment {
         }
     };
 
-    public void removeFriend(String username, Friend targetFriend) {
-        DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
-    }
-
-    public void addFriend(String username, Friend targetFriend) {
-        DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
-    }
-
-    // get friends and friend requests from the user that is passed in
-    public void updateFriendList(String username) {
-        DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        friendDataList = (ArrayList<Friend>) document.get("friends");
-                        friendRecyclerAdapter.notifyDataSetChanged();
-
-                        requestDataList = (ArrayList<Friend>) document.get("requests");
-                        requestRecyclerAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        });
-    }
+//    public void removeFriend(String username, Friend targetFriend) {
+//        DocumentReference usersRef = db.collection("Users").document(username);
+//        usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
+//    }
+//
+//    public void addFriend(String username, Friend targetFriend) {
+//        DocumentReference usersRef = db.collection("Users").document(username);
+//        usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
+//    }
+//
+//    // get friends and friend requests from the user that is passed in
+//    public void updateFriendList(String username) {
+//        DocumentReference usersRef = db.collection("Users").document(username);
+//        usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        friendDataList = (ArrayList<Friend>) document.get("friends");
+//                        friendRecyclerAdapter.notifyDataSetChanged();
+//
+//                        requestDataList = (ArrayList<Friend>) document.get("requests");
+//                        requestRecyclerAdapter.notifyDataSetChanged();
+//                    }
+//                }
+//            }
+//        });
+//    }
 
 }

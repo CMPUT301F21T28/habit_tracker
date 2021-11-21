@@ -120,7 +120,7 @@ public class HabitListFragment extends Fragment {
             }
         });
 
-        // add a habit (go to new fragment)
+        // add a habit (go to new fragment after taping on the floating button)
         getView().findViewById(R.id.add_friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -59,8 +59,7 @@ public class HabitAddFragment extends Fragment {
     private TextView repeatDay;
     private boolean[] selectedDay;
     private ArrayList<Integer> dayList = new ArrayList<>();
-    private String[] dayArray = {"Monday", "Tuesday", "Wednesday",
-            "Thursday", "Friday", "Saturday", "Sunday"};
+    private String[] dayArray = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private String selectedDayString;
 
     private EditText isPrivate;
@@ -158,10 +157,16 @@ public class HabitAddFragment extends Fragment {
                             dayList.add(i);
                             //Sort dayList
                             Collections.sort(dayList);
+                            System.out.println("add:" + i);
+                            System.out.println(dayList);
                         }else {
                             //When checkbox is unselected, remove position from the list
-                            dayList.remove(i);
+                            System.out.println("unselect:" + i);
+                            dayList.remove(Integer.valueOf(i));
+                            System.out.println("Delete" + i);
+                            System.out.println(dayList);
                         }
+
                     }
                 });
 

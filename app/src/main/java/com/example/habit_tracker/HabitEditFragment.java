@@ -161,7 +161,7 @@ public class HabitEditFragment extends Fragment {
                             Collections.sort(dayList);
                         }else {
                             //When checkbox is unselected, remove position from the list
-                            dayList.remove(i);
+                            dayList.remove(Integer.valueOf(i));
                         }
                     }
                 });

@@ -39,6 +39,12 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         holder.friendName.setText(friend.getActualName());
         //TODO implement accept button and deny button, try to implement onClickListener here
 
+        holder.acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
@@ -55,8 +61,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             super(itemView);
 
             friendName = itemView.findViewById(R.id.friend_name_request);
-            acceptButton = itemView.findViewById(R.id.accept_button);
-            denyButton = itemView.findViewById(R.id.deny_button);
+            acceptButton = itemView.findViewById(R.id.request_accept_button);
+            denyButton = itemView.findViewById(R.id.request_deny_button);
         }
     }
 }

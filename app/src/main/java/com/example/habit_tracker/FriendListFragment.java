@@ -130,12 +130,11 @@ public class FriendListFragment extends Fragment {
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
                     deletedFriend = friendDataList.get(position);
-                    // TODO a delete query (next line is wrong)
                     // more information on array operations in firestore
                     // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
                     removeFriend(username, deletedFriend);
 
-                    // TODO have a undo deletion step
+                    // Undo the deletion
                     Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

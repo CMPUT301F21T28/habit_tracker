@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -11,12 +12,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.habit_tracker.adapters.HabitListAdapter;
+import com.example.habit_tracker.viewholders.TextProgressViewHolder;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,18 +37,17 @@ import java.util.HashMap;
  */
 public class HabitListFragment extends Fragment {
 
-    RecyclerView habitList;
-    HabitListAdapter recyclerAdapter;
-
     FirebaseFirestore db;
-
-    ArrayList<Habit> habitDataList;
-
-    String userName = null;
-
-    Habit deletedHabit = null;
-
     CollectionReference collectionReference;
+
+    RecyclerView habitList;
+    ArrayList<Habit> habitDataList;
+    GenericAdapter<Habit> habitAdapter;
+
+    String username = null;
+
+    Habit habit = null;
+    Habit deletedHabit = null;
 
     public HabitListFragment() {
         // Required empty public constructor
@@ -71,12 +72,83 @@ public class HabitListFragment extends Fragment {
 
 
         Bundle bundle = this.getArguments();
-        userName = bundle.getString("username");
+        username = bundle.getString("username");
 
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
-        recyclerAdapter = new HabitListAdapter(getActivity(), habitDataList);
-        habitList.setAdapter(recyclerAdapter);
+        habitAdapter = new GenericAdapter<Habit>(getActivity(), habitDataList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                return new TextProgressViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.habit_list_row, parent, false));
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
+                ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putParcelable("Habit", habit);
+
+                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
+                    }
+                });
+                // TODO integrate progress
+                // ((TextProgressViewHolder) holder).getProgressBar().setProgress();
+            }
+
+//            @Override
+//            public OnRecyclerItemClicked onGetRecyclerItemClickListener() {
+//                return new OnRecyclerItemClicked() {
+//                    @Override
+//                    public void onItemClicked(View view, int position) {
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("username", username);
+//                        bundle.putParcelable("Habit", habit);
+//
+//                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+//                        NavController controller = Navigation.findNavController(view);
+//                        controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
+//                    }
+//                };
+//            }
+        };
+        /*
+        habitAdapter.setOnRecyclerItemClicked(new GenericAdapter.OnRecyclerItemClicked() {
+            @Override
+            public void onItemClicked(View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", username);
+                bundle.putParcelable("Habit", habit);
+
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
+            }
+        });
+        habitAdapter.setOnRecyclerItemLongClicked(new GenericAdapter.OnRecyclerItemLongClicked() {
+            @Override
+            public void onItemLongClicked(View view, int position) {
+                // TODO change to a button implementation in the future update
+                Bundle bundle = new Bundle();
+                bundle.putString("username", username);
+                bundle.putParcelable("Habit", habit);
+
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
+            }
+        });
+
+         */
+
+
+        habitList.setAdapter(habitAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // initialize ItemTouchHelper for swipe & reorder function
@@ -101,7 +173,7 @@ public class HabitListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         db = FirebaseFirestore.getInstance();
-        collectionReference = db.collection("Users").document(userName).collection("HabitList");
+        collectionReference = db.collection("Users").document(username).collection("HabitList");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
@@ -114,9 +186,9 @@ public class HabitListFragment extends Fragment {
                     String habitRepeat = (String) doc.getData().get("repeat");
                     //Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
                     Boolean habitIsPrivate = false;
-                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
+                    habitDataList.add(new Habit(username, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
                 }
-                recyclerAdapter.notifyDataSetChanged();
+                habitAdapter.notifyDataSetChanged();
             }
         });
 
@@ -125,7 +197,7 @@ public class HabitListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("username", userName);
+                bundle.putString("username", username);
 
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_habitListFragment_to_habitAddFragment, bundle);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,8 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.habit_tracker.adapters.EventListAdapter;
-import com.example.habit_tracker.adapters.GenericAdapter;
+import com.example.habit_tracker.viewholders.TextViewHolder;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,10 +43,8 @@ public class EventListFragment extends Fragment {
     String eventID = null;
 
     RecyclerView eventList;
-    EventListAdapter recyclerAdapter;
-
-    // maybe implement this as a seperate class?
     ArrayList<Event> eventDataList;
+    GenericAdapter<Event> eventAdapter;
 
     FirebaseFirestore db;
     CollectionReference collectionReference;
@@ -79,8 +77,66 @@ public class EventListFragment extends Fragment {
 
         eventDataList = new ArrayList<>();
         eventList = (RecyclerView) rootView.findViewById(R.id.event_list);
-        recyclerAdapter = new EventListAdapter(getActivity(), eventDataList);
-        eventList.setAdapter(recyclerAdapter);
+
+        eventAdapter = new GenericAdapter<Event>(getActivity(), eventDataList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                return new TextViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.general_list_row, parent, false));
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, Event val) {
+                ((TextViewHolder) holder).getTextView().setText(val.getName());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", event.getUsername());
+                        bundle.putString("habitID", event.getHabitID());
+                        bundle.putParcelable("Event", event);
+
+                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_eventListFragment_to_eventDetailFragment, bundle);
+                    }
+                });
+            }
+        };
+
+//            @Override
+//            public OnRecyclerItemClicked onGetRecyclerItemClickListener() {
+//                return new OnRecyclerItemClicked() {
+//                    @Override
+//                    public void onItemClicked(View view, int position) {
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("username", event.getUsername());
+//                        bundle.putString("habitID", event.getHabitID());
+//                        bundle.putParcelable("Event", event);
+//
+//                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+//                        NavController controller = Navigation.findNavController(view);
+//                        controller.navigate(R.id.action_eventListFragment_to_eventDetailFragment, bundle);
+//                    }
+//                };
+//            }
+//        };
+
+//        eventAdapter.setOnRecyclerItemClicked(new GenericAdapter.OnRecyclerItemClicked() {
+//            @Override
+//            public void onItemClicked(View view, int position) {
+//                Bundle bundle = new Bundle();
+//                bundle.putString("username", event.getUsername());
+//                bundle.putString("habitID", event.getHabitID());
+//                bundle.putParcelable("Event", event);
+//
+//                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+//                NavController controller = Navigation.findNavController(view);
+//                controller.navigate(R.id.action_eventListFragment_to_eventDetailFragment, bundle);
+//            }
+//        });
+
+
+        eventList.setAdapter(eventAdapter);
         eventList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // initialize ItemTouchHelper for swipe function
@@ -121,7 +177,7 @@ public class EventListFragment extends Fragment {
                     // TODO image & location
                     eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment));
                 }
-                recyclerAdapter.notifyDataSetChanged();
+                eventAdapter.notifyDataSetChanged();
             }
         });
 
@@ -187,6 +243,8 @@ public class EventListFragment extends Fragment {
                 bundle.putString("username", username);
                 bundle.putString("habitID", habitID);
 
+                Log.d(TAG, "onClick: habitID" + habitID);
+
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_eventListFragment_to_eventAddFragment,bundle);
             }
@@ -247,7 +305,7 @@ public class EventListFragment extends Fragment {
             int position = viewHolder.getAdapterPosition();
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
-                    deletedEvent = eventDataList.get(position);
+                    deletedEvent = (Event) eventDataList.get(position);
                     collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {

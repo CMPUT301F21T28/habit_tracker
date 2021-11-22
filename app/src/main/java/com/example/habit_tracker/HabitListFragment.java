@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -35,6 +36,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -115,7 +117,7 @@ public class HabitListFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users").document(userName).collection("HabitList");
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        collectionReference.orderBy("order").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
@@ -126,10 +128,8 @@ public class HabitListFragment extends Fragment {
                     String habitDateOfStarting = (String) doc.getData().get("dateOfStarting");
                     String habitReason = (String) doc.getData().get("reason");
                     String habitRepeat = (String) doc.getData().get("repeat");
-                    //Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
-                    Boolean habitIsPrivate = false;
-                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
-//                    System.out.println(habitDataList);
+                    Boolean habitIsPrivate = Boolean.parseBoolean((String) doc.getData().get("isPrivate"));
+                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate));
                 }
                 recyclerAdapter.notifyDataSetChanged();
 
@@ -171,6 +171,7 @@ public class HabitListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
+                bundle.putInt("habitSize", habitDataList.size());
                 bundle.putString("username", userName);
 
                 NavController controller = Navigation.findNavController(view);
@@ -184,14 +185,22 @@ public class HabitListFragment extends Fragment {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             // TODO drag to reorder the list (possible solution: put arrayList in mainActivity)
-            /*
+
             int fromPosition = viewHolder.getAdapterPosition();
             int toPosition = target.getAdapterPosition();
-
             Collections.swap(habitDataList, fromPosition, toPosition);
             habitList.getAdapter().notifyItemMoved(fromPosition, toPosition);
 
-             */
+            if (fromPosition < toPosition) {
+                for (int i = fromPosition; i < toPosition+1; i++) {
+                    collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i+1);
+                }
+            } else {
+                for (int i = toPosition; i < fromPosition+1; i++) {
+                    collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i+1);
+                }
+            }
+
             return false;
         }
 
@@ -201,7 +210,6 @@ public class HabitListFragment extends Fragment {
             int position = viewHolder.getAdapterPosition();
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
-
                     deletedHabit = habitDataList.get(position);
                     collectionReference.document(habitDataList.get(position).getHabitID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -209,6 +217,11 @@ public class HabitListFragment extends Fragment {
                         }
                     });
 
+                    for (int i = position+1; i < habitDataList.size(); i++) {
+                        collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i);
+                    }
+
+                    // TODO a pop up confirm deletion, so no undo anymore
                     Snackbar.make(habitList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

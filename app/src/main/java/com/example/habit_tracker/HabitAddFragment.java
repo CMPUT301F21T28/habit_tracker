@@ -42,6 +42,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -67,6 +68,8 @@ public class HabitAddFragment extends Fragment {
     private String username;
     private Boolean isPrivateBoolean;
 
+    private Integer habitsSize;
+
 
     public HabitAddFragment() {
         // Required empty public constructor
@@ -87,6 +90,7 @@ public class HabitAddFragment extends Fragment {
         if (bundle != null && bundle.containsKey("username")){
             username = bundle.getString("username");
         }
+        habitsSize = bundle.getInt("habitSize");
         return rootView;
 
     }
@@ -266,17 +270,19 @@ public class HabitAddFragment extends Fragment {
                     return;
                 }
 
-                HashMap<String, String> data = new HashMap<>();
+                HashMap<String, Object> data = new HashMap<>();
 
                 UUID uuid = UUID.randomUUID();
                 String uuidString = uuid.toString();
 
                 if (isValid[0]) {
+
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", selectedDayString);
                     data.put("dateOfStarting", dateOfStarting.getText().toString());
                     data.put("isPrivate", isPrivateBoolean.toString());
+                    data.put("order", habitsSize+1);
                     collectionReference
                             .document(uuidString)
                             .set(data)

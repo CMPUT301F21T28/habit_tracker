@@ -1,11 +1,16 @@
 package com.example.habit_tracker;
 
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,8 +23,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,6 +39,7 @@ public class EventEditFragment extends Fragment {
     private EditText commentContent;
     private EditText locationContent;
     private FirebaseFirestore db;
+    FusedLocationProviderClient client;
 
     private String username;
     private String habitID;
@@ -74,10 +83,13 @@ public class EventEditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
+        final Double[] currentLongitude = {null};
+        final Double[] currentLatitude = {null};
 
         commentContent = (EditText)getView().findViewById(R.id.CommentContent);
         //locationContent = (EditText)getView().findViewById(R.id.LocationContent);
         submit= (Button) getView().findViewById(R.id.Submit);
+        Button locationButton = view.findViewById(R.id.locationButton);
 
 
         commentContent.setText(event.getComment());
@@ -104,11 +116,13 @@ public class EventEditFragment extends Fragment {
 //                    return;
 //                }
 
-                HashMap<String, String> data = new HashMap<>();
+                HashMap<String, Object> data = new HashMap<>();
 
                 // isValid doesnt actually do anything... please check this -- darren
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
+                    data.put("Longitude", currentLongitude[0]);
+                    data.put("Latitude", currentLatitude[0]);
                     //data.put("Location", locationContent.getText().toString());
 
                     event.setEventComment(commentContent.getText().toString());
@@ -136,6 +150,58 @@ public class EventEditFragment extends Fragment {
                                     Toast.makeText(getContext(), "Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
                                 }
                             });
+                }
+            }
+        });
+
+
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    client = LocationServices.getFusedLocationProviderClient(view.getContext());
+                    Task<Location> task = client.getLastLocation();
+                    task.addOnSuccessListener(new OnSuccessListener<Location>(){
+                        @Override
+                        public void onSuccess(Location location){
+                            HashMap<String,Object> data = new HashMap<>();
+                            if (location!= null){
+                                currentLongitude[0] =location.getLongitude();
+                                currentLatitude[0] = location.getLatitude();
+
+
+                            /*data.put("Longitude", location.getLongitude());
+                            data.put("Latitude", location.getLatitude());
+                            Log.d(TAG, "onClick: " + habitID);
+                            collectionReference.document(habitID).collection("EventList")
+                                    .document(event_name + String.valueOf(System.currentTimeMillis()))
+                                    .set(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(getContext(), "submit success", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getContext(), "submit fail", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });*/
+                            }
+
+                        }
+
+                    });}
+
+                else{
+                    ActivityCompat.requestPermissions((Activity) view.getContext(),
+                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44
+                    );
+
                 }
             }
         });

@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
@@ -26,10 +30,13 @@ public class EventDetailFragment extends Fragment {
     private TextView eventName;
     private TextView commentContent;
     private TextView location;
+    private Double locationLongitude;
+    private Double locationLatitude;
     //private TextView locationContent;
     /*private TextView picture;
     private ImageView Image;*/
     private Button edit;
+    private Button viewLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,8 @@ public class EventDetailFragment extends Fragment {
 
         eventName.setText(event.getName());
         commentContent.setText(event.getComment());
+        locationLongitude = event.getLocationLongitude();
+        locationLatitude = event.getLocationLatitude();
         //locationContent.setText(habitevent.getEventLocation());
 
         return rootView;
@@ -84,6 +93,30 @@ public class EventDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(locationLatitude != null && locationLongitude!= null){
+
+        viewLocation=(Button) getView().findViewById(R.id.viewLocation);
+        viewLocation.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f",locationLongitude,locationLatitude );
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent);
+
+
+                                        }
+        });}
+
+        else{
+            viewLocation=(Button) getView().findViewById(R.id.viewLocation);
+            viewLocation.setVisibility(View.GONE);
+
+        }
+
+
+
+
 
         edit = (Button)getView().findViewById(R.id.Edit);
         edit.setOnClickListener(new View.OnClickListener() {

@@ -10,6 +10,8 @@ public class Event implements Parcelable, Info
     private String eventID;
     private String eventName;
     private String eventComment;
+    private Double locationLongitude;
+    private Double locationLatitude;
     //private String eventLocation;
 
     /**
@@ -22,12 +24,14 @@ public class Event implements Parcelable, Info
      */
 
     // TODO location, picture
-    Event(String username, String habitID, String eventID, String eventName, String eventComment) {
+    Event(String username, String habitID, String eventID, String eventName, String eventComment, Double locationLongitude, Double locationLatitude) {
         this.username = username;
         this.habitID = habitID;
         this.eventID = eventID;
         this.eventName = eventName;
         this.eventComment = eventComment;
+        this.locationLatitude = locationLongitude;
+        this.locationLongitude = locationLatitude;
         //this.eventLocation = eventLocation;
     }
 
@@ -38,6 +42,8 @@ public class Event implements Parcelable, Info
         eventID = in.readString();
         eventName = in.readString();
         eventComment = in.readString();
+        locationLongitude = in.readDouble();
+        locationLatitude = in.readDouble();
         //eventLocation = in.readString();
     }
 
@@ -59,6 +65,9 @@ public class Event implements Parcelable, Info
     void setEventComment(String Comment) {
         this.eventComment = Comment;
     }
+    void setLocationLongitude(Double longitude){this.locationLongitude= longitude;}
+    void setLocationLatitude(Double latitude){this.locationLatitude= latitude;}
+
     //void setEventLocation(String Location){ this.eventLocation = Location;}
 
     public String getUsername() {return this.username;}
@@ -66,6 +75,8 @@ public class Event implements Parcelable, Info
     public String getEventID() {return this.eventID;}
     public String getName() {return this.eventName;}
     public String getComment() {return this.eventComment;}
+    public Double getLocationLongitude() {return this.locationLongitude;}
+    public Double getLocationLatitude() {return this.locationLatitude;}
     //String getEventLocation() {return this.eventLocation;}
 
     @Override
@@ -80,6 +91,8 @@ public class Event implements Parcelable, Info
         parcel.writeString(eventID);
         parcel.writeString(eventName);
         parcel.writeString(eventComment);
+        parcel.writeDouble(locationLongitude);
+        parcel.writeDouble(locationLatitude);
         //parcel.writeString(eventLocation);
     }
 }

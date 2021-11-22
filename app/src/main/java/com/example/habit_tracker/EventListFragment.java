@@ -116,8 +116,11 @@ public class EventListFragment extends Fragment {
                     String eventID = doc.getId();
                     String eventName = (String) doc.getData().get("event name");
                     String eventComment = (String) doc.getData().get("event comment");
+                    Double locationLongitude = (Double) doc.getData().get("Longitude");
+                    Double locationLatitude = (Double) doc.getData().get("Latitude");
+
                     // TODO image & location
-                    eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment));
+                    eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment,locationLongitude,locationLatitude));
                 }
                 recyclerAdapter.notifyDataSetChanged();
             }
@@ -257,9 +260,11 @@ public class EventListFragment extends Fragment {
                     Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            HashMap<String, String> data = new HashMap<>();
+                            HashMap<String, Object> data = new HashMap<>();
                             data.put("event name", deletedEvent.getName());
                             data.put("event comment", deletedEvent.getComment());
+                            data.put("Longitude", deletedEvent.getLocationLongitude());
+                            data.put("LaLatitude", deletedEvent.getLocationLatitude());
                             collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {

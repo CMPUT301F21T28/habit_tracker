@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -248,33 +250,39 @@ public class EventListFragment extends Fragment {
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
 
-                    // this was how to store something into a variable, if undo, push this saved data into db
-//                    deletedEvent = eventDataList.get(position);
+                    // create a dialog to confirm delete of the habit
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    // TODO implement a delete pop-up to confirm deletion
-                    // This is how you delete a thing from db
-                    collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
+                    builder.setTitle("Confirm");
+                    builder.setMessage("Are you sure to delete this event?");
+
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Delete the event
+                            deletedEvent = eventDataList.get(position);
+                            collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                }
+                            });
+                            dialog.dismiss();
                         }
                     });
 
-                    // this was how the undo works
-//                    Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            HashMap<String, String> data = new HashMap<>();
-//                            data.put("event name", deletedEvent.getName());
-//                            data.put("event comment", deletedEvent.getComment());
-//                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void unused) {
-//                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                        }
-//                    }).show();
-//                    break;
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do nothing
+                            recyclerAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
             }
         }
     };

@@ -42,7 +42,6 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     public void onBindViewHolder(@NonNull FriendListAdapter.ViewHolder holder, int position) {
         Friend friend = friends.get(position);
         holder.friendName.setText((friend.getActualName()));
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -130,9 +130,9 @@ public class HabitListFragment extends Fragment {
                     String habitDateOfStarting = (String) doc.getData().get("dateOfStarting");
                     String habitReason = (String) doc.getData().get("reason");
                     String habitRepeat = (String) doc.getData().get("repeat");
-                    //Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
-                    Boolean habitIsPrivate = false;
-                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
+                    Boolean habitIsPrivate = Boolean.parseBoolean((String) doc.getData().get("isPrivate"));
+//                    Boolean habitIsPrivate = false;
+                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate));
 //                    System.out.println(habitDataList);
                 }
                 recyclerAdapter.notifyDataSetChanged();

@@ -23,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,10 +65,10 @@ public class HabitAddFragment extends Fragment {
     private String[] dayArray = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private String selectedDayString;
 
-    private EditText isPrivate;
+    private RadioGroup radioGroup;
     private FirebaseFirestore db;
     private String username;
-    private Boolean isPrivateBoolean;
+    private Boolean isPrivate;
 
     private Integer habitsSize;
 
@@ -90,7 +92,6 @@ public class HabitAddFragment extends Fragment {
         if (bundle != null && bundle.containsKey("username")){
             username = bundle.getString("username");
         }
-        habitsSize = bundle.getInt("habitSize");
         return rootView;
 
     }
@@ -136,7 +137,9 @@ public class HabitAddFragment extends Fragment {
         dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting);
 //        repeat = (EditText) getView().findViewById(R.id.editText_repeat);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day);
-        isPrivate = (EditText) getView().findViewById(R.id.editText_isPrivate);
+
+        //isPrivate = (EditText) getView().findViewById(R.id.editText_isPrivate);
+        radioGroup = getView().findViewById(R.id.radioGroup);
 
         submitButton = (Button) getView().findViewById(R.id.submit_button);
 
@@ -217,6 +220,23 @@ public class HabitAddFragment extends Fragment {
             }
         });
 
+        //Create the radio button
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radioYes:
+                        isPrivate = true;
+                        Toast.makeText(getActivity(), "Set the habit to private", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radioNo:
+                        isPrivate = false;
+                        Toast.makeText(getActivity(), "Set the habit to public", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
 
 
         CollectionReference collectionReference = db.collection("Users").document(username).collection("HabitList");
@@ -227,11 +247,6 @@ public class HabitAddFragment extends Fragment {
             public void onClick(View view) {
                 final boolean[] isValid = {true};
 
-//                isValid[0] = isTitleValid(habitTitle.getText().toString());
-//                isValid[1] = isReasonValid(habitReason.getText().toString());
-//                isValid[2] = isDateValid(dateOfStarting.getText().toString());
-//                isValid[3] = isRepeatValid(repeat.getText().toString());
-//                isValid[4] = isPrivateValid(isPrivate.getText().toString());
 
                 if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
                     isValid[0] = false;
@@ -260,13 +275,9 @@ public class HabitAddFragment extends Fragment {
                     return;
                 }
 
-                if (isPrivate.getText().toString().toLowerCase().equals("yes")) {
-                    isPrivateBoolean = true;
-                } else if (isPrivate.getText().toString().toLowerCase().equals("no")){
-                    isPrivateBoolean = false;
-                }else {
+                if (isPrivate == null){
                     isValid[0] = false;
-                    isPrivate.setError("Your input should be Yes or No.");
+                    Toast.makeText(getActivity(), "the isPrivate is set to null, please choose one", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -276,12 +287,11 @@ public class HabitAddFragment extends Fragment {
                 String uuidString = uuid.toString();
 
                 if (isValid[0]) {
-
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", selectedDayString);
                     data.put("dateOfStarting", dateOfStarting.getText().toString());
-                    data.put("isPrivate", isPrivateBoolean.toString());
+                    data.put("isPrivate", isPrivate.toString());
                     data.put("order", habitsSize+1);
                     collectionReference
                             .document(uuidString)

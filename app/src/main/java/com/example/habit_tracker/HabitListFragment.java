@@ -1,5 +1,8 @@
 package com.example.habit_tracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
 import android.os.Build;
 import android.os.Bundle;
 
@@ -22,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.habit_tracker.adapters.HabitListAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.hash.HashingInputStream;
@@ -117,7 +121,7 @@ public class HabitListFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users").document(userName).collection("HabitList");
-        collectionReference.orderBy("order").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
@@ -129,7 +133,9 @@ public class HabitListFragment extends Fragment {
                     String habitReason = (String) doc.getData().get("reason");
                     String habitRepeat = (String) doc.getData().get("repeat");
                     Boolean habitIsPrivate = Boolean.parseBoolean((String) doc.getData().get("isPrivate"));
+//                    Boolean habitIsPrivate = false;
                     habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate));
+//                    System.out.println(habitDataList);
                 }
                 recyclerAdapter.notifyDataSetChanged();
 
@@ -167,11 +173,10 @@ public class HabitListFragment extends Fragment {
         });
 
         // add a habit (go to new fragment)
-        getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.add_friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("habitSize", habitDataList.size());
                 bundle.putString("username", userName);
 
                 NavController controller = Navigation.findNavController(view);
@@ -210,37 +215,41 @@ public class HabitListFragment extends Fragment {
             int position = viewHolder.getAdapterPosition();
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
-                    deletedHabit = habitDataList.get(position);
-                    collectionReference.document(habitDataList.get(position).getHabitID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
+
+                    // create a dialog to confirm delete of the habit
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    builder.setTitle("Confirm");
+                    builder.setMessage("Are you sure to delete this habit?");
+
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Delete the habit
+                            collectionReference.document(habitDataList.get(position).getHabitID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                }
+                            });
+                            for (int i = position+1; i < habitDataList.size(); i++) {
+                                collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i);
+                            }
+                            dialog.dismiss();
                         }
                     });
 
-                    for (int i = position+1; i < habitDataList.size(); i++) {
-                        collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i);
-                    }
-
-                    // TODO a pop up confirm deletion, so no undo anymore
-                    Snackbar.make(habitList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
-                            //habitDataList.add(position, deletedHabit);
-                            HashMap<String, String> data = new HashMap<>();
-                            data.put("title", deletedHabit.getName());
-                            data.put("reason", deletedHabit.getComment());
-                            data.put("repeat", deletedHabit.getRepeat());
-                            data.put("dateOfStarting", deletedHabit.getDateOfStarting());
-                            data.put("isPrivate", Boolean.toString(deletedHabit.getIsPrivate()));
-                            collectionReference.document(deletedHabit.getHabitID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do nothing
+                            recyclerAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            dialog.dismiss();
                         }
-                    }).show();
-                    break;
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
             }
         }
     };

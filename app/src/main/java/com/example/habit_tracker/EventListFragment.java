@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.habit_tracker.adapters.EventListAdapter;
+import com.example.habit_tracker.adapters.GenericAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -185,8 +189,6 @@ public class EventListFragment extends Fragment {
                 bundle.putString("username", username);
                 bundle.putString("habitID", habitID);
 
-                Log.d(TAG, "onClick: habitID" + habitID);
-
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_eventListFragment_to_eventAddFragment,bundle);
             }
@@ -247,28 +249,40 @@ public class EventListFragment extends Fragment {
             int position = viewHolder.getAdapterPosition();
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
-                    deletedEvent = eventDataList.get(position);
-                    collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
+
+                    // create a dialog to confirm delete of the habit
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    builder.setTitle("Confirm");
+                    builder.setMessage("Are you sure to delete this event?");
+
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Delete the event
+                            deletedEvent = eventDataList.get(position);
+                            collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                }
+                            });
+                            dialog.dismiss();
                         }
                     });
 
-                    Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
                         @Override
-                        public void onClick(View view) {
-                            HashMap<String, String> data = new HashMap<>();
-                            data.put("event name", deletedEvent.getName());
-                            data.put("event comment", deletedEvent.getComment());
-                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do nothing
+                            recyclerAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            dialog.dismiss();
                         }
-                    }).show();
-                    break;
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
             }
         }
     };

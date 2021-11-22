@@ -1,4 +1,4 @@
-package com.example.habit_tracker;
+package com.example.habit_tracker.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.habit_tracker.Habit;
+import com.example.habit_tracker.R;
 
 import java.util.ArrayList;
 

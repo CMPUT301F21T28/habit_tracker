@@ -54,6 +54,17 @@ public class MainPageFragment extends Fragment {
                 controller.navigate(R.id.action_mainPageFragment_to_habitListFragment, bundle);
             }
         });
+
+        getView().findViewById(R.id.friends_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", username);
+
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_mainPageFragment_to_friendListFragment, bundle);
+            }
+        });
     }
 
 }

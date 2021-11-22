@@ -77,17 +77,17 @@ public class EventAddFragment extends Fragment {
         final File[] file = new File[1];
 
 
-        /* TODO image adding
-        ImageButton imageButton = getView().findViewById(R.id.imageButton);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //file[0] = new File(Environment.getExternalStorageDirectory(),System.currentTimeMillis()+habit+".jpg")
-                //Intent intent = new Intent(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file[0]));
-                //startActivityForResult(intent,100);
-            }
-        });
-        */
+//        // TODO image adding
+//        ImageButton imageButton = getView().findViewById(R.id.imageButton);
+//        imageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //file[0] = new File(Environment.getExternalStorageDirectory(),System.currentTimeMillis()+habit+".jpg")
+//                Intent intent = new Intent(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file[0]));
+//                startActivityForResult(intent,100);
+//            }
+//        });
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("habit");

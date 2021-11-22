@@ -107,6 +107,7 @@
 
     <EditText
         android:id="@+id/editTextComments"
+        android:maxLength="20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/textView4"

@@ -96,6 +96,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:hint="Up to 20 characters"
+        android:maxLength="20"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"

@@ -140,6 +140,7 @@ public class HabitEditFragment extends Fragment {
         habitReason.setText(habit.getComment());
         dateOfStarting.setText(habit.getDateOfStarting());
         repeatDay.setText(habit.getRepeat());
+        selectedDayString = habit.getRepeat();
 
 
         selectedDay = new boolean[dayArray.length];

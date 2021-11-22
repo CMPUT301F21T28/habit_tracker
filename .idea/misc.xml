@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_event_list.xml" value="0.203515625" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_friend_details.xml" value="0.203515625" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_friend_info.xml" value="0.203515625" />
         <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_friend_list.xml" value="0.264" />
         <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_habit_list.xml" value="0.203515625" />
         <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_login.xml" value="0.1" />

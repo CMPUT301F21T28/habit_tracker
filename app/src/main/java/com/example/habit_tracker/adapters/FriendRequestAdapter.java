@@ -23,13 +23,15 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     ArrayList<Friend> friends;
     Context context;
     String currentUserUsername;
+    String currentUserRealname;
     Utility firebaseUtils = new Utility();
 
 
-    public FriendRequestAdapter(Context ctx, ArrayList<Friend> friends, String username) {
+    public FriendRequestAdapter(Context ctx, ArrayList<Friend> friends, String username, String realname) {
         context = ctx;
         this.friends = friends;
         this.currentUserUsername = username;
+        this.currentUserRealname = realname;
     }
 
     @NonNull
@@ -44,19 +46,20 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     public void onBindViewHolder(@NonNull FriendRequestAdapter.ViewHolder holder, int position) {
         Friend friend = friends.get(position);
         holder.friendName.setText(friend.getActualName());
-        //TODO implement accept button and deny button, try to implement onClickListener here
 
         holder.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("DEBUG", friend.getActualName().toString());
                 Log.d("DEBUG", friend.getUserName().toString());
+                Log.d("DEBUG", currentUserUsername.toString());
+                Log.d("DEBUG", currentUserRealname.toString());
                 firebaseUtils.addFriend(currentUserUsername, friend);
                 firebaseUtils.removeRequest(currentUserUsername, friend);
                 friends.remove(friend);
                 FriendRequestAdapter.this.notifyDataSetChanged();
 
-                // TODO: Update the friend list as well after accepting.
+                //Update the sender's friend list after accepting as well after accepting
             }
         });
 
@@ -88,6 +91,5 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             denyButton = itemView.findViewById(R.id.request_deny_button);
         }
     }
-
 
 }

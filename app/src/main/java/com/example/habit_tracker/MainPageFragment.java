@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 public class MainPageFragment extends Fragment {
 
     private String username;
-
+    String realname;
 
     public MainPageFragment() {
         // Required empty public constructor
@@ -37,6 +37,7 @@ public class MainPageFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main_page, container, false);
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
+        realname = bundle.getString("realname");
 
         return rootView;
     }
@@ -49,6 +50,7 @@ public class MainPageFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", username);
+                bundle.putString("realname", realname);
 
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_mainPageFragment_to_habitListFragment, bundle);
@@ -60,6 +62,7 @@ public class MainPageFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", username);
+                bundle.putString("realname", realname);
 
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_mainPageFragment_to_friendListFragment, bundle);

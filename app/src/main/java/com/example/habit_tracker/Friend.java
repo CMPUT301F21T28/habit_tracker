@@ -7,7 +7,7 @@ public class Friend implements Parcelable{
     private String userName;
     private String actualName;
 
-    Friend(String userName, String actualName) {
+    public Friend(String userName, String actualName) {
         this.userName = userName;
         this.actualName = actualName;
     }

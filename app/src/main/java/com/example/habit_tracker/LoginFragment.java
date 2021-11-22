@@ -122,6 +122,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (DocumentSnapshot documentSnapshot : task.getResult()) {
                                 String correctPassword = documentSnapshot.getString("password");
+                                String realName = documentSnapshot.getString("realname");
 
                                 // Converting password to hashed password
                                 String hashedPw = null;
@@ -137,6 +138,7 @@ public class LoginFragment extends Fragment {
                                     // Creating bundle to pass information to next fragment
                                     Bundle outgoingBundle = new Bundle();
                                     outgoingBundle.putString("username", username);
+                                    outgoingBundle.putString("realname", realName);
 
                                     // Navigating to the next fragment
                                     NavController controller = Navigation.findNavController(view);

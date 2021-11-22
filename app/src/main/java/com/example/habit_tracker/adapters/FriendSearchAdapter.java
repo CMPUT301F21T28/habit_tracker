@@ -1,6 +1,8 @@
 package com.example.habit_tracker.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habit_tracker.Friend;
 import com.example.habit_tracker.R;
+import com.example.habit_tracker.firebaseUtils.utils;
 
 import java.util.ArrayList;
 
@@ -19,10 +25,12 @@ public class FriendSearchAdapter extends RecyclerView.Adapter<FriendSearchAdapte
 
     ArrayList<Friend> friends;
     Context context;
+    Friend currentUser;
 
-    public FriendSearchAdapter(Context ctx, ArrayList<Friend> friends) {
+    public FriendSearchAdapter(Context ctx, ArrayList<Friend> friends, Friend currentUser) {
         context = ctx;
         this.friends = friends;
+        this.currentUser = currentUser;
     }
 
     @NonNull
@@ -36,9 +44,29 @@ public class FriendSearchAdapter extends RecyclerView.Adapter<FriendSearchAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Friend friend = friends.get(position);
-        holder.friendName.setText(friend.getActualName());
+        //Log.d("tag", "Value: " + friend.getActualName());
+        holder.friendName.setText(friend.getActualName() + " ("+friend.getUserName()+")");
+        utils newUtil = new utils();
 
-        // TODO set button onClickListener here
+        holder.requestButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                if (holder.requestButton.getText().toString().equals("Request")){
+                    Log.d("tag", "Value: " + holder.requestButton.getText().toString());
+                    newUtil.addRequest(friend.getUserName(),currentUser);
+                    holder.requestButton.setText("Cancel");
+                }
+                else if (holder.requestButton.getText().toString().equals("Cancel")){
+                    newUtil.removeRequest(friend.getUserName(),currentUser);
+                    holder.requestButton.setText("Request");
+                }
+
+
+            }
+        });
+
 
     }
 

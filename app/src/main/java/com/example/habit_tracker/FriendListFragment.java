@@ -49,6 +49,7 @@ public class FriendListFragment extends Fragment {
 
     Friend deletedFriend;
     String username;
+    String realname;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference;
@@ -73,6 +74,7 @@ public class FriendListFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
+        realname = bundle.getString("realname");
 
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
@@ -110,10 +112,11 @@ public class FriendListFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", username);
+                bundle.putString("realname", realname);
 
                 NavController controller = Navigation.findNavController(view);
                 // TODO havent declare next fragment
-                controller.navigate(R.id.action_eventListFragment_to_eventAddFragment,bundle);
+                controller.navigate(R.id.action_friendListFragment_to_friendSearchFragment,bundle);
             }
         });
     }
@@ -182,23 +185,26 @@ public class FriendListFragment extends Fragment {
                         friendDataList.clear();
                         // Getting the array of friends
                         ArrayList<Map> friends = (ArrayList<Map>) document.get("friends");
-                        for (Map<String, String> map : friends) {
-                            String username = map.get("userName");
-                            String realname = map.get("actualName");
-                            friendDataList.add(new Friend(username, realname));
+                        if (friends!=null){
+                            for (Map<String, String> map : friends) {
+                                String username = map.get("userName");
+                                String realname = map.get("actualName");
+                                friendDataList.add(new Friend(username, realname));
+                            }
+
+                            // Getting the array of requests
+                            ArrayList<Map> requests = (ArrayList<Map>) document.get("requests");
+                            for (Map<String, String> map : requests) {
+                                String username = map.get("userName");
+                                String realname = map.get("actualName");
+                                requestDataList.add(new Friend(username, realname));
+                            }
+
+                            // Update the adapaters
+                            friendRecyclerAdapter.notifyDataSetChanged();
+                            requestRecyclerAdapter.notifyDataSetChanged();
                         }
 
-                        // Getting the array of requests
-                        ArrayList<Map> requests = (ArrayList<Map>) document.get("requests");
-                        for (Map<String, String> map : requests) {
-                            String username = map.get("userName");
-                            String realname = map.get("actualName");
-                            requestDataList.add(new Friend(username, realname));
-                        }
-
-                        // Update the adapaters
-                        friendRecyclerAdapter.notifyDataSetChanged();
-                        requestRecyclerAdapter.notifyDataSetChanged();
                     }
                 }
             }

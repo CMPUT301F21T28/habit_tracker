@@ -50,6 +50,8 @@ public class EventEditFragment extends Fragment {
     private String habitID;
     private Event event;
 
+    Bitmap originBitmap;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,11 +83,15 @@ public class EventEditFragment extends Fragment {
         //locationContent = (EditText)getView().findViewById(R.id.LocationContent);
         submit= (Button) getView().findViewById(R.id.Submit);
         imageButton = getView().findViewById(R.id.editImageButton);
+
+        originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
         String imageString = event.getEventImage();
-        byte[] bitmapArray;
-        bitmapArray = Base64.getDecoder().decode(imageString);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray,0,bitmapArray.length);
-        imageButton.setImageBitmap(bitmap);
+        if (imageString != null) {
+            byte[] bitmapArray;
+            bitmapArray = Base64.getDecoder().decode(imageString);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+            imageButton.setImageBitmap(bitmap);
+        }
 
 
         commentContent.setText(event.getEventComment());
@@ -96,11 +102,13 @@ public class EventEditFragment extends Fragment {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         //
-                        Bundle b = result.getData().getExtras();
-                        Bitmap bitmap = (Bitmap) b.get("data");
-                        //bit = (Bitmap) b.get("data");
-                        //imageBitmap = (Bitmap) b.get("data");
-                        imageButton.setImageBitmap(bitmap);
+                        if (result.getData() != null) {
+                            Bundle b = result.getData().getExtras();
+                            Bitmap bitmap = (Bitmap) b.get("data");
+                            //bit = (Bitmap) b.get("data");
+                            //imageBitmap = (Bitmap) b.get("data");
+                            imageButton.setImageBitmap(bitmap);
+                        }
                     }
                 });
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -145,10 +153,15 @@ public class EventEditFragment extends Fragment {
                     event.setEventComment(commentContent.getText().toString());
                     //habitevent.setEventLocation(locationContent.getText().toString());
                     Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-                    byte[] imageByte = byteArrayOutputStream.toByteArray();
-                    String imageString = Base64.getEncoder().encodeToString(imageByte);
+                    String imageString = event.getEventImage();
+                    if (imageString == null && imageBitmap == originBitmap){
+
+                    }else {
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                        byte[] imageByte = byteArrayOutputStream.toByteArray();
+                        imageString = Base64.getEncoder().encodeToString(imageByte);
+                    }
                     event.setEventImage(imageString);
                     data.put("event image", imageString);
 

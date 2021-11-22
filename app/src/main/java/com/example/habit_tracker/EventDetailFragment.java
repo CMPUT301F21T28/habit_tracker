@@ -75,11 +75,15 @@ public class EventDetailFragment extends Fragment {
         //locationContent.setText(habitevent.getEventLocation());
 
         imageView = rootView.findViewById(R.id.imageView);
+        //imageView.getDrawable().
+
         String imageString = event.getEventImage();
-        byte[] bitmapArray;
-        bitmapArray = Base64.getDecoder().decode(imageString);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray,0,bitmapArray.length);
-        imageView.setImageBitmap(bitmap);
+        if (imageString != null) {
+            byte[] bitmapArray;
+            bitmapArray = Base64.getDecoder().decode(imageString);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+            imageView.setImageBitmap(bitmap);
+        }
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        final CollectionReference collectionReference = db.collection("habit");
 //        DocumentReference documentReference = collectionReference.document(habitID)

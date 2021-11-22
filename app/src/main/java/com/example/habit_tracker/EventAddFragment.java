@@ -51,7 +51,7 @@ public class EventAddFragment extends Fragment {
 
     String username = null;
     String habitID = null;
-    
+    Bitmap originBitmap;
 
     public EventAddFragment() {
         // Required empty public constructor
@@ -93,6 +93,8 @@ public class EventAddFragment extends Fragment {
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
         ActivityResultLauncher<Intent> activityResultLauncher;
         Bitmap bit = null;
+        //Boolean needImage;
+        originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
 
         /**
          *
@@ -102,11 +104,13 @@ public class EventAddFragment extends Fragment {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         //
-                        Bundle b = result.getData().getExtras();
-                        Bitmap bitmap = (Bitmap) b.get("data");
-                        //bit = (Bitmap) b.get("data");
-                        //imageBitmap = (Bitmap) b.get("data");
-                        imageButton.setImageBitmap(bitmap);
+                        if (result.getData() != null) {
+                            Bundle b = result.getData().getExtras();
+                            Bitmap bitmap = (Bitmap) b.get("data");
+                            //bit = (Bitmap) b.get("data");
+                            //imageBitmap = (Bitmap) b.get("data");
+                            imageButton.setImageBitmap(bitmap);
+                        }
                     }
                 });
 
@@ -152,13 +156,19 @@ public class EventAddFragment extends Fragment {
                 String event_name = editTextEventName.getText().toString();
                 String event_commit = editTextEventCommit.getText().toString();
                 //Matrix image_matrix = imageButton.getImageMatrix()
+
                 Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-                byte[] imageByte = byteArrayOutputStream.toByteArray();
-                //String imageString = imageByte.toString();
-                //imageString.
-                String imageString = Base64.getEncoder().encodeToString(imageByte);
+                String imageString;
+                if (imageBitmap != originBitmap) {
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    byte[] imageByte = byteArrayOutputStream.toByteArray();
+                    //String imageString = imageByte.toString();
+                    //imageString.
+                    imageString = Base64.getEncoder().encodeToString(imageByte);
+                }else {
+                    imageString = null;
+                }
 
 
                 HashMap<String,Object> data = new HashMap<>();
@@ -171,7 +181,8 @@ public class EventAddFragment extends Fragment {
                     //System.currentTimeMillis() return long
 
                     Log.d(TAG, "onClick: " + habitID);
-                    String eventID = event_name + String.valueOf(System.currentTimeMillis());
+                    //String eventID = event_name + String.valueOf(System.currentTimeMillis());
+                    String eventID = String.valueOf(System.currentTimeMillis()) + event_name;
 
 
                     collectionReference.document(habitID).collection("EventList")

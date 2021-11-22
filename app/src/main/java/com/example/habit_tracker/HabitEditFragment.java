@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,13 +48,13 @@ public class HabitEditFragment extends Fragment {
             "Thursday", "Friday", "Saturday", "Sunday"};
     private String selectedDayString;
 
-    private EditText isPrivate;
+    private RadioGroup radioGroup;
     private FirebaseFirestore db;
     private String username;
 
     private Habit habit;
 
-    private Boolean isPrivateBoolean;
+    private Boolean isPrivate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,7 +134,23 @@ public class HabitEditFragment extends Fragment {
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason2);
         dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting2);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day2);
-        isPrivate = (EditText) getView().findViewById(R.id.editText_isPrivate2);
+
+        radioGroup = getView().findViewById(R.id.radioGroup2);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radioYes:
+                        isPrivate = true;
+                        Toast.makeText(getActivity(), "Set the habit to private", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.radioNo:
+                        isPrivate = false;
+                        Toast.makeText(getActivity(), "Set the habit to public", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
 
         submitButton = (Button) getView().findViewById(R.id.button_submit);
 
@@ -141,6 +159,12 @@ public class HabitEditFragment extends Fragment {
         dateOfStarting.setText(habit.getDateOfStarting());
         repeatDay.setText(habit.getRepeat());
         selectedDayString = habit.getRepeat();
+        if (habit.getIsPrivate() == true) {
+            radioGroup.check(R.id.radioYes);
+        } else {
+            radioGroup.check(R.id.radioNo);
+        }
+
 
 
         selectedDay = new boolean[dayArray.length];
@@ -212,15 +236,6 @@ public class HabitEditFragment extends Fragment {
         });
 
 
-
-
-
-        if (habit.getIsPrivate() == false){
-            isPrivate.setText("No");
-        } else if (habit.getIsPrivate() == true){
-            isPrivate.setText("Yes");
-        }
-
         CollectionReference collectionReference = db.collection("Users").document(username).collection("HabitList");
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +245,7 @@ public class HabitEditFragment extends Fragment {
                 //final boolean[] isValid = {true};
                 //Check if input is in range
                 boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,0,30)
-                        && checkInputValidity(dateOfStarting,0,20) && selectedDayString != null;
+                        && checkInputValidity(dateOfStarting,0,20) && selectedDayString != null && isPrivate != null;
                 if (inputValid == false){
                     Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
                     return;
@@ -244,16 +259,6 @@ public class HabitEditFragment extends Fragment {
 
 
                 //set the isPrivate to be true if the user enters yes, false if the user enters no.
-                if (isPrivate.getText().toString().toLowerCase().equals("yes")) {
-                    isPrivateBoolean = true;
-                } else if (isPrivate.getText().toString().toLowerCase().equals("no")){
-                    isPrivateBoolean = false;
-                }else {
-                    //isValid[0] = false;
-                    inputValid = false;
-                    isPrivate.setError("Your input should be Yes or No.");
-                    return;
-                }
 
                 HashMap<String, String> data = new HashMap<>();
 
@@ -262,13 +267,13 @@ public class HabitEditFragment extends Fragment {
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", selectedDayString);
                     data.put("dateOfStarting", dateOfStarting.getText().toString());
-                    data.put("isPrivate", isPrivateBoolean.toString());
+                    data.put("isPrivate", isPrivate.toString());
 
                     habit.setHabitTitle(habitTitle.getText().toString());
                     habit.setDateOfStarting(dateOfStarting.getText().toString());
                     habit.setReason(habitReason.getText().toString());
                     habit.setRepeat(selectedDayString);
-                    habit.setPrivate(isPrivateBoolean);
+                    habit.setPrivate(isPrivate);
 
                     collectionReference
                             .document(habit.getHabitID())

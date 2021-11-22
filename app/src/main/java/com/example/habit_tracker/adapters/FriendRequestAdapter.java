@@ -1,11 +1,13 @@
 package com.example.habit_tracker.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     Context context;
     String currentUserUsername;
     Utility firebaseUtils = new Utility();
+
 
     public FriendRequestAdapter(Context ctx, ArrayList<Friend> friends, String username) {
         context = ctx;
@@ -46,11 +49,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         holder.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.d("DEBUG", friend.getActualName().toString());
+                Log.d("DEBUG", friend.getUserName().toString());
                 firebaseUtils.addFriend(currentUserUsername, friend);
                 firebaseUtils.removeRequest(currentUserUsername, friend);
                 friends.remove(friend);
                 FriendRequestAdapter.this.notifyDataSetChanged();
+
+                // TODO: Update the friend list as well after accepting.
             }
         });
 

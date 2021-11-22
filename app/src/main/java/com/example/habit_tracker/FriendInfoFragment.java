@@ -82,29 +82,30 @@ public class FriendInfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // set onClickListener for unfollowBtn
-        // TODO: FIX THIS SHIT - figure out why the fk this is saying "null reference"... button exists tho
-//        unfollowBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // remove them from the follow list
-//                firebaseUtils.removeFriend(currentUser, friend);
-//
-//                // give them undo option
-//                Snackbar.make(habitList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        firebaseUtils.addFriend(currentUser, friend);
-//                    }
-//                }).show();
-//
-//                // return to friendlist
-//                Bundle bundle = new Bundle();
-//                bundle.putString("username", currentUser);
-//
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_friendInfoFragment_to_friendListFragment, bundle);
-//            }
-//        });
+        unfollowBtn = getView().findViewById(R.id.unfollow_button);
+
+        unfollowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // remove them from the follow list
+                firebaseUtils.removeFriend(currentUser, friend);
+
+                // give them undo option
+                Snackbar.make(habitList, "Unfollowed " + friend.getUserName(), Snackbar.LENGTH_INDEFINITE).setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        firebaseUtils.addFriend(currentUser, friend);
+                    }
+                }).show();
+
+                // return to friendlist
+                Bundle bundle = new Bundle();
+                bundle.putString("username", currentUser);
+
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_friendInfoFragment_to_friendListFragment, bundle);
+            }
+        });
 
         //  use 'addSnapshotListener' to pull data from db, use for loop to add data to habitDataList (an ArrayList<Habit>),
         //  can look up how I implement in HabitListFragment.java
@@ -119,8 +120,17 @@ public class FriendInfoFragment extends Fragment {
                     String habitDateOfStarting = (String) doc.getData().get("dateOfStarting");
                     String habitReason = (String) doc.getData().get("reason");
                     String habitRepeat = (String) doc.getData().get("repeat");
-                    Boolean habitIsPrivate = false;
-                    habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
+
+
+                    // TODO: change isPrivate field of a habit to be a boolean. in the meantime use this:
+                    String habitIsPrivate = (String) doc.getData().get("isPrivate");
+                    if (habitIsPrivate.equals("false")) {
+                        habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
+                    }
+
+//                    if (!habitIsPrivate) {
+//                        habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false));
+//                    }
                 }
                 habitListAdapter.notifyDataSetChanged();
             }

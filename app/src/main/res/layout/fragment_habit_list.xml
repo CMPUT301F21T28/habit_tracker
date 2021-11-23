@@ -20,7 +20,7 @@
     <include layout="@layout/fragment_one"></include>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_friend_button"
+        android:id="@+id/add_habit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

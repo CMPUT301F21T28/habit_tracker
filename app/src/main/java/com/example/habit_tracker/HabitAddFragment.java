@@ -89,9 +89,11 @@ public class HabitAddFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_habit_add, container, false);
         // get the bundle passed from the previous fragment
         Bundle bundle = this.getArguments();
-        if (bundle != null && bundle.containsKey("username")){
-            username = bundle.getString("username");
+        username = bundle.getString("username");
+        if (bundle.containsKey("habitsSize")) {
+            Log.d(TAG, "onCreateView: yes");
         }
+        habitsSize = bundle.getInt("habitsSize");
         return rootView;
 
     }
@@ -135,14 +137,10 @@ public class HabitAddFragment extends Fragment {
         habitTitle = (EditText) getView().findViewById(R.id.editText_habitTitle);
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason);
         dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting);
-//        repeat = (EditText) getView().findViewById(R.id.editText_repeat);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day);
-
-        //isPrivate = (EditText) getView().findViewById(R.id.editText_isPrivate);
         radioGroup = getView().findViewById(R.id.radioGroup);
 
         submitButton = (Button) getView().findViewById(R.id.submit_button);
-
 
         //Initialize selected repeat day
         //https://stackoverflow.com/questions/10207206/how-to-display-alertdialog-in-a-fragment
@@ -246,8 +244,6 @@ public class HabitAddFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 final boolean[] isValid = {true};
-
-
                 if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
                     isValid[0] = false;
                     habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
@@ -291,8 +287,8 @@ public class HabitAddFragment extends Fragment {
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", selectedDayString);
                     data.put("dateOfStarting", dateOfStarting.getText().toString());
-                    data.put("isPrivate", isPrivate.toString());
-                    data.put("order", habitsSize+1);
+                    data.put("isPrivate", isPrivate);
+                    data.put("order", (int) habitsSize+1);
                     collectionReference
                             .document(uuidString)
                             .set(data)
@@ -316,10 +312,7 @@ public class HabitAddFragment extends Fragment {
                                     Toast.makeText(getContext(), "Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
                                 }
                             });
-
                 }
-
-
             }
         });
 

@@ -49,9 +49,7 @@ public class HabitDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_habit_detail, container, false);
 
         Bundle bundle = this.getArguments();
-        if (bundle != null && bundle.containsKey("username")){
-            habit = bundle.getParcelable("Habit");
-        }
+        habit = bundle.getParcelable("Habit");
 
         habitTitle = rootView.findViewById(R.id.textView_habitTitle);
         habitReason = rootView.findViewById(R.id.textView_habitReason);

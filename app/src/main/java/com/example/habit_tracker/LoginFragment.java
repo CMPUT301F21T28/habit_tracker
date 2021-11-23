@@ -138,7 +138,7 @@ public class LoginFragment extends Fragment {
                                     // Creating bundle to pass information to next fragment
                                     Bundle outgoingBundle = new Bundle();
                                     outgoingBundle.putString("username", username);
-                                    outgoingBundle.putString("realname", realName);
+                                    outgoingBundle.putString("realname", realname);
 
                                     // Navigating to the next fragment
                                     NavController controller = Navigation.findNavController(view);
@@ -153,9 +153,7 @@ public class LoginFragment extends Fragment {
                             Log.d("Failure", "User not Exists");
                             editTextUsername.setError("User does not exist. Please sign up first.");
                             //You can store new user information here
-
                         }
-
                     }
                 });
             }

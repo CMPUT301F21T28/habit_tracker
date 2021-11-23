@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habit_tracker.Friend;
 import com.example.habit_tracker.R;
-import com.example.habit_tracker.firebaseUtils.utils;
+import com.example.habit_tracker.Utility;
 
 import java.util.ArrayList;
 
@@ -46,7 +46,7 @@ public class FriendSearchAdapter extends RecyclerView.Adapter<FriendSearchAdapte
         Friend friend = friends.get(position);
         //Log.d("tag", "Value: " + friend.getActualName());
         holder.friendName.setText(friend.getActualName() + " ("+friend.getUserName()+")");
-        utils newUtil = new utils();
+        Utility newUtil = new Utility();
 
         holder.requestButton.setOnClickListener(new View.OnClickListener() {
 

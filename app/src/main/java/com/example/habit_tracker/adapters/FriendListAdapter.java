@@ -23,11 +23,13 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     ArrayList<Friend> friends;
     Context context;
+    String currentUsername;
     private static final String TAG = "MyActivity";
 
-    public FriendListAdapter(Context ctx, ArrayList<Friend> friends) {
+    public FriendListAdapter(Context ctx, ArrayList<Friend> friends, String currentUsername) {
         this.context = ctx;
         this.friends = friends;
+        this.currentUsername = currentUsername;
     }
 
     @NonNull
@@ -44,16 +46,16 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         holder.friendName.setText((friend.getActualName()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("Friend", friend);
+                bundle.putString("username", currentUsername);
+                bundle.putParcelable("friend", friend);
 
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 NavController controller = Navigation.findNavController(view);
-                //TODO next fragment un-declare
-                controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
+
+                controller.navigate(R.id.action_friendListFragment_to_friendInfoFragment, bundle);
             }
         });
 

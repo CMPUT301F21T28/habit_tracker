@@ -62,6 +62,8 @@ public class HabitListFragment extends Fragment {
 
     CollectionReference collectionReference;
 
+
+
     public HabitListFragment() {
         // Required empty public constructor
     }
@@ -166,6 +168,7 @@ public class HabitListFragment extends Fragment {
             }
         });
 
+
         // add a habit (go to new fragment)
         getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,6 +181,9 @@ public class HabitListFragment extends Fragment {
                 controller.navigate(R.id.action_habitListFragment_to_habitAddFragment, bundle);
             }
         });
+
+        // For tooltip
+
     }
 
     // swipe to delete & drag to reorder the list

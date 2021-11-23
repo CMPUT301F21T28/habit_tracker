@@ -27,6 +27,17 @@
 <!--        app:backgroundTint="@color/purple_200"-->
 <!--        android:src="@drawable/ic_baseline_assignment_return_24" />-->
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton_tooltip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/purple_200"
+        app:srcCompat="@android:drawable/ic_menu_help"
+        tools:ignore="SpeakableTextPresentCheck" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/event_list"
         android:layout_width="match_parent"

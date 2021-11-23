@@ -55,6 +55,7 @@ public class HabitEditFragment extends Fragment {
     private Habit habit;
 
     private Boolean isPrivate;
+    private Integer habitOrder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,10 +76,10 @@ public class HabitEditFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_habit_edit, container, false);
 
         Bundle bundle = this.getArguments();
-        if (bundle != null && bundle.containsKey("username")){
-            username = bundle.getString("username");
-            habit = bundle.getParcelable("Habit");
-        }
+
+        username = bundle.getString("username");
+        habit = bundle.getParcelable("Habit");
+        habitOrder = habit.getOrder();
         return rootView;
     }
 
@@ -260,14 +261,15 @@ public class HabitEditFragment extends Fragment {
 
                 //set the isPrivate to be true if the user enters yes, false if the user enters no.
 
-                HashMap<String, String> data = new HashMap<>();
+                HashMap<String, Object> data = new HashMap<>();
 
-                if (inputValid == true) {
+                if (inputValid) {
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", selectedDayString);
                     data.put("dateOfStarting", dateOfStarting.getText().toString());
-                    data.put("isPrivate", isPrivate.toString());
+                    data.put("isPrivate", isPrivate);
+                    data.put("order", habitOrder);
 
                     habit.setHabitTitle(habitTitle.getText().toString());
                     habit.setDateOfStarting(dateOfStarting.getText().toString());

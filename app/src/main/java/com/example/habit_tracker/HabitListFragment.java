@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
@@ -9,7 +11,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +28,6 @@ import android.widget.Toast;
 
 import com.example.habit_tracker.adapters.HabitListAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.common.hash.HashingInputStream;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,7 +39,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -47,7 +47,8 @@ import java.util.Locale;
  * create an instance of this fragment.
  */
 public class HabitListFragment extends Fragment {
-    Switch aSwitch;
+    Switch todayHabitSwitch;
+
     RecyclerView habitList;
     HabitListAdapter recyclerAdapter;
     HabitListAdapter todayRecyclerAdapter;
@@ -58,8 +59,6 @@ public class HabitListFragment extends Fragment {
     ArrayList<Habit> todayHabitDataList = new ArrayList<Habit>();
 
     String userName = null;
-
-    Habit deletedHabit = null;
 
     CollectionReference collectionReference;
 
@@ -121,7 +120,7 @@ public class HabitListFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users").document(userName).collection("HabitList");
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        collectionReference.orderBy("order").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
@@ -132,10 +131,9 @@ public class HabitListFragment extends Fragment {
                     String habitDateOfStarting = (String) doc.getData().get("dateOfStarting");
                     String habitReason = (String) doc.getData().get("reason");
                     String habitRepeat = (String) doc.getData().get("repeat");
-                    Boolean habitIsPrivate = Boolean.parseBoolean((String) doc.getData().get("isPrivate"));
-//                    Boolean habitIsPrivate = false;
-                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate));
-//                    System.out.println(habitDataList);
+                    Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
+                    Integer habitOrder = Integer.parseInt(String.valueOf(doc.getData().get("order")));
+                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate, habitOrder));
                 }
                 recyclerAdapter.notifyDataSetChanged();
 
@@ -148,17 +146,15 @@ public class HabitListFragment extends Fragment {
                     String dayName = dow.getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
                     System.out.println(dayName);
                     if (repeatString.contains(dayName)) {
-                        //System.out.println("isChecked");
                         todayHabitDataList.add(habit);
-                        //System.out.println("Add:" + habit.getName());
                     }
                 }
             }
         });
 
         //Add filter to only show today's list.
-        aSwitch = getView().findViewById(R.id.today_habit_switch);
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        todayHabitSwitch = getView().findViewById(R.id.today_habit_switch);
+        todayHabitSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -172,12 +168,14 @@ public class HabitListFragment extends Fragment {
             }
         });
 
-        // add a habit (go to new fragment after taping on the floating button)
-        getView().findViewById(R.id.add_friend_button).setOnClickListener(new View.OnClickListener() {
+
+        // add a habit (go to new fragment)
+        getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", userName);
+                bundle.putInt("habitsSize", habitDataList.size());
 
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_habitListFragment_to_habitAddFragment, bundle);
@@ -193,14 +191,22 @@ public class HabitListFragment extends Fragment {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             // TODO drag to reorder the list (possible solution: put arrayList in mainActivity)
-            /*
+
             int fromPosition = viewHolder.getAdapterPosition();
             int toPosition = target.getAdapterPosition();
-
             Collections.swap(habitDataList, fromPosition, toPosition);
             habitList.getAdapter().notifyItemMoved(fromPosition, toPosition);
 
-             */
+            if (fromPosition < toPosition) {
+                for (int i = fromPosition; i < toPosition+1; i++) {
+                    collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i+1);
+                }
+            } else {
+                for (int i = toPosition; i < fromPosition+1; i++) {
+                    collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i+1);
+                }
+            }
+
             return false;
         }
 
@@ -226,12 +232,14 @@ public class HabitListFragment extends Fragment {
                                 public void onSuccess(Void unused) {
                                 }
                             });
+                            for (int i = position+1; i < habitDataList.size(); i++) {
+                                collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i);
+                            }
                             dialog.dismiss();
                         }
                     });
 
                     builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Do nothing

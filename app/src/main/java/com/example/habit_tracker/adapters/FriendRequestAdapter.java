@@ -1,17 +1,20 @@
 package com.example.habit_tracker.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habit_tracker.Friend;
 import com.example.habit_tracker.R;
+import com.example.habit_tracker.Utility;
 
 import java.util.ArrayList;
 
@@ -19,10 +22,16 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     ArrayList<Friend> friends;
     Context context;
+    String currentUserUsername;
+    String currentUserRealname;
+    Utility firebaseUtils = new Utility();
 
-    public FriendRequestAdapter(Context ctx, ArrayList<Friend> friends) {
+
+    public FriendRequestAdapter(Context ctx, ArrayList<Friend> friends, String username, String realname) {
         context = ctx;
         this.friends = friends;
+        this.currentUserUsername = username;
+        this.currentUserRealname = realname;
     }
 
     @NonNull
@@ -37,12 +46,29 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     public void onBindViewHolder(@NonNull FriendRequestAdapter.ViewHolder holder, int position) {
         Friend friend = friends.get(position);
         holder.friendName.setText(friend.getActualName());
-        //TODO implement accept button and deny button, try to implement onClickListener here
 
         holder.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("DEBUG", friend.getActualName().toString());
+                Log.d("DEBUG", friend.getUserName().toString());
+                Log.d("DEBUG", currentUserUsername.toString());
+                Log.d("DEBUG", currentUserRealname.toString());
+                firebaseUtils.addFriend(currentUserUsername, friend);
+                firebaseUtils.removeRequest(currentUserUsername, friend);
+                friends.remove(friend);
+                FriendRequestAdapter.this.notifyDataSetChanged();
 
+                //Update the sender's friend list after accepting as well after accepting
+            }
+        });
+
+        holder.denyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                firebaseUtils.removeRequest(currentUserUsername, friend);
+                friends.remove(friend);
+                FriendRequestAdapter.this.notifyDataSetChanged();
             }
         });
     }
@@ -65,4 +91,5 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             denyButton = itemView.findViewById(R.id.request_deny_button);
         }
     }
+
 }

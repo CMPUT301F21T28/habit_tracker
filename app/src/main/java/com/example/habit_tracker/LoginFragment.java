@@ -41,6 +41,7 @@ public class LoginFragment extends Fragment {
     private TextView navToSignup;
     FirebaseFirestore db;
     Button toLoginButton;
+    String realname;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -122,8 +123,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (DocumentSnapshot documentSnapshot : task.getResult()) {
                                 String correctPassword = documentSnapshot.getString("password");
-                                String realName = documentSnapshot.getString("realname");
-
+                                realname = documentSnapshot.getString("realname");
                                 // Converting password to hashed password
                                 String hashedPw = null;
                                 try {

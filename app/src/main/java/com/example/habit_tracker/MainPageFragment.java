@@ -19,8 +19,7 @@ import android.view.ViewGroup;
 public class MainPageFragment extends Fragment {
 
     private String username;
-    private String realname;
-
+    String realname;
 
     public MainPageFragment() {
         // Required empty public constructor
@@ -51,6 +50,7 @@ public class MainPageFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", username);
+                bundle.putString("realname", realname);
 
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_mainPageFragment_to_habitListFragment, bundle);

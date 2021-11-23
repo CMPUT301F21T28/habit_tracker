@@ -1,11 +1,10 @@
-package com.example.habit_tracker.firebaseUtils;
+package com.example.habit_tracker;
 
-import com.example.habit_tracker.Friend;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class utils {
+public class Utility {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public void removeRequest(String username, Friend targetFriend) {

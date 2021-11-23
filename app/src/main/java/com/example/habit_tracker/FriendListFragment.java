@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.habit_tracker.adapters.FriendListAdapter;
 import com.example.habit_tracker.adapters.FriendRequestAdapter;
@@ -27,12 +26,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class FriendListFragment extends Fragment {
@@ -78,7 +77,7 @@ public class FriendListFragment extends Fragment {
 
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
-        friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList);
+        friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList, username);
         friendList.setAdapter(friendRecyclerAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -88,9 +87,16 @@ public class FriendListFragment extends Fragment {
 
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
-        requestRecyclerAdapter = new FriendRequestAdapter(getActivity(), requestDataList);
+        requestRecyclerAdapter = new FriendRequestAdapter(getActivity(), requestDataList, username, realname);
         requestList.setAdapter(requestRecyclerAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+//        requestList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                updateFriendList(username);
+//            }
+//        });
 
         updateFriendList(username);
 
@@ -116,7 +122,7 @@ public class FriendListFragment extends Fragment {
 
                 NavController controller = Navigation.findNavController(view);
                 // TODO havent declare next fragment
-                controller.navigate(R.id.action_friendListFragment_to_friendSearchFragment,bundle);
+                controller.navigate(R.id.action_friendListFragment_to_friendSearchFragment, bundle);
             }
         });
     }
@@ -176,39 +182,31 @@ public class FriendListFragment extends Fragment {
     // get friends and friend requests from the user that is passed in
     public void updateFriendList(String username) {
         DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        usersRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        friendDataList.clear();
-                        // Getting the array of friends
-                        ArrayList<Map> friends = (ArrayList<Map>) document.get("friends");
-                        if (friends!=null){
-                            for (Map<String, String> map : friends) {
-                                String username = map.get("userName");
-                                String realname = map.get("actualName");
-                                friendDataList.add(new Friend(username, realname));
-                            }
-
-                            // Getting the array of requests
-                            ArrayList<Map> requests = (ArrayList<Map>) document.get("requests");
-                            for (Map<String, String> map : requests) {
-                                String username = map.get("userName");
-                                String realname = map.get("actualName");
-                                requestDataList.add(new Friend(username, realname));
-                            }
-
-                            // Update the adapaters
-                            friendRecyclerAdapter.notifyDataSetChanged();
-                            requestRecyclerAdapter.notifyDataSetChanged();
-                        }
-
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                    friendDataList.clear();
+                    requestDataList.clear();
+                    // Getting the array of friends
+                    ArrayList<Map> friends = (ArrayList<Map>) documentSnapshot.get("friends");
+                    for (Map<String, String> map : friends) {
+                        String username = map.get("userName");
+                        String realname = map.get("actualName");
+                        friendDataList.add(new Friend(username, realname));
                     }
+
+                    // Getting the array of requests
+                    ArrayList<Map> requests = (ArrayList<Map>) documentSnapshot.get("requests");
+                    for (Map<String, String> map : requests) {
+                        String username = map.get("userName");
+                        String realname = map.get("actualName");
+                        requestDataList.add(new Friend(username, realname));
+                    }
+
+                    // Update the adapaters
+                    friendRecyclerAdapter.notifyDataSetChanged();
+                    requestRecyclerAdapter.notifyDataSetChanged();
                 }
-            }
         });
     }
-
 }

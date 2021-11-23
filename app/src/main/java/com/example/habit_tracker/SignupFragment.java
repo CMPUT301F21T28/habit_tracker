@@ -110,8 +110,6 @@ public class SignupFragment extends DialogFragment {
         returnToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_signupFragment_to_loginFragment);
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_signupFragment_to_loginFragment);
             }

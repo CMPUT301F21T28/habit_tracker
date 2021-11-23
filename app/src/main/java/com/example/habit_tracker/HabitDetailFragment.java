@@ -66,7 +66,12 @@ public class HabitDetailFragment extends Fragment {
         habitReason.setText(habit.getComment());
         dateOfStarting.setText(habit.getDateOfStarting());
         repeat.setText(habit.getRepeat());
-        isPrivate.setText(Boolean.toString(habit.getIsPrivate()));
+        if (habit.getIsPrivate() == true) {
+            isPrivate.setText("Private");
+        } else {
+            isPrivate.setText("Public");
+        }
+
         //TODO visual indicator
 
         return rootView;

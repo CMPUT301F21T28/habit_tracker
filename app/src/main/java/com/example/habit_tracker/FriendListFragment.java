@@ -118,6 +118,7 @@ public class FriendListFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("username", username);
+                bundle.putString("realname", realname);
 
                 NavController controller = Navigation.findNavController(view);
                 // TODO havent declare next fragment

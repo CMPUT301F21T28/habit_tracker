@@ -17,6 +17,7 @@ public class Utility {
         usersRef.update("requests", FieldValue.arrayUnion(targetFriend));
     }
 
+
     public void removeFriend(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayRemove(targetFriend));

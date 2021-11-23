@@ -38,6 +38,10 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -106,8 +110,6 @@ public class SignupFragment extends DialogFragment {
         returnToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_signupFragment_to_loginFragment);
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_signupFragment_to_loginFragment);
             }
@@ -125,37 +127,31 @@ public class SignupFragment extends DialogFragment {
                 // **** if all fields are valid, check if username already exists
                 // **** if username does exist, return error
                 // **** if username does NOT exist, then we sign them up
-                final boolean[] isValid = {true};
                 // check if username valid
-                if (0 >= username.getText().toString().length() || username.getText().toString().length() >= 20) {
-                    isValid[0] = false;
+                if (!checkUsernameValid(username.getText().toString())) {
                     username.setError("Username not valid. Please ensure that it is between 0 and 20 characters.");
                     username.requestFocus();
-                    return;
+                    return; // breaks the onclick, so that user can change input
                 }
 
                 // check realname - as long as not empty
-                if (realName.getText().toString().isEmpty()) {
-                    isValid[0] = false;
+                if (!checkRealnameValid(realName.getText().toString())) {
                     realName.setError("This field cannot be empty.");
                     realName.requestFocus();
-                    return;
+                    return; // breaks the onclick, so that user can change input
                 }
 
-                // check if password is empty
-                if (firstPassword.getText().toString().isEmpty()) {
-                    isValid[0] = false;
-                    firstPassword.setError("Password cannot be empty. Please try again.");
+                // check if password is valid
+                if (!checkFirstPassValid(firstPassword.getText().toString())) {
+                    firstPassword.setError("Password must be longer than 5 characters");
                     firstPassword.requestFocus();
                     return;
                 }
-
                 // check password matching
-                if (!firstPassword.getText().toString().equals(secondPassword.getText().toString())) {
-                    isValid[0] = false;
+                if (!checkSecondPassValid(firstPassword.getText().toString(), secondPassword.getText().toString())) {
                     secondPassword.setError("Passwords do not match. Please try again.");
                     secondPassword.requestFocus();
-                    return;
+                    return; // breaks the onclick, so that user can change input
                 }
 
                 // check if username already exists in db
@@ -169,7 +165,6 @@ public class SignupFragment extends DialogFragment {
                             if (document.exists()) {
                                 // if the username is taken
                                 Log.d("Check Username", "Username already exists.");
-                                isValid[0] = false;
                                 username.setError("Username already exists. Please choose another");
                                 username.requestFocus();
                                 return;
@@ -190,6 +185,8 @@ public class SignupFragment extends DialogFragment {
                                 data.put("username", username.getText().toString());
                                 data.put("realname", realName.getText().toString());
                                 data.put("password", hashedPw);
+                                data.put("friends", Collections.emptyList()); // empty list since there are no friends on the acc yet
+                                data.put("requests", Collections.emptyList()); // empty list since there are no friend requests yet
                                 CollectionReference Users = db.collection("Users");
                                 Users.document(username.getText().toString()).set(data)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -220,6 +217,48 @@ public class SignupFragment extends DialogFragment {
             }
         });
     }
+
+    /**
+     * Checking if inputted username is valid (follows length guidelines)
+     * @param username
+     *      The String of the username that is being tested
+     * @return
+     *      return True if everything is ok
+     */
+    public static boolean checkUsernameValid(String username) {
+        // testing username bounds
+        return 0 < username.length() && username.length() < 20;
+    }
+
+    /**
+     * Checking if inputted username is valid (follow not null guidelines)
+     * @param realName
+     *      the String of the realname
+     * @return
+     *      return True if everything is ok
+     */
+    public static boolean checkRealnameValid(String realName) {
+        return !realName.isEmpty();
+    }
+
+    /**
+     * Checks if the password and the comfirm password fields are valid.
+     * (longer than 5 characters, passwords match)
+     * @param firstpass
+     *      the String of the firstpassword input
+     * @return
+     *      return True if everything is ok
+     */
+    public static boolean checkFirstPassValid(String firstpass) {
+        // check if password is empty
+        return firstpass.length() > 5;
+    }
+
+    public static boolean checkSecondPassValid(String firstpass, String secondpass) {
+        // check second pass password matching
+        return firstpass.equals(secondpass);
+    }
+
 
     /**
      * Hashing support function. SRC: https://www.geeksforgeeks.org/sha-256-hash-in-java/

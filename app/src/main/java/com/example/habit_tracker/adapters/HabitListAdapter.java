@@ -1,4 +1,4 @@
-package com.example.habit_tracker;
+package com.example.habit_tracker.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.habit_tracker.Habit;
+import com.example.habit_tracker.R;
+
 import java.util.ArrayList;
 
 public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.ViewHolder> {
@@ -24,6 +27,11 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
     ArrayList<Habit> habits;
     Context context;
 
+    /**
+     * HabitListAdapter is a customized list for storing DB-retrieved data
+     * @param ctx
+     * @param habits is the self-defined Habit class instance
+     */
     public HabitListAdapter(Context ctx, ArrayList<Habit> habits) {
         context = ctx;
         this.habits = habits;
@@ -37,10 +45,17 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
         return new ViewHolder(view);
     }
 
+    /**
+     * Create the view of the recyclerView
+     * Short-Click: cause a fragment change by navigation, to see the habit details
+     * Long-Click: cause a fragment change by navigation, to see the habit events
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Habit habit = habits.get(position);
-        holder.habitName.setText(habit.getHabitName());
+        holder.habitName.setText(habit.getName());
 
         //TODO progress bar undone
 
@@ -48,7 +63,7 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("username", habit.getUserName());
+                bundle.putString("username", habit.getUsername());
                 bundle.putParcelable("Habit", habit);
 
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
@@ -62,7 +77,7 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
             public boolean onLongClick(View view) {
                 // TODO change to a button implementation in the future update
                 Bundle bundle = new Bundle();
-                bundle.putString("username", habit.getUserName());
+                bundle.putString("username", habit.getUsername());
                 bundle.putParcelable("Habit", habit);
                 Log.d(TAG, "onLongClick: habit id " +habit.getHabitID());
 
@@ -84,6 +99,10 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
         TextView habitName;
         ProgressBar habitProgress;
 
+        /**
+         * Create the view for a single row of the recyclerView
+         * @param itemView
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             habitName = itemView.findViewById(R.id.habit_name_row);

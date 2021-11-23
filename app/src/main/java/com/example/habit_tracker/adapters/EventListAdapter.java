@@ -1,4 +1,4 @@
-package com.example.habit_tracker;
+package com.example.habit_tracker.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.habit_tracker.Event;
+import com.example.habit_tracker.R;
 
 import java.util.ArrayList;
 
@@ -32,14 +35,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.habit_list_row, parent, false);
+        View view = inflater.inflate(R.layout.general_list_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Event event = events.get(position);
-        holder.eventName.setText(event.getEventName());
+        holder.eventName.setText(event.getName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,13 +66,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView eventName;
-        ProgressBar progressBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            progressBar = itemView.findViewById(R.id.habit_progress_row);
-            progressBar.setVisibility(View.INVISIBLE);
-            eventName = itemView.findViewById(R.id.habit_name_row);
+            eventName = itemView.findViewById(R.id.name_row);
         }
     }
 }

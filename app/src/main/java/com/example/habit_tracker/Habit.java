@@ -3,7 +3,7 @@ package com.example.habit_tracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Habit implements Parcelable {
+public class Habit implements Parcelable, Info {
     private String userName;
     private String habitName;
     private String habitID;
@@ -12,6 +12,16 @@ public class Habit implements Parcelable {
     private String repeat;
     private Boolean isPrivate;
 
+    /**
+     * Habit Class has 7 variables, each co-responding to either a field in Habit or a reference (e.g. username)
+     * @param userName
+     * @param habitName
+     * @param habitID
+     * @param dateOfStarting
+     * @param reason
+     * @param repeat
+     * @param isPrivate
+     */
     Habit(String userName, String habitName, String habitID, String dateOfStarting, String reason, String repeat, boolean isPrivate) {
         this.userName = userName;
         this.habitName = habitName;
@@ -61,13 +71,13 @@ public class Habit implements Parcelable {
         this.habitName = habitName;
     }
 
-    String getUserName() {return this.userName;}
-    String getHabitName() {return this.habitName;}
-    String getHabitID() {return this.habitID;}
-    String getDateOfStarting() {return this.dateOfStarting;}
-    String getReason() {return this.reason;}
-    String getRepeat() {return  this.repeat;}
-    Boolean getIsPrivate() {return this.isPrivate;}
+    public String getUsername() {return this.userName;}
+    public String getName() {return this.habitName;}
+    public String getHabitID() {return this.habitID;}
+    public String getDateOfStarting() {return this.dateOfStarting;}
+    public String getComment() {return this.reason;}
+    public String getRepeat() {return  this.repeat;}
+    public Boolean getIsPrivate() {return this.isPrivate;}
 
     @Override
     public int describeContents() {

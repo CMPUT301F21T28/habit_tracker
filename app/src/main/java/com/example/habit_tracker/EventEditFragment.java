@@ -58,6 +58,13 @@ public class EventEditFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for EventAddFragment, extract necessities (e.g. username, instance of Habit class) from the bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,6 +81,13 @@ public class EventEditFragment extends Fragment {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -134,6 +148,7 @@ public class EventEditFragment extends Fragment {
                 if ( 20 <= commentContent.getText().toString().length()) {
                     isValid[0] = false;
                     commentContent.setError("Comment may not valid. Please ensure that it is between 0 and 20 characters.");
+                    commentContent.requestFocus();
                     return;
                 }
 //                TODO location
@@ -145,10 +160,10 @@ public class EventEditFragment extends Fragment {
 
                 HashMap<String, String> data = new HashMap<>();
 
+                // isValid doesnt actually do anything... please check this -- darren
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
                     //data.put("Location", locationContent.getText().toString());
-
 
                     event.setEventComment(commentContent.getText().toString());
                     //habitevent.setEventLocation(locationContent.getText().toString());
@@ -165,7 +180,7 @@ public class EventEditFragment extends Fragment {
                     event.setEventImage(imageString);
                     data.put("event image", imageString);
 
-                    data.put("event name", event.getEventName());
+                    data.put("event name", event.getName());
                     collectionReference
                             .document(event.getEventID())
                             .set(data)

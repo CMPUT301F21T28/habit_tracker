@@ -3,7 +3,7 @@ package com.example.habit_tracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Event implements Parcelable
+public class Event implements Parcelable, Info
 {
     private String username;
     private String habitID;
@@ -12,6 +12,15 @@ public class Event implements Parcelable
     private String eventComment;
     private String eventImage;
     //private String eventLocation;
+
+    /**
+     * Habit Class has 5 variables, each co-responding to either a field in Event or a reference (e.g. username)
+     * @param username
+     * @param habitID
+     * @param eventID
+     * @param eventName
+     * @param eventComment
+     */
 
     // TODO location, picture
     Event(String username, String habitID, String eventID, String eventName, String eventComment, String eventImage) {

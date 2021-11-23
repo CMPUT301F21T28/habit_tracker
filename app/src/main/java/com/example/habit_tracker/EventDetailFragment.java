@@ -49,6 +49,15 @@ public class EventDetailFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    /**
+     * Create view for EventDetailFragment
+     * Extract necessities (e.g. username, instance of Habit class) from bundle, set TextViews to their corresponding values
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +66,7 @@ public class EventDetailFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
 
+        // maybe add validation check for bundle arguments? - darren
         username = bundle.getString("username");
         habitID = bundle.getString("habitID");
         event = bundle.getParcelable("Event");
@@ -70,8 +80,8 @@ public class EventDetailFragment extends Fragment {
         Image = rootView.findViewById(R.id.PictureContent);
         */
 
-        eventName.setText(event.getEventName());
-        commentContent.setText(event.getEventComment());
+        eventName.setText(event.getName());
+        commentContent.setText(event.getComment());
         //locationContent.setText(habitevent.getEventLocation());
 
         imageView = rootView.findViewById(R.id.imageView);
@@ -97,6 +107,12 @@ public class EventDetailFragment extends Fragment {
 
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

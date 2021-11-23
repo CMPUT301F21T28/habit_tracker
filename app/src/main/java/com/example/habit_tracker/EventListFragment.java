@@ -1,6 +1,7 @@
 package com.example.habit_tracker;
 
-import android.media.Ringtone;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,16 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.habit_tracker.adapters.EventListAdapter;
+import com.example.habit_tracker.adapters.GenericAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
@@ -33,7 +33,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -50,6 +49,7 @@ public class EventListFragment extends Fragment {
     RecyclerView eventList;
     EventListAdapter recyclerAdapter;
 
+    // maybe implement this as a seperate class?
     ArrayList<Event> eventDataList;
 
     FirebaseFirestore db;
@@ -192,8 +192,6 @@ public class EventListFragment extends Fragment {
                 bundle.putString("username", username);
                 bundle.putString("habitID", habitID);
 
-                Log.d(TAG, "onClick: habitID" + habitID);
-
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_eventListFragment_to_eventAddFragment,bundle);
             }
@@ -254,28 +252,40 @@ public class EventListFragment extends Fragment {
             int position = viewHolder.getAdapterPosition();
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
-                    deletedEvent = eventDataList.get(position);
-                    collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
+
+                    // create a dialog to confirm delete of the habit
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    builder.setTitle("Confirm");
+                    builder.setMessage("Are you sure to delete this event?");
+
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Delete the event
+                            deletedEvent = eventDataList.get(position);
+                            collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                }
+                            });
+                            dialog.dismiss();
                         }
                     });
 
-                    Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
                         @Override
-                        public void onClick(View view) {
-                            HashMap<String, String> data = new HashMap<>();
-                            data.put("event name", deletedEvent.getEventName());
-                            data.put("event comment", deletedEvent.getEventComment());
-                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do nothing
+                            recyclerAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            dialog.dismiss();
                         }
-                    }).show();
-                    break;
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
             }
         }
     };

@@ -2,6 +2,7 @@ package com.example.habit_tracker;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,12 +17,14 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -35,6 +38,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -52,26 +56,29 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * A simple {@link Fragment} subclass.
  * create an instance of Add Habit Fragment.
  */
-public class HabitAddFragment extends Fragment {
+public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
 
     private Button submitButton;
+    private RadioGroup radioGroup;
     private EditText habitTitle;
     private EditText habitReason;
     private EditText dateOfStarting;
-//    private EditText repeat;
     private TextView repeatDay;
+    private TextView editTextDate;
+
     private boolean[] selectedDay;
     private ArrayList<Integer> dayList = new ArrayList<>();
     private String[] dayArray = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private String selectedDayString;
 
-    private RadioGroup radioGroup;
-    private FirebaseFirestore db;
     private String username;
     private Boolean isPrivate;
 
     private Integer habitsSize;
 
+    private String datePicked;
+
+    private FirebaseFirestore db;
 
     public HabitAddFragment() {
         // Required empty public constructor
@@ -98,28 +105,28 @@ public class HabitAddFragment extends Fragment {
 
     }
 
-    /**
-     * function to check if the string is in the form of yyyy/mm/dd
-     * @param date
-     * @return a boolean, true if the string is in yyyy/mm/dd, return false otherwise
-     */
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static boolean checkDateValidity(final String date) {
-        boolean valid = false;
-        try {
-
-            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
-            LocalDate.parse(date,
-                    DateTimeFormatter.ofPattern("uuuu/MM/dd")
-                            .withResolverStyle(ResolverStyle.STRICT)
-            );
-            valid = true;
-        } catch (DateTimeParseException e) {
-            e.printStackTrace();
-            valid = false;
-        }
-        return valid;
-    }
+//    /**
+//     * function to check if the string is in the form of yyyy/mm/dd
+//     * @param date
+//     * @return a boolean, true if the string is in yyyy/mm/dd, return false otherwise
+//     */
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public static boolean checkDateValidity(final String date) {
+//        boolean valid = false;
+//        try {
+//
+//            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
+//            LocalDate.parse(date,
+//                    DateTimeFormatter.ofPattern("uuuu/MM/dd")
+//                            .withResolverStyle(ResolverStyle.STRICT)
+//            );
+//            valid = true;
+//        } catch (DateTimeParseException e) {
+//            e.printStackTrace();
+//            valid = false;
+//        }
+//        return valid;
+//    }
 
     /**
      * Called after the view is created. User Interface fields (eg. edittext) are bound to their variables,
@@ -136,10 +143,9 @@ public class HabitAddFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         habitTitle = (EditText) getView().findViewById(R.id.editText_habitTitle);
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason);
-        dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting);
+        editTextDate = (TextView) getView().findViewById(R.id.textDatePicker);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day);
         radioGroup = getView().findViewById(R.id.radioGroup);
-
         submitButton = (Button) getView().findViewById(R.id.submit_button);
 
         //Initialize selected repeat day
@@ -240,7 +246,13 @@ public class HabitAddFragment extends Fragment {
             }
         });
 
-
+        // Calling Date Picker (date of starting)
+        editTextDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog();
+            }
+        });
 
         CollectionReference collectionReference = db.collection("Users").document(username).collection("HabitList");
 
@@ -261,14 +273,18 @@ public class HabitAddFragment extends Fragment {
                     return;
                 }
 
-                if (dateOfStarting.getText().toString().length() >= 0){
-                    isValid[0] = checkDateValidity(dateOfStarting.getText().toString());
-                    if (isValid[0] == false){
-                        dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
-                        return;
-                    }
-
+                if (TextUtils.isEmpty(datePicked)) {
+                    editTextDate.setError("Date cannot be empty.");
+                    return;
                 }
+
+//                if (dateOfStarting.getText().toString().length() >= 0){
+//                    isValid[0] = checkDateValidity(dateOfStarting.getText().toString());
+//                    if (isValid[0] == false){
+//                        dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
+//                        return;
+//                    }
+//                }
 
                 if (selectedDayString == null){
                     isValid[0] = false;
@@ -291,9 +307,9 @@ public class HabitAddFragment extends Fragment {
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", selectedDayString);
-                    data.put("dateOfStarting", dateOfStarting.getText().toString());
+                    data.put("dateOfStarting", datePicked);
                     data.put("isPrivate", isPrivate);
-                    data.put("order", (int) habitsSize+1);
+                    data.put("order", habitsSize+1);
                     collectionReference
                             .document(uuidString)
                             .set(data)
@@ -330,6 +346,24 @@ public class HabitAddFragment extends Fragment {
             habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
         }
         return isValid;
+    }
+
+    /* Create a DatePicker Dialog */
+    private void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getActivity(),
+                this, Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        month++;
+        datePicked = year + "-" + month + "-" +dayOfMonth;
+        editTextDate.setText("Date Selected: " + datePicked);
     }
 
 //    public Boolean isReasonValid(String string) {

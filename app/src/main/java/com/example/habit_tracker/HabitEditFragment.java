@@ -1,5 +1,6 @@
 package com.example.habit_tracker;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,10 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,30 +35,32 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class HabitEditFragment extends Fragment {
+public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
     private Button submitButton;
     private EditText habitTitle;
     private EditText habitReason;
-    private EditText dateOfStarting;
-
+    private TextView dateOfStarting;
+    private RadioGroup radioGroup;
     private TextView repeatDay;
+
     private boolean[] selectedDay;
     private ArrayList<Integer> dayList = new ArrayList<>();
     private String[] dayArray = {"Monday", "Tuesday", "Wednesday",
             "Thursday", "Friday", "Saturday", "Sunday"};
     private String selectedDayString;
 
-    private RadioGroup radioGroup;
     private FirebaseFirestore db;
-    private String username;
 
+    private String username;
     private Habit habit;
 
     private Boolean isPrivate;
     private Integer habitOrder;
+    private String datePicked;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,28 +88,28 @@ public class HabitEditFragment extends Fragment {
         return rootView;
     }
 
-    /**
-     * Check if the input date is valid
-     * @param date
-     * @return A boolean specify if the input date is valid
-     */
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static boolean checkDateValidity(final String date) {
-        boolean valid = false;
-        try {
-
-            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
-            LocalDate.parse(date,
-                    DateTimeFormatter.ofPattern("uuuu/MM/dd")
-                            .withResolverStyle(ResolverStyle.STRICT)
-            );
-            valid = true;
-        } catch (DateTimeParseException e) {
-            e.printStackTrace();
-            valid = false;
-        }
-        return valid;
-    }
+//    /**
+//     * Check if the input date is valid
+//     * @param date
+//     * @return A boolean specify if the input date is valid
+//     */
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public static boolean checkDateValidity(final String date) {
+//        boolean valid = false;
+//        try {
+//
+//            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
+//            LocalDate.parse(date,
+//                    DateTimeFormatter.ofPattern("uuuu/MM/dd")
+//                            .withResolverStyle(ResolverStyle.STRICT)
+//            );
+//            valid = true;
+//        } catch (DateTimeParseException e) {
+//            e.printStackTrace();
+//            valid = false;
+//        }
+//        return valid;
+//    }
 
     /**
      * Check if the input title, reason, date are valid
@@ -133,7 +138,7 @@ public class HabitEditFragment extends Fragment {
 
         habitTitle = (EditText) getView().findViewById(R.id.editText_habitTitle2);
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason2);
-        dateOfStarting = (EditText) getView().findViewById(R.id.editText_dateOfStarting2);
+        dateOfStarting = (TextView) getView().findViewById(R.id.textDateStarting);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day2);
 
         radioGroup = getView().findViewById(R.id.radioGroup2);
@@ -157,19 +162,16 @@ public class HabitEditFragment extends Fragment {
 
         habitTitle.setText(habit.getName());
         habitReason.setText(habit.getComment());
-        dateOfStarting.setText(habit.getDateOfStarting());
+        datePicked = habit.getDateOfStarting();
+        dateOfStarting.setText(datePicked + " (type to edit)");
         repeatDay.setText(habit.getRepeat());
         selectedDayString = habit.getRepeat();
-
-
 
         if (habit.getIsPrivate() == true) {
             radioGroup.check(R.id.radioYes);
         } else {
             radioGroup.check(R.id.radioNo);
         }
-
-
 
         selectedDay = new boolean[dayArray.length];
         repeatDay.setOnClickListener(new View.OnClickListener() {
@@ -245,6 +247,12 @@ public class HabitEditFragment extends Fragment {
             }
         });
 
+        dateOfStarting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog();
+            }
+        });
 
         CollectionReference collectionReference = db.collection("Users").document(username).collection("HabitList");
 
@@ -255,20 +263,11 @@ public class HabitEditFragment extends Fragment {
                 //final boolean[] isValid = {true};
                 //Check if input is in range
                 boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,0,30)
-                        && checkInputValidity(dateOfStarting,0,20) && selectedDayString != null && isPrivate != null;
+                        && selectedDayString != null && isPrivate != null;
                 if (inputValid == false){
                     Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                // Check if input date is valid
-                if (checkDateValidity(dateOfStarting.getText().toString()) == false){
-                    dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
-                    inputValid = false;
-                    return;
-                }
-
-
-                //set the isPrivate to be true if the user enters yes, false if the user enters no.
 
                 HashMap<String, Object> data = new HashMap<>();
 
@@ -276,7 +275,7 @@ public class HabitEditFragment extends Fragment {
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", selectedDayString);
-                    data.put("dateOfStarting", dateOfStarting.getText().toString());
+                    data.put("dateOfStarting", datePicked);
                     data.put("isPrivate", isPrivate);
                     data.put("order", habitOrder);
 
@@ -314,5 +313,23 @@ public class HabitEditFragment extends Fragment {
             }
         });
 
+    }
+
+    /* Create a DatePicker Dialog */
+    private void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getActivity(),
+                this, Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        month++;
+        datePicked = year + "-" + month + "-" +dayOfMonth;
+        dateOfStarting.setText("Date Selected: " + datePicked);
     }
 }

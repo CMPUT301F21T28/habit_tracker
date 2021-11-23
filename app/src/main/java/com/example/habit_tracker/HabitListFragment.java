@@ -100,9 +100,6 @@ public class HabitListFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(habitList);
 
-        // prompt user how to interact
-        Toast.makeText(getActivity(), "Right Swipe to Delete, Long Press to See Events", Toast.LENGTH_SHORT).show();
-
         return rootView;
     }
 

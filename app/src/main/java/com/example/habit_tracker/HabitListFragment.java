@@ -1,7 +1,5 @@
 package com.example.habit_tracker;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +55,8 @@ public class HabitListFragment extends Fragment {
     ArrayList<Habit> habitDataList;
     ArrayList<Habit> todayHabitDataList = new ArrayList<Habit>();
 
-    String userName = null;
+    String username = null;
+    String realname = null;
 
     CollectionReference collectionReference;
 
@@ -87,7 +85,8 @@ public class HabitListFragment extends Fragment {
 
 
         Bundle bundle = this.getArguments();
-        userName = bundle.getString("username");
+        username = bundle.getString("username");
+        realname = bundle.getString("realname");
 
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
@@ -119,7 +118,7 @@ public class HabitListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         db = FirebaseFirestore.getInstance();
-        collectionReference = db.collection("Users").document(userName).collection("HabitList");
+        collectionReference = db.collection("Users").document(username).collection("HabitList");
         collectionReference.orderBy("order").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -133,7 +132,7 @@ public class HabitListFragment extends Fragment {
                     String habitRepeat = (String) doc.getData().get("repeat");
                     Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
                     Integer habitOrder = Integer.parseInt(String.valueOf(doc.getData().get("order")));
-                    habitDataList.add(new Habit(userName, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate, habitOrder));
+                    habitDataList.add(new Habit(username, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate, habitOrder));
                 }
                 recyclerAdapter.notifyDataSetChanged();
 
@@ -174,11 +173,23 @@ public class HabitListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("username", userName);
+                bundle.putString("username", username);
                 bundle.putInt("habitsSize", habitDataList.size());
 
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_habitListFragment_to_habitAddFragment, bundle);
+            }
+        });
+
+        getView().findViewById(R.id.friend_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", username);
+                bundle.putString("realname", realname);
+
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_habitListFragment_to_friendListFragment, bundle);
             }
         });
 

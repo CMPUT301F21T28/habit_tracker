@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:text="Today's Habits (coming in next version)"
+            android:text="Today's Habits"
             android:textColor="@color/purple_500"
             android:textSize="20dp"/>
 

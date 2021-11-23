@@ -11,23 +11,11 @@
         android:label="Login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_mainPageFragment"
-            app:destination="@id/mainPageFragment" />
-        <action
             android:id="@+id/action_loginFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/mainPageFragment"
-        android:name="com.example.habit_tracker.MainPageFragment"
-        android:label="Main"
-        tools:layout="@layout/fragment_main_page" >
         <action
-            android:id="@+id/action_mainPageFragment_to_habitListFragment"
+            android:id="@+id/action_loginFragment_to_habitListFragment"
             app:destination="@id/habitListFragment" />
-        <action
-            android:id="@+id/action_mainPageFragment_to_friendListFragment"
-            app:destination="@id/friendListFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitListFragment"
@@ -43,6 +31,9 @@
         <action
             android:id="@+id/action_habitListFragment_to_eventListFragment"
             app:destination="@id/eventListFragment" />
+        <action
+            android:id="@+id/action_habitListFragment_to_friendListFragment"
+            app:destination="@id/friendListFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitDetailFragment"

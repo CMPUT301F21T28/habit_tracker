@@ -142,7 +142,7 @@ public class LoginFragment extends Fragment {
 
                                     // Navigating to the next fragment
                                     NavController controller = Navigation.findNavController(view);
-                                    controller.navigate(R.id.action_loginFragment_to_mainPageFragment, outgoingBundle);
+                                    controller.navigate(R.id.action_loginFragment_to_habitListFragment, outgoingBundle);
 
                                 } else {
                                     Log.d("Check Password", "Password does not match.");

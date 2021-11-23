@@ -179,17 +179,22 @@ public class HabitAddFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         StringBuilder stringBuilder = new StringBuilder();
-                        for (int j = 0; j < dayList.size(); j ++){
-                            //concat array value
-                            stringBuilder.append(dayArray[dayList.get(j)]);
-                            //check condition
-                            if (j != dayList.size() - 1) {
-                                stringBuilder.append(", ");
+                        if (dayList.size() > 0) {
+                            for (int j = 0; j < dayList.size(); j ++){
+                                //concat array value
+                                stringBuilder.append(dayArray[dayList.get(j)]);
+                                //check condition
+                                if (j != dayList.size() - 1) {
+                                    stringBuilder.append(", ");
+                                }
                             }
+                            //set text on textView
+                            selectedDayString = stringBuilder.toString();
+                            repeatDay.setText(selectedDayString);
+                        } else {
+                            selectedDayString = null;
+                            repeatDay.setText("Select Day");
                         }
-                        //set text on textView
-                        selectedDayString = stringBuilder.toString();
-                        repeatDay.setText(selectedDayString);
                     }
                 });
 

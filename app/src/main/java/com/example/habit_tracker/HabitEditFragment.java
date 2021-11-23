@@ -160,6 +160,9 @@ public class HabitEditFragment extends Fragment {
         dateOfStarting.setText(habit.getDateOfStarting());
         repeatDay.setText(habit.getRepeat());
         selectedDayString = habit.getRepeat();
+
+
+
         if (habit.getIsPrivate() == true) {
             radioGroup.check(R.id.radioYes);
         } else {
@@ -197,17 +200,22 @@ public class HabitEditFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         StringBuilder stringBuilder = new StringBuilder();
-                        for (int j = 0; j < dayList.size(); j ++){
-                            //concat array value
-                            stringBuilder.append(dayArray[dayList.get(j)]);
-                            //check condition
-                            if (j != dayList.size() - 1) {
-                                stringBuilder.append(", ");
+                        if (dayList.size() > 0) {
+                            for (int j = 0; j < dayList.size(); j ++){
+                                //concat array value
+                                stringBuilder.append(dayArray[dayList.get(j)]);
+                                //check condition
+                                if (j != dayList.size() - 1) {
+                                    stringBuilder.append(", ");
+                                }
                             }
+                            //set text on textView
+                            selectedDayString = stringBuilder.toString();
+                            repeatDay.setText(selectedDayString);
+                        } else {
+                            selectedDayString = null;
+                            repeatDay.setText("Select Day");
                         }
-                        //set text on textView
-                        selectedDayString = stringBuilder.toString();
-                        repeatDay.setText(selectedDayString);
                     }
                 });
 
@@ -227,6 +235,7 @@ public class HabitEditFragment extends Fragment {
                             selectedDay[j] = false;
                             dayList.clear();
                             repeatDay.setText("Select Day");
+                            selectedDayString = null;
                         }
                     }
                 });

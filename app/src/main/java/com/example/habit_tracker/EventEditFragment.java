@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -108,7 +107,7 @@ public class EventEditFragment extends Fragment {
         }
 
 
-        commentContent.setText(event.getEventComment());
+        commentContent.setText(event.getComment());
 
         ActivityResultLauncher<Intent> activityResultLauncher;
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),

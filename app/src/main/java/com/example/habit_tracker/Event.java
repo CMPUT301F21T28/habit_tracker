@@ -64,13 +64,15 @@ public class Event implements Parcelable, Info
     }
     void setEventImage(String imageString) { this.eventImage = imageString; }
     //void setEventLocation(String Location){ this.eventLocation = Location;}
+    @Override
+    public String getName() {return this.eventName;}
+    @Override
+    public String getComment() {return this.eventComment;}
 
-    String getUsername() {return this.username;}
-    String getHabitID() {return this.habitID;}
-    String getEventID() {return this.eventID;}
-    String getEventName() {return this.eventName;}
-    String getEventComment() {return this.eventComment;}
-    String getEventImage() {return this.eventImage;}
+    public String getUsername() {return this.username;}
+    public String getHabitID() {return this.habitID;}
+    public String getEventImage() {return this.eventImage;}
+    public String getEventID() {return this.eventID;}
     //String getEventLocation() {return this.eventLocation;}
 
     @Override

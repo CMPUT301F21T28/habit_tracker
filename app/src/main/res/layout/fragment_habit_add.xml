@@ -283,7 +283,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="Default is 28, tap to change"
+        android:hint="Default is 28, max 1000 times"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"

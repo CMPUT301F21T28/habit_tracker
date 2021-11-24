@@ -292,6 +292,18 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                     return;
                 }
 
+                Integer times = 0;
+                if (plan.getText().toString().length() == 0) {
+                    times = 28;
+                } else {
+                    times = Integer.parseInt(plan.getText().toString());
+                    if (times > 1000) {
+                        isValid[0] = false;
+                        plan.setError("Please enter a times less or equal to 1000 times");
+                        return;
+                    }
+                }
+
                 HashMap<String, Object> data = new HashMap<>();
 
                 UUID uuid = UUID.randomUUID();
@@ -304,7 +316,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                     data.put("dateOfStarting", datePicked);
                     data.put("isPrivate", isPrivate);
                     data.put("order", habitsSize+1);
-                    data.put("plan", plan.getText().toString().length() == 0? 28 : Integer.parseInt(plan.getText().toString()));
+                    data.put("plan", times);
                     data.put("finish", 0);
                     collectionReference
                             .document(uuidString)

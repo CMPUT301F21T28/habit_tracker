@@ -100,9 +100,8 @@ public class HabitListFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(habitList);
 
-        // prompt user how to interact
-        Toast.makeText(getActivity(), "Right Swipe to Delete, Long Press to See Events", Toast.LENGTH_SHORT).show();
-
+        // prompt user how to interact - replaced with tooltip - Darren
+        // Toast.makeText(getActivity(), "Right Swipe to Delete, Long Press to See Events", Toast.LENGTH_SHORT).show();
         return rootView;
     }
 
@@ -194,7 +193,12 @@ public class HabitListFragment extends Fragment {
         });
 
         // For tooltip
-
+        getView().findViewById(R.id.tooltip_floatingactionbutton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Swipe Right to Delete\nShort Tap to View Details\nTap Progress to View Events", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     // swipe to delete & drag to reorder the list

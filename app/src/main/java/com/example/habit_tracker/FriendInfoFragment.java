@@ -122,16 +122,11 @@ public class FriendInfoFragment extends Fragment {
                     String habitRepeat = (String) doc.getData().get("repeat");
                     Integer habitOrder = Integer.parseInt(String.valueOf(doc.getData().get("order")));
 
+                    Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
 
-                    // TODO: change isPrivate field of a habit to be a boolean. in the meantime use this:
-                    String habitIsPrivate = (String) doc.getData().get("isPrivate");
-                    if (habitIsPrivate.equals("false")) {
+                    if (!habitIsPrivate) {
                         habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder));
                     }
-
-//                    if (!habitIsPrivate) {
-//                        habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder));
-//                    }
                 }
                 habitListAdapter.notifyDataSetChanged();
             }

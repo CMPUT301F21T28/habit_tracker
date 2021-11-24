@@ -25,10 +25,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -90,6 +92,8 @@ public class EventEditFragment extends Fragment {
         //locationContent = (EditText)getView().findViewById(R.id.LocationContent);
         submit= (Button) getView().findViewById(R.id.Submit);
         Button locationButton = view.findViewById(R.id.locationButton);
+        Button removeLocationButton = view.findViewById(R.id.removeLocationButton);
+        locationButton.setVisibility(View.GONE);
 
 
         commentContent.setText(event.getComment());
@@ -155,6 +159,33 @@ public class EventEditFragment extends Fragment {
         });
 
 
+        removeLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("Longitude", FieldValue.delete());
+                data.put("Latitude", FieldValue.delete());
+                collectionReference
+                        .document(event.getEventID())
+                        .update(data)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                removeLocationButton.setVisibility(View.GONE);
+                                locationButton.setVisibility(View.VISIBLE);
+                                Toast.makeText(getContext(), "Success - Successfully delete it.", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Failure - Failed to delete it .", Toast.LENGTH_LONG).show();
+                            }
+                        });}
+
+            });
+
+
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,6 +193,7 @@ public class EventEditFragment extends Fragment {
                 if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
                         android.Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
                     client = LocationServices.getFusedLocationProviderClient(view.getContext());
                     Task<Location> task = client.getLastLocation();
                     task.addOnSuccessListener(new OnSuccessListener<Location>(){
@@ -171,6 +203,10 @@ public class EventEditFragment extends Fragment {
                             if (location!= null){
                                 currentLongitude[0] =location.getLongitude();
                                 currentLatitude[0] = location.getLatitude();
+                                locationButton.setVisibility(View.GONE);
+                                removeLocationButton.setVisibility(View.VISIBLE);
+
+
 
 
                             /*data.put("Longitude", location.getLongitude());

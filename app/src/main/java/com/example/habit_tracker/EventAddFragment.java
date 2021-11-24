@@ -34,7 +34,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.Context;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
@@ -93,6 +95,8 @@ public class EventAddFragment extends Fragment {
 
         Button submitButton = view.findViewById(R.id.submitButton);
         Button locationButton = view.findViewById(R.id.locationButton);
+        Button removeLocationButton = view.findViewById(R.id.removeLocationButton);
+        removeLocationButton.setVisibility(View.GONE);
 
         //String habit = getArguments().getString("habitId");//"0NyZLjRumQo45JOmXish";//getArguments().getString("habit");
 
@@ -171,15 +175,17 @@ public class EventAddFragment extends Fragment {
                 if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
                         android.Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
                     client = LocationServices.getFusedLocationProviderClient(view.getContext());
                     Task<Location> task = client.getLastLocation();
                     task.addOnSuccessListener(new OnSuccessListener<Location>(){
                     @Override
                     public void onSuccess(Location location){
-                        HashMap<String,Object> data = new HashMap<>();
                         if (location!= null){
                             currentLongitude[0] =location.getLongitude();
                             currentLatitude[0] = location.getLatitude();
+                            locationButton.setVisibility(View.GONE);
+                            removeLocationButton.setVisibility(View.VISIBLE);
 
 
                             /*data.put("Longitude", location.getLongitude());
@@ -214,6 +220,22 @@ public class EventAddFragment extends Fragment {
                 }
             }
         });
+
+        removeLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentLongitude[0] = null;
+                currentLatitude[0] = null ;
+                removeLocationButton.setVisibility(View.GONE);
+                locationButton.setVisibility(View.VISIBLE);
+
+            }
+
+
+        });
+
+
+
 
     }
     }

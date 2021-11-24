@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,11 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.habit_tracker.adapters.HabitListAdapter;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -59,6 +64,7 @@ public class HabitListFragment extends Fragment {
     String realname = null;
 
     CollectionReference collectionReference;
+    CollectionReference collectionReferenceEvent;
 
 
 
@@ -241,12 +247,38 @@ public class HabitListFragment extends Fragment {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int which) {
+                            String selectedHabitID = habitDataList.get(position).getHabitID();
+                            //delete habit events of this habit
+                            collectionReferenceEvent = db.collection("habit").document(selectedHabitID).collection("EventList");
+                            collectionReferenceEvent
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    //Log.d("Success", "To get " + document.toObject(String.class));
+                                                    collectionReferenceEvent.document(document.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            Log.d("TAG", "Deleted " + document.getId() + " => " + document.getData());
+                                                        }
+                                                    });
+
+                                                }
+                                            } else {
+                                                Log.d("TAG", "Error getting documents: ", task.getException());
+                                            }
+                                        }
+                                    });
                             // Delete the habit
-                            collectionReference.document(habitDataList.get(position).getHabitID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            collectionReference.document(selectedHabitID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                 }
                             });
+
+
                             for (int i = position+1; i < habitDataList.size(); i++) {
                                 collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i);
                             }

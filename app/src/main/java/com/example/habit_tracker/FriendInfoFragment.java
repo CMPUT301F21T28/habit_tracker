@@ -59,7 +59,6 @@ public class FriendInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_friend_info, container, false);
 
-        // TODO expecting (current user username, friend type object) from previous fragment
         Bundle bundle  = this.getArguments();
         currentUser = bundle.getString("username");
         friend = bundle.getParcelable("friend");
@@ -145,8 +144,6 @@ public class FriendInfoFragment extends Fragment {
                     String habitRepeat = (String) doc.getData().get("repeat");
                     Integer habitOrder = Integer.parseInt(String.valueOf(doc.getData().get("order")));
 
-
-                    // TODO: change isPrivate field of a habit to be a boolean. in the meantime use this:
                     Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
                     if (!habitIsPrivate) {
                         habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder));

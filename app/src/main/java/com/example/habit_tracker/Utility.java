@@ -27,4 +27,8 @@ public class Utility {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
     }
+
+    public String saltPass(String password) {
+        return "saltvalue".concat(password);
+    }
 }

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -30,6 +31,8 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import io.grpc.okhttp.internal.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +45,7 @@ public class LoginFragment extends Fragment {
     FirebaseFirestore db;
     Button toLoginButton;
     String realname;
+    Utility firebaseUtils = new Utility();
 
     public LoginFragment() {
         // Required empty public constructor
@@ -133,7 +137,7 @@ public class LoginFragment extends Fragment {
                                     e.printStackTrace();
                                 }
 
-                                if (validPassword(password,correctPassword)) {
+                                if (validPassword(password, correctPassword)) {
                                     Log.d("Success", "Log in successful.");
                                     // Creating bundle to pass information to next fragment
                                     Bundle outgoingBundle = new Bundle();
@@ -162,10 +166,12 @@ public class LoginFragment extends Fragment {
     }
 
     public boolean validPassword(String inputPassword, String dbPassword){
+        // Salt the PW
+        String saltedPw = firebaseUtils.saltPass(inputPassword);
         // Converting password to hashed password
         String hashedPw = null;
         try {
-            hashedPw = toHexString(getSHA(inputPassword));
+            hashedPw = toHexString(getSHA(saltedPw));
         } catch (NoSuchAlgorithmException e) {
             // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
             e.printStackTrace();
@@ -215,5 +221,4 @@ public class LoginFragment extends Fragment {
 
         return hexString.toString();
     }
-
 }

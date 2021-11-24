@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -57,7 +59,6 @@ public class FriendInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_friend_info, container, false);
 
-        // TODO expecting (current user username, friend type object) from previous fragment
         Bundle bundle  = this.getArguments();
         currentUser = bundle.getString("username");
         friend = bundle.getParcelable("friend");
@@ -87,23 +88,44 @@ public class FriendInfoFragment extends Fragment {
         unfollowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // remove them from the follow list
-                firebaseUtils.removeFriend(currentUser, friend);
+                // Create window asking to confirm
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Confirm Unfriend");
+                builder.setMessage("Are you sure that you want to unfriend " + friend.getUserName() + "?\nThey're going to miss you!");
 
-                // give them undo option
-                Snackbar.make(habitList, "Unfollowed " + friend.getUserName(), Snackbar.LENGTH_INDEFINITE).setAction("Undo", new View.OnClickListener() {
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        firebaseUtils.addFriend(currentUser, friend);
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // remove them from the follow list
+                        firebaseUtils.removeFriend(currentUser, friend);
+
+                        // give them undo option
+                        Snackbar.make(habitList, "Unfollowed " + friend.getUserName(), Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                firebaseUtils.addFriend(currentUser, friend);
+                            }
+                        }).show();
+
+                        // return to friendlist
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", currentUser);
+
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_friendInfoFragment_to_friendListFragment, bundle);
                     }
-                }).show();
+                });
 
-                // return to friendlist
-                Bundle bundle = new Bundle();
-                bundle.putString("username", currentUser);
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
 
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_friendInfoFragment_to_friendListFragment, bundle);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
             }
         });
 
@@ -123,7 +145,6 @@ public class FriendInfoFragment extends Fragment {
                     Integer habitOrder = Integer.parseInt(String.valueOf(doc.getData().get("order")));
 
                     Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
-
                     if (!habitIsPrivate) {
                         habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder));
                     }

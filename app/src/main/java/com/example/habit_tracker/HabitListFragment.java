@@ -260,7 +260,7 @@ public class HabitListFragment extends Fragment {
 
                     AlertDialog alert = builder.create();
                     alert.show();
-
+                    break;
             }
         }
     };

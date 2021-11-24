@@ -35,6 +35,7 @@
                 android:id="@+id/habit_progress_row"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:longClickable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

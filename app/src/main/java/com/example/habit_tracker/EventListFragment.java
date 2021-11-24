@@ -287,7 +287,7 @@ public class EventListFragment extends Fragment {
 
                     AlertDialog alert = builder.create();
                     alert.show();
-
+                    break;
             }
         }
     };

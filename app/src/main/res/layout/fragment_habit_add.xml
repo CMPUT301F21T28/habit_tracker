@@ -272,7 +272,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="each habit event count as a successful completion  "
+        android:text="each habit event count as a successful completion"
         android:textSize="10sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />

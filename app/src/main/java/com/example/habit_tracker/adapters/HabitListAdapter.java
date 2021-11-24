@@ -80,11 +80,23 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
                 Bundle bundle = new Bundle();
                 bundle.putString("username", habit.getUsername());
                 bundle.putParcelable("Habit", habit);
-                Log.d(TAG, "onLongClick: habit id " +habit.getHabitID());
 
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
+            }
+        });
+
+        holder.habitProgress.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", habit.getUsername());
+                bundle.putString("habitID", habit.getHabitID());
+
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_habitListFragment_to_eventAddFragment, bundle);
+                return false;
             }
         });
     }

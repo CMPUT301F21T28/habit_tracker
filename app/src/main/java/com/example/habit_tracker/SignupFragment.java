@@ -61,6 +61,8 @@ public class SignupFragment extends DialogFragment {
     private EditText secondPassword;
     private FirebaseFirestore db;
 
+    Utility firebaseUtils = new Utility();
+
     public SignupFragment() {
         // Required empty public constructor
     }
@@ -174,7 +176,8 @@ public class SignupFragment extends DialogFragment {
                                 // **** hashing pw
                                 String hashedPw = null;
                                 try {
-                                    hashedPw = toHexString(getSHA(firstPassword.getText().toString()));
+                                    // Salts password at the same time
+                                    hashedPw = toHexString(getSHA(firebaseUtils.saltPass(firstPassword.getText().toString())));
                                 } catch (NoSuchAlgorithmException e) {
                                     // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
                                     e.printStackTrace();

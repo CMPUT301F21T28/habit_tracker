@@ -127,6 +127,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (DocumentSnapshot documentSnapshot : task.getResult()) {
                                 String correctPassword = documentSnapshot.getString("password");
+                                String salt = documentSnapshot.getString("salt");
                                 realname = documentSnapshot.getString("realname");
                                 // Converting password to hashed password
                                 String hashedPw = null;
@@ -137,7 +138,7 @@ public class LoginFragment extends Fragment {
                                     e.printStackTrace();
                                 }
 
-                                if (validPassword(password, correctPassword)) {
+                                if (validPassword(password, correctPassword, salt)) {
                                     Log.d("Success", "Log in successful.");
                                     // Creating bundle to pass information to next fragment
                                     Bundle outgoingBundle = new Bundle();
@@ -165,9 +166,9 @@ public class LoginFragment extends Fragment {
 
     }
 
-    public boolean validPassword(String inputPassword, String dbPassword){
+    public boolean validPassword(String inputPassword, String dbPassword, String salt){
         // Salt the PW
-        String saltedPw = firebaseUtils.saltPass(inputPassword);
+        String saltedPw = inputPassword.concat(salt);
         // Converting password to hashed password
         String hashedPw = null;
         try {

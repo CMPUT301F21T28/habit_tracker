@@ -4,8 +4,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
 public class Utility {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static Random _random = new SecureRandom();
 
     public void removeRequest(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
@@ -28,7 +32,15 @@ public class Utility {
         usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
     }
 
-    public String saltPass(String password) {
-        return "saltvalue".concat(password);
+    /**
+     * Returns a random salt to be used to hash a password.
+     * Credit: https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string
+     * @return a 16 bytes random salt
+     */
+    public static String getNextSalt() {
+        byte[] salt = new byte[16];
+        _random.nextBytes(salt);
+        String saltString = new String(salt);
+        return saltString;
     }
 }

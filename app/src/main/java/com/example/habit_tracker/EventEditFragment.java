@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +44,7 @@ public class EventEditFragment extends Fragment {
     private Button submit;
     private EditText commentContent;
     private EditText locationContent;
+    private EditText nameContent;
     private ImageButton imageButton;
     private FirebaseFirestore db;
 
@@ -94,6 +97,7 @@ public class EventEditFragment extends Fragment {
 
         commentContent = (EditText)getView().findViewById(R.id.CommentContent);
         //locationContent = (EditText)getView().findViewById(R.id.LocationContent);
+        nameContent = getView().findViewById(R.id.nameContent);
         submit= (Button) getView().findViewById(R.id.Submit);
         imageButton = getView().findViewById(R.id.editImageButton);
 
@@ -108,6 +112,7 @@ public class EventEditFragment extends Fragment {
 
 
         commentContent.setText(event.getComment());
+        nameContent.setText(event.getName());
 
         ActivityResultLauncher<Intent> activityResultLauncher;
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -131,6 +136,39 @@ public class EventEditFragment extends Fragment {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//EXTRA_OUTPUT, Uri.fromFile(file[0]));
                 activityResultLauncher.launch(intent);
 
+            }
+        });
+        imageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //return false;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                builder.setTitle("Confirm");
+                builder.setMessage("Are you sure to delete this image?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        // set image origin
+                        imageButton.setImageBitmap(originBitmap);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                //imageButton.setImageBitmap(originBitmap);
+
+                return true;
             }
         });
 
@@ -163,13 +201,16 @@ public class EventEditFragment extends Fragment {
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
                     //data.put("Location", locationContent.getText().toString());
+                    data.put("event name",nameContent.getText().toString());
 
                     event.setEventComment(commentContent.getText().toString());
                     //habitevent.setEventLocation(locationContent.getText().toString());
                     Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
                     String imageString = event.getEventImage();
-                    if (imageString == null && imageBitmap == originBitmap){
-
+                    //if (imageString == null && imageBitmap == originBitmap){
+                    if (imageBitmap == originBitmap){
+                        // do nothing
+                        imageString = null;
                     }else {
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -179,7 +220,7 @@ public class EventEditFragment extends Fragment {
                     event.setEventImage(imageString);
                     data.put("event image", imageString);
 
-                    data.put("event name", event.getName());
+                    //data.put("event name", event.getName());
                     collectionReference
                             .document(event.getEventID())
                             .set(data)

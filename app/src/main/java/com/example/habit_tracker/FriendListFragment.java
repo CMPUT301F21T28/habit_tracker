@@ -82,8 +82,8 @@ public class FriendListFragment extends Fragment {
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // ItemTouchHelper helps to define the swipe function
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
-        itemTouchHelper.attachToRecyclerView(friendList);
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+//        itemTouchHelper.attachToRecyclerView(friendList);
 
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
@@ -127,33 +127,33 @@ public class FriendListFragment extends Fragment {
         });
     }
 
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            switch (direction) {
-                case ItemTouchHelper.RIGHT:
-                    deletedFriend = friendDataList.get(position);
-                    // more information on array operations in firestore
-                    // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
-                    removeFriend(username, deletedFriend);
-
-                    // Undo the deletion
-                    Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            addFriend(username, deletedFriend);
-                        }
-                    }).show();
-                    break;
-            }
-        }
-    };
+//    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+//        @Override
+//        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//            return false;
+//        }
+//
+//        @Override
+//        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//            int position = viewHolder.getAdapterPosition();
+//            switch (direction) {
+//                case ItemTouchHelper.RIGHT:
+//                    deletedFriend = friendDataList.get(position);
+//                    // more information on array operations in firestore
+//                    // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
+//                    removeFriend(username, deletedFriend);
+//
+//                    // Undo the deletion
+//                    Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            addFriend(username, deletedFriend);
+//                        }
+//                    }).show();
+//                    break;
+//            }
+//        }
+//    };
 
     public void removeRequest(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);

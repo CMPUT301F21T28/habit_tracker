@@ -12,6 +12,9 @@ public class Habit implements Parcelable, Info {
     private String repeat;
     private Boolean isPrivate;
     private Integer order;
+    private Integer plan;
+    private Integer finish;
+    private Float progress;
 
     /**
      * Habit Class has 7 variables, each co-responding to either a field in Habit or a reference (e.g. username)
@@ -23,7 +26,7 @@ public class Habit implements Parcelable, Info {
      * @param repeat
      * @param isPrivate
      */
-    Habit(String userName, String habitName, String habitID, String dateOfStarting, String reason, String repeat, boolean isPrivate, Integer order) {
+    Habit(String userName, String habitName, String habitID, String dateOfStarting, String reason, String repeat, boolean isPrivate, Integer order, Integer plan, Integer finish) {
         this.userName = userName;
         this.habitName = habitName;
         this.habitID = habitID;
@@ -32,6 +35,9 @@ public class Habit implements Parcelable, Info {
         this.repeat = repeat;
         this.isPrivate = isPrivate;
         this.order = order;
+        this.plan = plan;
+        this.finish = finish;
+        this.progress = finish.floatValue() / plan.floatValue() * 100;
     }
 
     protected Habit(Parcel in) {
@@ -81,6 +87,9 @@ public class Habit implements Parcelable, Info {
     public String getRepeat() {return  this.repeat;}
     public Boolean getIsPrivate() {return this.isPrivate;}
     public Integer getOrder() {return this.order;}
+    public Integer getPlan() {return this.plan;}
+    public Integer getFinish() {return this.finish;}
+    public Float getProgress() {return this.progress;}
 
     @Override
     public int describeContents() {

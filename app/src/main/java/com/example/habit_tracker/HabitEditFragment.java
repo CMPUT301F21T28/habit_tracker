@@ -46,6 +46,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
     private TextView dateOfStarting;
     private RadioGroup radioGroup;
     private TextView repeatDay;
+    private EditText times;
 
     private boolean[] selectedDay;
     private ArrayList<Integer> dayList = new ArrayList<>();
@@ -140,6 +141,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason2);
         dateOfStarting = (TextView) getView().findViewById(R.id.textDateStarting);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day2);
+        times = (EditText) getView().findViewById(R.id.editTextTime);
 
         radioGroup = getView().findViewById(R.id.radioGroup2);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -163,9 +165,10 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         habitTitle.setText(habit.getName());
         habitReason.setText(habit.getComment());
         datePicked = habit.getDateOfStarting();
-        dateOfStarting.setText(datePicked + " (type to edit)");
+        dateOfStarting.setText(datePicked + " (tap to edit)");
         repeatDay.setText(habit.getRepeat());
         selectedDayString = habit.getRepeat();
+        times.setHint(habit.getPlan() + "times (tap to change)");
 
         if (habit.getIsPrivate() == true) {
             radioGroup.check(R.id.radioYes);
@@ -278,12 +281,8 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                     data.put("dateOfStarting", datePicked);
                     data.put("isPrivate", isPrivate);
                     data.put("order", habitOrder);
-
-                    habit.setHabitTitle(habitTitle.getText().toString());
-                    habit.setDateOfStarting(dateOfStarting.getText().toString());
-                    habit.setReason(habitReason.getText().toString());
-                    habit.setRepeat(selectedDayString);
-                    habit.setPrivate(isPrivate);
+                    data.put("plan", times.getText().toString().length() == 0? habit.getPlan(): Integer.parseInt(times.getText().toString()));
+                    data.put("finish", habit.getFinish());
 
                     collectionReference
                             .document(habit.getHabitID())
@@ -293,7 +292,6 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                                 public void onSuccess(Void unused) {
                                     Bundle bundle = new Bundle();
                                     bundle.putString("username", username);
-                                    bundle.putParcelable("Habit", habit);
 
                                     NavController controller = Navigation.findNavController(view);
                                     controller.navigate(R.id.action_habitEditFragment_to_habitListFragment, bundle);

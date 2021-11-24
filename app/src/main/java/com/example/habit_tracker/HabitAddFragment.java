@@ -65,6 +65,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
     private EditText dateOfStarting;
     private TextView repeatDay;
     private TextView editTextDate;
+    private TextView plan;
 
     private boolean[] selectedDay;
     private ArrayList<Integer> dayList = new ArrayList<>();
@@ -147,6 +148,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day);
         radioGroup = getView().findViewById(R.id.radioGroup);
         submitButton = (Button) getView().findViewById(R.id.submit_button);
+        plan = (EditText) getView().findViewById(R.id.habit_times);
 
         //Initialize selected repeat day
         //https://stackoverflow.com/questions/10207206/how-to-display-alertdialog-in-a-fragment
@@ -278,14 +280,6 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                     return;
                 }
 
-//                if (dateOfStarting.getText().toString().length() >= 0){
-//                    isValid[0] = checkDateValidity(dateOfStarting.getText().toString());
-//                    if (isValid[0] == false){
-//                        dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
-//                        return;
-//                    }
-//                }
-
                 if (selectedDayString == null){
                     isValid[0] = false;
                     repeatDay.setError("Please Select at least one day");
@@ -310,6 +304,8 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                     data.put("dateOfStarting", datePicked);
                     data.put("isPrivate", isPrivate);
                     data.put("order", habitsSize+1);
+                    data.put("plan", plan.getText().toString().length() == 0? 28 : Integer.parseInt(plan.getText().toString()));
+                    data.put("finish", 0);
                     collectionReference
                             .document(uuidString)
                             .set(data)

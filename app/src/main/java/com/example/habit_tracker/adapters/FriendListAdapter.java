@@ -23,12 +23,14 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     ArrayList<Friend> friends;
     Context context;
+    String currentRealname;
     String currentUsername;
     private static final String TAG = "MyActivity";
 
-    public FriendListAdapter(Context ctx, ArrayList<Friend> friends, String currentUsername) {
+    public FriendListAdapter(Context ctx, ArrayList<Friend> friends, String currentUsername, String realname) {
         this.context = ctx;
         this.friends = friends;
+        this.currentRealname = realname;
         this.currentUsername = currentUsername;
     }
 
@@ -51,6 +53,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                 Bundle bundle = new Bundle();
                 bundle.putString("username", currentUsername);
                 bundle.putParcelable("friend", friend);
+                bundle.putString("realname", currentRealname);
 
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 NavController controller = Navigation.findNavController(view);

@@ -37,6 +37,7 @@ public class FriendInfoFragment extends Fragment {
     Friend friend;
     TextView tvUsername;
     Button unfollowBtn;
+    String currentReal;
     String currentUser;
     Utility firebaseUtils = new Utility();
 
@@ -61,6 +62,7 @@ public class FriendInfoFragment extends Fragment {
 
         Bundle bundle  = this.getArguments();
         currentUser = bundle.getString("username");
+        currentReal = bundle.getString("realname");
         friend = bundle.getParcelable("friend");
 
         // setting the friend username and realname
@@ -100,7 +102,7 @@ public class FriendInfoFragment extends Fragment {
                         firebaseUtils.removeFriend(currentUser, friend);
 
                         // give them undo option
-                        Snackbar.make(habitList, "Unfollowed " + friend.getUserName(), Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                        Snackbar.make(habitList, "Unfriended " + friend.getUserName(), Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 firebaseUtils.addFriend(currentUser, friend);
@@ -110,6 +112,7 @@ public class FriendInfoFragment extends Fragment {
                         // return to friendlist
                         Bundle bundle = new Bundle();
                         bundle.putString("username", currentUser);
+                        bundle.putString("realname", currentReal);
 
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_friendInfoFragment_to_friendListFragment, bundle);

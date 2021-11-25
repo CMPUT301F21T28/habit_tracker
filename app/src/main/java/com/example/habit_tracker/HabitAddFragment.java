@@ -56,7 +56,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * A simple {@link Fragment} subclass.
  * create an instance of Add Habit Fragment.
  */
-public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
+public class HabitAddFragment extends SuperFragment implements DatePickerDialog.OnDateSetListener{
 
     private Button submitButton;
     private RadioGroup radioGroup;
@@ -72,7 +72,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
     private String[] dayArray = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private String selectedDayString;
 
-    private String username;
+    //private String username;
     private Boolean isPrivate;
 
     private Integer habitsSize;
@@ -93,15 +93,11 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_habit_add, container, false);
-        // get the bundle passed from the previous fragment
-        Bundle bundle = this.getArguments();
-        username = bundle.getString("username");
-        if (bundle.containsKey("habitsSize")) {
+        View rootView = super.onCreateView(inflater,container,savedInstanceState);
+        if (inBundle.containsKey("habitsSize")) {
             Log.d(TAG, "onCreateView: yes");
         }
-        habitsSize = bundle.getInt("habitsSize");
+        habitsSize = inBundle.getInt("habitsSize");
         return rootView;
 
     }

@@ -1,5 +1,6 @@
 package com.example.habit_tracker;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -30,8 +31,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 
@@ -93,14 +99,43 @@ public class EventEditFragment extends Fragment {
         submit= (Button) getView().findViewById(R.id.Submit);
         Button locationButton = view.findViewById(R.id.locationButton);
         Button removeLocationButton = view.findViewById(R.id.removeLocationButton);
-        locationButton.setVisibility(View.GONE);
 
 
         commentContent.setText(event.getComment());
+
+        if(event.getLocationLongitude() == null && event.getLocationLatitude() == null){
+            removeLocationButton.setVisibility(View.GONE);
+            locationButton.setVisibility(View.VISIBLE);
+        }
+        else{
+            locationButton.setVisibility(View.GONE);
+            removeLocationButton.setVisibility(View.VISIBLE);
+        }
         //locationContent.setText(habitevent.getEventLocation());
 
 
         CollectionReference collectionReference = db.collection("habit").document(habitID).collection("EventList");
+
+
+        /*collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                currentLongitude = event.getLocationLongitude()
+
+                if (currentLongitude[0] == null && currentLatitude[0] == null) {
+                    removeLocationButton.setVisibility(View.GONE);
+                    locationButton.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    locationButton.setVisibility(View.GONE);
+                    removeLocationButton.setVisibility(View.VISIBLE);
+                }
+
+
+            }
+        });*/
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -191,7 +226,7 @@ public class EventEditFragment extends Fragment {
             public void onClick(View view) {
 
                 if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
-                        android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
                     client = LocationServices.getFusedLocationProviderClient(view.getContext());
@@ -235,7 +270,7 @@ public class EventEditFragment extends Fragment {
 
                 else{
                     ActivityCompat.requestPermissions((Activity) view.getContext(),
-                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44
                     );
 
                 }

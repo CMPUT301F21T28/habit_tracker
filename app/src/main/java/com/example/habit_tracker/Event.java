@@ -44,7 +44,7 @@ public class Event implements Parcelable, Info
         eventComment = in.readString();
         locationLongitude = in.readDouble();
         locationLatitude = in.readDouble();
-        //eventLocation = in.readString();
+
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {

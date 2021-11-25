@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -106,9 +107,6 @@ public class HabitListFragment extends Fragment {
         // initialize ItemTouchHelper for swipe & reorder function
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(habitList);
-
-        // prompt user how to interact - replaced with tooltip - Darren
-        // Toast.makeText(getActivity(), "Right Swipe to Delete, Long Press to See Events", Toast.LENGTH_SHORT).show();
         return rootView;
     }
 
@@ -138,18 +136,18 @@ public class HabitListFragment extends Fragment {
                     String habitRepeat = (String) doc.getData().get("repeat");
                     Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
                     Integer habitOrder = Integer.parseInt(String.valueOf(doc.getData().get("order")));
-                    habitDataList.add(new Habit(username, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate, habitOrder));
+                    Integer habitPlan = Integer.parseInt(String.valueOf(doc.getData().get("plan")));
+                    Integer habitFinish = Integer.parseInt(String.valueOf(doc.getData().get("finish")));
+                    habitDataList.add(new Habit(username, habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, habitIsPrivate, habitOrder, habitPlan, habitFinish));
                 }
                 recyclerAdapter.notifyDataSetChanged();
 
                 todayHabitDataList.clear();
                 for (Habit habit: habitDataList){
                     String repeatString = habit.getRepeat();
-                    System.out.println("repeat String" + repeatString);
                     LocalDate date = LocalDate.now();
                     DayOfWeek dow = date.getDayOfWeek();
                     String dayName = dow.getDisplayName(TextStyle.FULL_STANDALONE, Locale.ENGLISH);
-                    System.out.println(dayName);
                     if (repeatString.contains(dayName)) {
                         todayHabitDataList.add(habit);
                     }
@@ -316,7 +314,7 @@ public class HabitListFragment extends Fragment {
 
                     AlertDialog alert = builder.create();
                     alert.show();
-
+                    break;
             }
         }
     };

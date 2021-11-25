@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 public class HabitDetailFragment extends Fragment {
 
     Habit habit;
@@ -26,6 +28,7 @@ public class HabitDetailFragment extends Fragment {
     ProgressBar visualIndicator;
     TextView percentage;
     Button edit;
+    TextView progress;
 
     private static final String TAG = "MyActivity";
 
@@ -56,15 +59,20 @@ public class HabitDetailFragment extends Fragment {
         dateOfStarting = rootView.findViewById(R.id.textView_dateOfStarting);
         repeat = rootView.findViewById(R.id.textView_repeat);
         visualIndicator = rootView.findViewById(R.id.progressBar_visualIndicator);
-        percentage = rootView.findViewById(R.id.textView_percentage);
+        percentage = rootView.findViewById(R.id.buttonPercentage);
         isPrivate = rootView.findViewById(R.id.textView_private);
         edit = rootView.findViewById(R.id.button_edit);
+        progress = rootView.findViewById(R.id.textView5);
 
         habitTitle.setText(habit.getName());
         habitReason.setText(habit.getComment());
         dateOfStarting.setText(habit.getDateOfStarting());
         repeat.setText(habit.getRepeat());
         isPrivate.setText(Boolean.toString(habit.getIsPrivate()));
+        visualIndicator.setProgress(Math.round(habit.getProgress()));
+        percentage.setText(Math.round(habit.getProgress()) + "%");
+        progress.setText("Finish " + habit.getFinish() + "/" + habit.getPlan() + " times");
+
         //TODO visual indicator
 
         return rootView;

@@ -43,6 +43,9 @@ public class FriendInfoFragment extends Fragment {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference;
+
+    Integer plan = 0;
+    Integer finish = 0;
     // TODO initialize collectionReference
 
     public FriendInfoFragment() {
@@ -83,6 +86,8 @@ public class FriendInfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // TODO Generic adapter: setOnClick to be disabled!!
 
         // set onClickListener for unfollowBtn
         unfollowBtn = getView().findViewById(R.id.unfollow_button);
@@ -146,10 +151,11 @@ public class FriendInfoFragment extends Fragment {
                     String habitReason = (String) doc.getData().get("reason");
                     String habitRepeat = (String) doc.getData().get("repeat");
                     Integer habitOrder = Integer.parseInt(String.valueOf(doc.getData().get("order")));
-
                     Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
-                    if (!habitIsPrivate) {
-                        habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder));
+                    Integer habitPlan = Integer.parseInt(String.valueOf(doc.getData().get("plan")));
+                    Integer habitFinish = Integer.parseInt(String.valueOf(doc.getData().get("finish")));
+                    if (habitIsPrivate == false) {
+                        habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder, habitPlan, habitFinish));
                     }
                 }
                 habitListAdapter.notifyDataSetChanged();

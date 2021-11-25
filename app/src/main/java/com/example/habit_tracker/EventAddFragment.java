@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -96,9 +97,6 @@ public class EventAddFragment extends Fragment {
         //Boolean needImage;
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
 
-        /**
-         *
-         */
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -184,7 +182,6 @@ public class EventAddFragment extends Fragment {
                     //String eventID = event_name + String.valueOf(System.currentTimeMillis());
                     String eventID = String.valueOf(System.currentTimeMillis()) + event_name;
 
-
                     collectionReference.document(habitID).collection("EventList")
                             .document(eventID)
                             //.document(event_name + String.valueOf(System.currentTimeMillis()))
@@ -193,6 +190,11 @@ public class EventAddFragment extends Fragment {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(getContext(),"submit success",Toast.LENGTH_SHORT).show();
+                                    db.collection("Users").document(username).collection("HabitList").document(habitID).update("finish", FieldValue.increment(1));
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("username", username);
+                                    bundle.putString("habitID", habitID);
 
                                     NavController controller = Navigation.findNavController(view);
                                     controller.navigate(R.id.action_eventAddFragment_to_eventListFragment, bundle);

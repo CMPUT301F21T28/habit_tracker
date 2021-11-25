@@ -101,7 +101,7 @@ public class EventListFragment extends Fragment {
                     }
                 });
             }
-        };
+
 
 //            @Override
 //            public OnRecyclerItemClicked onGetRecyclerItemClickListener() {
@@ -119,7 +119,21 @@ public class EventListFragment extends Fragment {
 //                    }
 //                };
 //            }
-//        };
+        };
+
+        eventAdapter.setOnRecyclerItemClicked(new GenericAdapter.OnRecyclerItemClicked() {
+            @Override
+            public void onItemClicked(View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", event.getUsername());
+                bundle.putString("habitID", event.getHabitID());
+                bundle.putParcelable("Event", event);
+
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                NavController controller = Navigation.findNavController(view);
+                controller.navigate(R.id.action_eventListFragment_to_eventDetailFragment, bundle);
+            }
+        });
 
 //        eventAdapter.setOnRecyclerItemClicked(new GenericAdapter.OnRecyclerItemClicked() {
 //            @Override

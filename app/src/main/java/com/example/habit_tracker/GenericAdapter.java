@@ -12,14 +12,14 @@ public abstract class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerVie
 
     private Context context;
     private ArrayList<T> items;
-//    private OnRecyclerItemClicked onRecyclerItemClicked;
+    private OnRecyclerItemClicked onRecyclerItemClicked;
 //    private OnRecyclerItemLongClicked onRecyclerItemLongClicked;
 
     public abstract RecyclerView.ViewHolder setViewHolder(ViewGroup parent);
 
     public abstract void onBindData(RecyclerView.ViewHolder holder, T val);
 
-//    public abstract OnRecyclerItemClicked onGetRecyclerItemClickListener();
+    //public abstract OnRecyclerItemClicked onGetRecyclerItemClickListener();
 
     public GenericAdapter(Context context, ArrayList<T> items){
         this.context = context;
@@ -42,13 +42,14 @@ public abstract class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerVie
         return items.size();
     }
 
-////    public void setOnRecyclerItemClicked(OnRecyclerItemClicked onRecyclerItemClicked){
-////        this.onRecyclerItemClicked = onRecyclerItemClicked;
-////    }
-//
-//    public interface OnRecyclerItemClicked{
-//        void onItemClicked(View view, int position);
-//    }
+    public void setOnRecyclerItemClicked(OnRecyclerItemClicked onRecyclerItemClicked){
+        this.onRecyclerItemClicked = onRecyclerItemClicked;
+    }
+
+    public interface OnRecyclerItemClicked{
+        void onItemClicked(View view, int position);
+    }
+
 //
 //    /*public void setOnRecyclerItemLongClicked(OnRecyclerItemLongClicked onRecyclerItemLongClicked) {
 //        this.onRecyclerItemLongClicked = onRecyclerItemLongClicked;

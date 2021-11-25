@@ -1,6 +1,8 @@
 package com.example.habit_tracker;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -96,6 +98,7 @@ public class EventAddFragment extends Fragment {
         Bitmap bit = null;
         //Boolean needImage;
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
+        Toast.makeText(getContext(),"long click image to delete",Toast.LENGTH_SHORT).show();
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -130,6 +133,39 @@ public class EventAddFragment extends Fragment {
                                 //
                             }
                         })*/
+            }
+        });
+        imageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //return false;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                builder.setTitle("Confirm");
+                builder.setMessage("Are you sure to delete this image?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        // set image origin
+                        imageButton.setImageBitmap(originBitmap);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                //imageButton.setImageBitmap(originBitmap);
+
+                return true;
             }
         });
 

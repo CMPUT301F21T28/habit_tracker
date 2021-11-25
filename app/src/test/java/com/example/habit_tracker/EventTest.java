@@ -13,7 +13,7 @@ public class EventTest {
      */
     @BeforeEach
     public void createMockEvent(){
-        mockEvent = new Event("mockUsername", "mockHabitId", "mockEventId", "mockName", "mockComment");
+        mockEvent = new Event("mockUsername", "mockHabitId", "mockEventId", "mockName", "mockComment",null);
     }
 
     /**

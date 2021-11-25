@@ -65,6 +65,14 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+    // TODO: add on resume clear the password textbox
+    @Override
+    public void onResume () {
+        super.onResume();
+
+        editTextPassword.setText("");
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -80,6 +88,7 @@ public class LoginFragment extends Fragment {
         signInButton = (Button) getView().findViewById(R.id.Nav_to_mainpage);
         editTextUsername = (EditText) getView().findViewById(R.id.username);
         editTextPassword = (EditText) getView().findViewById(R.id.password);
+
         navToSignup = (TextView) getView().findViewById(R.id.Nav_to_signup);
         db = FirebaseFirestore.getInstance();
 

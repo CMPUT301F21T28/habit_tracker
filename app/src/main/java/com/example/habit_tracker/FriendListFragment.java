@@ -79,7 +79,7 @@ public class FriendListFragment extends Fragment {
 
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
-        friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList, username);
+        friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList, username, realname);
         friendList.setAdapter(friendRecyclerAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 

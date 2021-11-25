@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -30,6 +31,8 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import io.grpc.okhttp.internal.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +45,7 @@ public class LoginFragment extends Fragment {
     FirebaseFirestore db;
     Button toLoginButton;
     String realname;
+    Utility firebaseUtils = new Utility();
 
     public LoginFragment() {
         // Required empty public constructor
@@ -61,6 +65,14 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+    // TODO: add on resume clear the password textbox
+    @Override
+    public void onResume () {
+        super.onResume();
+
+        editTextPassword.setText("");
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -76,6 +88,7 @@ public class LoginFragment extends Fragment {
         signInButton = (Button) getView().findViewById(R.id.Nav_to_mainpage);
         editTextUsername = (EditText) getView().findViewById(R.id.username);
         editTextPassword = (EditText) getView().findViewById(R.id.password);
+
         navToSignup = (TextView) getView().findViewById(R.id.Nav_to_signup);
         db = FirebaseFirestore.getInstance();
 
@@ -123,6 +136,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (DocumentSnapshot documentSnapshot : task.getResult()) {
                                 String correctPassword = documentSnapshot.getString("password");
+                                String salt = documentSnapshot.getString("salt");
                                 realname = documentSnapshot.getString("realname");
                                 // Converting password to hashed password
                                 String hashedPw = null;
@@ -133,7 +147,7 @@ public class LoginFragment extends Fragment {
                                     e.printStackTrace();
                                 }
 
-                                if (validPassword(password,correctPassword)) {
+                                if (validPassword(password, correctPassword, salt)) {
                                     Log.d("Success", "Log in successful.");
                                     // Creating bundle to pass information to next fragment
                                     Bundle outgoingBundle = new Bundle();
@@ -161,11 +175,13 @@ public class LoginFragment extends Fragment {
 
     }
 
-    public boolean validPassword(String inputPassword, String dbPassword){
+    public boolean validPassword(String inputPassword, String dbPassword, String salt){
+        // Salt the PW
+        String saltedPw = inputPassword.concat(salt);
         // Converting password to hashed password
         String hashedPw = null;
         try {
-            hashedPw = toHexString(getSHA(inputPassword));
+            hashedPw = toHexString(getSHA(saltedPw));
         } catch (NoSuchAlgorithmException e) {
             // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
             e.printStackTrace();
@@ -215,5 +231,4 @@ public class LoginFragment extends Fragment {
 
         return hexString.toString();
     }
-
 }

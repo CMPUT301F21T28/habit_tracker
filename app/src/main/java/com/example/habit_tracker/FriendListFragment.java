@@ -75,9 +75,11 @@ public class FriendListFragment extends Fragment {
         username = bundle.getString("username");
         realname = bundle.getString("realname");
 
+        Log.d("FRIENDLISTFRAG", realname);
+
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
-        friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList, username);
+        friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList, username, realname);
         friendList.setAdapter(friendRecyclerAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -209,4 +211,6 @@ public class FriendListFragment extends Fragment {
                 }
         });
     }
+
+
 }

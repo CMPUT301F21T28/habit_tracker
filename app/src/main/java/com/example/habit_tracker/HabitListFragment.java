@@ -26,8 +26,14 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.habit_tracker.adapters.HabitListAdapter;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -61,6 +67,7 @@ public class HabitListFragment extends Fragment {
     String realname = null;
 
     CollectionReference collectionReference;
+    CollectionReference collectionReferenceEvent;
 
 
 
@@ -88,7 +95,6 @@ public class HabitListFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
-        realname = bundle.getString("realname");
 
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
@@ -101,7 +107,6 @@ public class HabitListFragment extends Fragment {
         // initialize ItemTouchHelper for swipe & reorder function
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(habitList);
-
         return rootView;
     }
 
@@ -183,17 +188,40 @@ public class HabitListFragment extends Fragment {
         getView().findViewById(R.id.friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("username", username);
-                bundle.putString("realname", realname);
+                // Query Realname
+                DocumentReference usersRef = db.collection("Users").document(username);
+                Log.d("INSIDE HABITLIST", username);
+                usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if (documentSnapshot.exists()) {
+                                String real = documentSnapshot.getString("realname");
+                                Log.d("INSIDE HABITLIST", real);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("username", username);
+                                bundle.putString("realname", real);
 
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_habitListFragment_to_friendListFragment, bundle);
+                                NavController controller = Navigation.findNavController(view);
+                                controller.navigate(R.id.action_habitListFragment_to_friendListFragment, bundle);
+                            }
+                        }
+                        else {
+                            Log.d("----- MAINPAGE", "FAILED");
+                        }
+                    }
+                });
             }
         });
 
         // For tooltip
-
+        getView().findViewById(R.id.tooltip_floatingactionbutton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Swipe Right to Delete\nShort Tap to View Details\nTap Progress to View Events", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     // swipe to delete & drag to reorder the list
@@ -236,12 +264,38 @@ public class HabitListFragment extends Fragment {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int which) {
+                            String selectedHabitID = habitDataList.get(position).getHabitID();
+                            //delete habit events of this habit
+                            collectionReferenceEvent = db.collection("habit").document(selectedHabitID).collection("EventList");
+                            collectionReferenceEvent
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    //Log.d("Success", "To get " + document.toObject(String.class));
+                                                    collectionReferenceEvent.document(document.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            Log.d("TAG", "Deleted " + document.getId() + " => " + document.getData());
+                                                        }
+                                                    });
+
+                                                }
+                                            } else {
+                                                Log.d("TAG", "Error getting documents: ", task.getException());
+                                            }
+                                        }
+                                    });
                             // Delete the habit
-                            collectionReference.document(habitDataList.get(position).getHabitID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            collectionReference.document(selectedHabitID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                 }
                             });
+
+
                             for (int i = position+1; i < habitDataList.size(); i++) {
                                 collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i);
                             }

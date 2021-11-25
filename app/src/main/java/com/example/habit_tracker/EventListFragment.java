@@ -92,9 +92,6 @@ public class EventListFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(eventList);
 
-        // prompt user how to interact
-        Toast.makeText(getActivity(), "Right Swipe to Delete", Toast.LENGTH_SHORT).show();
-
         return rootView;
     }
 
@@ -240,6 +237,14 @@ public class EventListFragment extends Fragment {
             }
         });*/
 
+        // For tooltip button
+        getView().findViewById(R.id.floatingActionButton_tooltip).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Swipe Right to Delete\nTap to View Details", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -291,5 +296,6 @@ public class EventListFragment extends Fragment {
             }
         }
     };
+
 }
 

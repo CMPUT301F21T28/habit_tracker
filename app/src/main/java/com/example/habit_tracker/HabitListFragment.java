@@ -31,6 +31,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -92,7 +94,6 @@ public class HabitListFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
-        realname = bundle.getString("realname");
 
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
@@ -189,12 +190,30 @@ public class HabitListFragment extends Fragment {
         getView().findViewById(R.id.friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("username", username);
-                bundle.putString("realname", realname);
+                // Query Realname
+                DocumentReference usersRef = db.collection("Users").document(username);
+                Log.d("INSIDE HABITLIST", username);
+                usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if (documentSnapshot.exists()) {
+                                String real = documentSnapshot.getString("realname");
+                                Log.d("INSIDE HABITLIST", real);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("username", username);
+                                bundle.putString("realname", real);
 
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_habitListFragment_to_friendListFragment, bundle);
+                                NavController controller = Navigation.findNavController(view);
+                                controller.navigate(R.id.action_habitListFragment_to_friendListFragment, bundle);
+                            }
+                        }
+                        else {
+                            Log.d("----- MAINPAGE", "FAILED");
+                        }
+                    }
+                });
             }
         });
 

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,7 +37,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.request_list_row, parent, false);
+        View view = inflater.inflate(R.layout.grant_list_row, parent, false);
         return new ViewHolder(view);
     }
 
@@ -86,7 +85,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            friendName = itemView.findViewById(R.id.friend_name_request);
+            friendName = itemView.findViewById(R.id.friend_name_grant);
             acceptButton = itemView.findViewById(R.id.request_accept_button);
             denyButton = itemView.findViewById(R.id.request_deny_button);
         }

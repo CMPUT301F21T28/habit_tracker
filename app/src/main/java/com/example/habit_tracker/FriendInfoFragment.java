@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.habit_tracker.adapters.HabitListAdapter;
+import com.example.habit_tracker.viewholders.TextProgressViewHolder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -32,9 +33,11 @@ import java.util.ArrayList;
 public class FriendInfoFragment extends Fragment {
 
     RecyclerView habitList;
-    HabitListAdapter habitListAdapter;
+    GenericAdapter<Habit> habitAdapter;
     ArrayList<Habit> habitDataList;
+
     Friend friend;
+
     TextView tvUsername;
     Button unfollowBtn;
     String currentReal;
@@ -44,8 +47,6 @@ public class FriendInfoFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference;
 
-    Integer plan = 0;
-    Integer finish = 0;
     // TODO initialize collectionReference
 
     public FriendInfoFragment() {
@@ -74,11 +75,20 @@ public class FriendInfoFragment extends Fragment {
 
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friendInfo);
-        habitListAdapter = new HabitListAdapter(getActivity(), habitDataList);
-        habitList.setAdapter(habitListAdapter);
-        habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        habitAdapter = new GenericAdapter<Habit>(getActivity(), habitDataList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                return new TextProgressViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.habit_list_row, parent, false));
+            }
 
-        // unfollowBtn.findViewById(R.id.unfollow_button);
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
+                ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
+                ((TextProgressViewHolder) holder).getProgressButton().setText(Math.round(val.getProgress()) + "%");
+            }
+        };
+        habitList.setAdapter(habitAdapter);
+        habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return rootView;
     }
@@ -158,7 +168,7 @@ public class FriendInfoFragment extends Fragment {
                         habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder, habitPlan, habitFinish));
                     }
                 }
-                habitListAdapter.notifyDataSetChanged();
+                habitAdapter.notifyDataSetChanged();
             }
         });
 

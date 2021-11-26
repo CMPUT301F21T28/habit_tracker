@@ -1,13 +1,12 @@
 package com.example.habit_tracker;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
-
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -42,11 +41,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -56,27 +58,17 @@ import java.util.Locale;
 public class HabitListFragment extends Fragment {
     Switch todayHabitSwitch;
 
-    private static final String TAG = "MyActivity";
-
     FirebaseFirestore db;
     CollectionReference collectionReference;
+    CollectionReference collectionReferenceEvent;
 
     RecyclerView habitList;
-    HabitListAdapter recyclerAdapter;
-    HabitListAdapter todayRecyclerAdapter;
-
-    FirebaseFirestore db;
-
     ArrayList<Habit> habitDataList;
     GenericAdapter<Habit> habitAdapter;
     ArrayList<Habit> todayHabitDataList = new ArrayList<Habit>();
+    GenericAdapter<Habit> todayRecyclerAdapter;
 
     String username = null;
-    String realname = null;
-    Habit habit = null;
-
-    CollectionReference collectionReference;
-    CollectionReference collectionReferenceEvent;
 
     public HabitListFragment() {
         // Required empty public constructor
@@ -114,51 +106,92 @@ public class HabitListFragment extends Fragment {
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
                 ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
+                ((TextProgressViewHolder) holder).getProgressButton().setText(Math.round(val.getProgress()) + "%");
+                ((TextProgressViewHolder) holder).getProgressButton().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putParcelable("Habit", val);
 
-                // TODO integrate progress
-                // ((TextProgressViewHolder) holder).getProgressBar().setProgress();
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
+                    }
+                });
+                ((TextProgressViewHolder) holder).getProgressButton().setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putParcelable("Habit", val);
+
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
+                        return false;
+                    }
+                });
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putParcelable("Habit", val);
+
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
+                    }
+                });
             }
-
-//            @Override
-//            public OnRecyclerItemClicked onGetRecyclerItemClickListener() {
-//                return new OnRecyclerItemClicked() {
-//                    @Override
-//                    public void onItemClicked(View view, int position) {
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("username", username);
-//                        bundle.putParcelable("Habit", habit);
-//
-//                        AppCompatActivity activity = (AppCompatActivity) view.getContext();
-//                        NavController controller = Navigation.findNavController(view);
-//                        controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
-//                    }
-//                };
-//            }
         };
-
-
-        /*
-        habitAdapter.setOnRecyclerItemLongClicked(new GenericAdapter.OnRecyclerItemLongClicked() {
-            @Override
-            public void onItemLongClicked(View view, int position) {
-                // TODO change to a button implementation in the future update
-                Bundle bundle = new Bundle();
-                bundle.putString("username", username);
-                bundle.putParcelable("Habit", habit);
-
-                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
-            }
-        });
-
-         */
-
 
         habitList.setAdapter(habitAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        todayRecyclerAdapter = new HabitListAdapter(getActivity(), todayHabitDataList);
+        todayRecyclerAdapter = new GenericAdapter<Habit>(getActivity(), todayHabitDataList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                return new TextProgressViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.habit_list_row, parent, false));
+            }
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
+                ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
+                ((TextProgressViewHolder) holder).getProgressButton().setText(Math.round(val.getProgress()) + "%");
+                ((TextProgressViewHolder) holder).getProgressButton().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putParcelable("Habit", val);
+
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
+                    }
+                });
+                ((TextProgressViewHolder) holder).getProgressButton().setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putParcelable("Habit", val);
+
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
+                        return false;
+                    }
+                });
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putParcelable("Habit", val);
+
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
+                    }
+                });
+            }
+        };
 
         // initialize ItemTouchHelper for swipe & reorder function
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
@@ -221,8 +254,8 @@ public class HabitListFragment extends Fragment {
                     todayRecyclerAdapter.notifyDataSetChanged();
                     //System.out.println(todayHabitDataList);
                 }else {
-                    habitList.setAdapter(recyclerAdapter);
-                    recyclerAdapter.notifyDataSetChanged();
+                    habitList.setAdapter(habitAdapter);
+                    habitAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -240,6 +273,7 @@ public class HabitListFragment extends Fragment {
             }
         });
 
+        // go to friend list
         getView().findViewById(R.id.friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -347,6 +381,7 @@ public class HabitListFragment extends Fragment {
                             collectionReference.document(selectedHabitID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
+                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -362,7 +397,7 @@ public class HabitListFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Do nothing
-                            recyclerAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            habitAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
                             dialog.dismiss();
                         }
                     });

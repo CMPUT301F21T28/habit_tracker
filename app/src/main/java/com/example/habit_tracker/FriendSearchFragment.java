@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.habit_tracker.adapters.FriendSearchAdapter;
+import com.example.habit_tracker.viewholders.TextProgressViewHolder;
+import com.example.habit_tracker.viewholders.TextSearchViewHolder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,15 +41,18 @@ import java.util.Map;
 public class FriendSearchFragment extends Fragment {
 
     RecyclerView searchList;
-    FriendSearchAdapter searchAdapter;
+    GenericAdapter<Friend> searchAdapter;
     ArrayList<Friend> searchDataList;
     ArrayList<String> friendDataList;
 
     // TODO initialize the following
     FirebaseFirestore db;
     CollectionReference collectionReference;
+
     private Button searchButton;
     private EditText editTextSearchUsername;
+
+    Utility newUtil = new Utility();
 
     public FriendSearchFragment() {
         // Required empty public constructor
@@ -56,7 +61,6 @@ public class FriendSearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -71,7 +75,33 @@ public class FriendSearchFragment extends Fragment {
         searchList = (RecyclerView) rootView.findViewById(R.id.search_recyclerView);
         Bundle bundle = getArguments();
         Friend currentUser = new Friend(bundle.getString("username"), bundle.getString("realname"));
-        searchAdapter = new FriendSearchAdapter(getActivity(), searchDataList, currentUser);
+        searchAdapter = new GenericAdapter<Friend>(getActivity(), searchDataList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                return new TextSearchViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.search_list_row, parent, false));
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, Friend val) {
+                ((TextSearchViewHolder) holder).getUserName().setText(val.getActualName() + " ("+val.getUserName()+")");
+                Button requestButton = ((TextSearchViewHolder) holder).getRequest();
+                requestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (requestButton.getText().toString().equals("Request")){
+                            Log.d("tag", "Value: " + requestButton.getText().toString());
+                            newUtil.addRequest(val.getUserName(),currentUser);
+                            requestButton.setText("Cancel");
+                        }
+                        else if (requestButton.getText().toString().equals("Cancel")){
+                            newUtil.removeRequest(val.getUserName(),currentUser);
+                            requestButton.setText("Request");
+                        }
+                    }
+                });
+            }
+        };
+
         searchList.setAdapter(searchAdapter);
         searchList.setLayoutManager(new LinearLayoutManager(getActivity()));
         db = FirebaseFirestore.getInstance();

@@ -19,10 +19,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.Base64;
 
 /**
@@ -72,7 +68,7 @@ public class EventDetailFragment extends Fragment {
         event = bundle.getParcelable("Event");
 
         eventName= rootView.findViewById(R.id.textView_detail_eventName_view);
-        commentContent = rootView.findViewById(R.id.CommentContent);
+        commentContent = rootView.findViewById(R.id.nameContent);
         /* TODO image & location
         location= rootView.findViewById(R.id.Location);
         locationContent = rootView.findViewById(R.id.LocationContent);

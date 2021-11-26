@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +44,7 @@ public class EventEditFragment extends Fragment {
     private Button submit;
     private EditText commentContent;
     private EditText locationContent;
+    private EditText nameContent;
     private ImageButton imageButton;
     private FirebaseFirestore db;
 
@@ -92,10 +95,12 @@ public class EventEditFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
 
-        commentContent = (EditText)getView().findViewById(R.id.CommentContent);
+        commentContent = (EditText)getView().findViewById(R.id.commentContent);
         //locationContent = (EditText)getView().findViewById(R.id.LocationContent);
         submit= (Button) getView().findViewById(R.id.Submit);
         imageButton = getView().findViewById(R.id.editImageButton);
+        nameContent = getView().findViewById(R.id.nameContent);
+        nameContent.setText(event.getName());
 
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
         String imageString = event.getEventImage();
@@ -133,6 +138,39 @@ public class EventEditFragment extends Fragment {
 
             }
         });
+        imageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //return false;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                builder.setTitle("Confirm");
+                builder.setMessage("Are you sure to delete this image?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        // set image origin
+                        imageButton.setImageBitmap(originBitmap);
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                //imageButton.setImageBitmap(originBitmap);
+
+                return true;
+            }
+        });
 
         //locationContent.setText(habitevent.getEventLocation());
 
@@ -150,6 +188,12 @@ public class EventEditFragment extends Fragment {
                     commentContent.requestFocus();
                     return;
                 }
+                if ( 20 <= nameContent.getText().toString().length()) {
+                    isValid[0] = false;
+                    nameContent.setError("name may not valid. Please ensure that it is between 0 and 20 characters.");
+                    nameContent.requestFocus();
+                    return;
+                }
 //                TODO location
 //                if (20 <= locationContent.getText().toString().length()) {
 //                    isValid[0] = false;
@@ -163,13 +207,14 @@ public class EventEditFragment extends Fragment {
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
                     //data.put("Location", locationContent.getText().toString());
+                    data.put("event name",nameContent.getText().toString());
 
                     event.setEventComment(commentContent.getText().toString());
                     //habitevent.setEventLocation(locationContent.getText().toString());
                     Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
                     String imageString = event.getEventImage();
-                    if (imageString == null && imageBitmap == originBitmap){
-
+                    if (imageBitmap == originBitmap){
+                        imageString = null;
                     }else {
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -179,7 +224,7 @@ public class EventEditFragment extends Fragment {
                     event.setEventImage(imageString);
                     data.put("event image", imageString);
 
-                    data.put("event name", event.getName());
+                    //data.put("event name", event.getName());
                     collectionReference
                             .document(event.getEventID())
                             .set(data)
@@ -205,5 +250,14 @@ public class EventEditFragment extends Fragment {
             }
         });
 
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String imageToString(Bitmap imageBitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imageByte = byteArrayOutputStream.toByteArray();
+        String imageString;
+        imageString = Base64.getEncoder().encodeToString(imageByte);
+        return imageString;
     }
 }

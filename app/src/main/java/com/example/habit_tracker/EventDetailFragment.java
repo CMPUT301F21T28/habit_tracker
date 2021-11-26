@@ -102,10 +102,7 @@ public class EventDetailFragment extends Fragment {
             public void onClick(View view) {
                 String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f",locationLongitude,locationLatitude );
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                startActivity(intent);
-
-
-                                        }
+                startActivity(intent); }
         });}
 
         else{
@@ -113,10 +110,6 @@ public class EventDetailFragment extends Fragment {
             viewLocation.setVisibility(View.GONE);
 
         }
-
-
-
-
 
         edit = (Button)getView().findViewById(R.id.Edit);
         edit.setOnClickListener(new View.OnClickListener() {

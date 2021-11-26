@@ -77,14 +77,6 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        getView().findViewById(R.id.Nav_to_mainpage).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_loginFragment_to_mainPageFragment);
-//            }
-//        });
-        //View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_login, null);
         signInButton = (Button) getView().findViewById(R.id.Nav_to_mainpage);
         editTextUsername = (EditText) getView().findViewById(R.id.username);
         editTextPassword = (EditText) getView().findViewById(R.id.password);

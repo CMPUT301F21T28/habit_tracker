@@ -129,58 +129,6 @@ public class FriendListFragment extends Fragment {
         });
     }
 
-//    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-//        @Override
-//        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-//            return false;
-//        }
-//
-//        @Override
-//        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//            int position = viewHolder.getAdapterPosition();
-//            switch (direction) {
-//                case ItemTouchHelper.RIGHT:
-//                    deletedFriend = friendDataList.get(position);
-//                    // more information on array operations in firestore
-//                    // https://firebase.googleblog.com/2018/08/better-arrays-in-cloud-firestore.html
-//                    removeFriend(username, deletedFriend);
-//
-//                    // Undo the deletion
-//                    Snackbar.make(friendList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            addFriend(username, deletedFriend);
-//                        }
-//                    }).show();
-//                    break;
-//            }
-//        }
-//    };
-
-    public void removeRequest(String username, Friend targetFriend) {
-        DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.update("requests", FieldValue.arrayRemove(targetFriend));
-        updateFriendList(username);
-    }
-
-    public void addRequest(String username, Friend targetFriend) {
-        DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.update("requests", FieldValue.arrayUnion(targetFriend));
-        updateFriendList(username);
-    }
-
-    public void removeFriend(String username, Friend targetFriend) {
-        DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
-        updateFriendList(username);
-    }
-
-    public void addFriend(String username, Friend targetFriend) {
-        DocumentReference usersRef = db.collection("Users").document(username);
-        usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
-        updateFriendList(username);
-    }
-
     // get friends and friend requests from the user that is passed in
     public void updateFriendList(String username) {
         DocumentReference usersRef = db.collection("Users").document(username);

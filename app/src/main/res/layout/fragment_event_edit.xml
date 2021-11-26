@@ -2,9 +2,42 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/imageButtom"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventEditFragment">
+
+    <EditText
+        android:id="@+id/commentContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Comment"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:hint="Up to 20 characters"
+        android:maxLength="20"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline29"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:text="name"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline10"
+        app:layout_constraintVertical_bias="0.592" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -86,7 +119,7 @@
         app:layout_constraintVertical_bias="0.481" />
 
     <EditText
-        android:id="@+id/CommentContent"
+        android:id="@+id/nameContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Comment"
@@ -95,64 +128,65 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:hint="Up to 20 characters"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        android:maxLength="20"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
-<!--        TODO location-->
-<!--    <TextView-->
-<!--        android:id="@+id/Location"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentStart="true"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:text="Location:(Optional)"-->
-<!--        android:textSize="20dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/guideline4"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/guideline4" />-->
+    <!--        TODO location-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/Location"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentStart="true"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_alignParentEnd="true"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:text="Location:(Optional)"-->
+    <!--        android:textSize="20dp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/guideline4"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/guideline4" />-->
 
-<!--    <EditText-->
-<!--        android:id="@+id/LocationContent"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/Location"-->
-<!--        android:layout_alignParentStart="true"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:hint="Up to 20 characters"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/guideline6"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/guideline29"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/guideline4" />-->
+    <!--    <EditText-->
+    <!--        android:id="@+id/LocationContent"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_below="@+id/Location"-->
+    <!--        android:layout_alignParentStart="true"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_alignParentEnd="true"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:hint="Up to 20 characters"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/guideline6"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/guideline29"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/guideline4" />-->
 
-<!--        TODO image-->
-<!--    <TextView-->
-<!--        android:id="@+id/Picture"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentStart="true"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:text="Upload a Picture:(Optional)"-->
-<!--        android:textSize="20dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/guideline6"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/guideline6" />-->
+    <!--        TODO image-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/Picture"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentStart="true"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_alignParentEnd="true"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:text="Upload a Picture:(Optional)"-->
+    <!--        android:textSize="20dp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/guideline6"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/guideline6" />-->
 
-<!--    <ImageView-->
-<!--        android:id="@+id/PictureContent"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/Picture"-->
-<!--        />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/PictureContent"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_below="@+id/Picture"-->
+    <!--        />-->
 
     <Button
         android:id="@+id/Submit"
@@ -168,28 +202,38 @@
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
-<!--        TODO event name edit &#45;&#45; support in next version-->
-<!--    <TextView-->
-<!--        android:id="@+id/textView_eventName"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:text="Event Name"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/guideline10"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/guideline10" />-->
+    <ImageButton
+        android:id="@+id/editImageButton"
+        android:layout_width="135dp"
+        android:layout_height="128dp"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintBottom_toTopOf="@+id/Submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameContent" />
 
-<!--    <EditText-->
-<!--        android:id="@+id/editText_eventName"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:hint="Name"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/guideline2"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/guideline29"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/guideline10" />-->
+    <!--        TODO event name edit &#45;&#45; support in next version-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView_eventName"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:text="Event Name"-->
+    <!--        android:textSize="20sp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/guideline10"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/guideline10" />-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/editText_eventName"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:ems="10"-->
+    <!--        android:hint="Name"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/guideline2"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/guideline29"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/guideline10" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

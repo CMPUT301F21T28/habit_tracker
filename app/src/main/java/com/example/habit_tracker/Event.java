@@ -10,6 +10,7 @@ public class Event implements Parcelable, Info
     private String eventID;
     private String eventName;
     private String eventComment;
+    private String eventImage;
     //private String eventLocation;
 
     /**
@@ -22,12 +23,13 @@ public class Event implements Parcelable, Info
      */
 
     // TODO location, picture
-    Event(String username, String habitID, String eventID, String eventName, String eventComment) {
+    Event(String username, String habitID, String eventID, String eventName, String eventComment, String eventImage) {
         this.username = username;
         this.habitID = habitID;
         this.eventID = eventID;
         this.eventName = eventName;
         this.eventComment = eventComment;
+        this.eventImage = eventImage;
         //this.eventLocation = eventLocation;
     }
 
@@ -38,6 +40,7 @@ public class Event implements Parcelable, Info
         eventID = in.readString();
         eventName = in.readString();
         eventComment = in.readString();
+        eventImage = in.readString();
         //eventLocation = in.readString();
     }
 
@@ -59,13 +62,17 @@ public class Event implements Parcelable, Info
     void setEventComment(String Comment) {
         this.eventComment = Comment;
     }
+    void setEventImage(String imageString) { this.eventImage = imageString; }
     //void setEventLocation(String Location){ this.eventLocation = Location;}
+    @Override
+    public String getName() {return this.eventName;}
+    @Override
+    public String getComment() {return this.eventComment;}
 
     public String getUsername() {return this.username;}
     public String getHabitID() {return this.habitID;}
+    public String getEventImage() {return this.eventImage;}
     public String getEventID() {return this.eventID;}
-    public String getName() {return this.eventName;}
-    public String getComment() {return this.eventComment;}
     //String getEventLocation() {return this.eventLocation;}
 
     @Override
@@ -81,6 +88,7 @@ public class Event implements Parcelable, Info
         parcel.writeString(eventName);
         parcel.writeString(eventComment);
         //parcel.writeString(eventLocation);
+        parcel.writeString(eventImage);
     }
 }
 

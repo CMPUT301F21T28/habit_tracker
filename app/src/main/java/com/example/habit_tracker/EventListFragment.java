@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -24,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -157,9 +162,6 @@ public class EventListFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(eventList);
 
-        // prompt user how to interact
-        Toast.makeText(getActivity(), "Right Swipe to Delete", Toast.LENGTH_SHORT).show();
-
         return rootView;
     }
 
@@ -188,8 +190,9 @@ public class EventListFragment extends Fragment {
                     String eventID = doc.getId();
                     String eventName = (String) doc.getData().get("event name");
                     String eventComment = (String) doc.getData().get("event comment");
+                    String eventImage = (String) doc.getData().get("event image");
                     // TODO image & location
-                    eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment));
+                    eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment, eventImage));
                 }
                 eventAdapter.notifyDataSetChanged();
             }
@@ -257,8 +260,6 @@ public class EventListFragment extends Fragment {
                 bundle.putString("username", username);
                 bundle.putString("habitID", habitID);
 
-                Log.d(TAG, "onClick: habitID" + habitID);
-
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_eventListFragment_to_eventAddFragment,bundle);
             }
@@ -306,6 +307,14 @@ public class EventListFragment extends Fragment {
             }
         });*/
 
+        // For tooltip button
+        getView().findViewById(R.id.floatingActionButton_tooltip).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Swipe Right to Delete\nTap to View Details", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -319,27 +328,40 @@ public class EventListFragment extends Fragment {
             int position = viewHolder.getAdapterPosition();
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
-                    deletedEvent = (Event) eventDataList.get(position);
-                    collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
+
+                    // create a dialog to confirm delete of the habit
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    builder.setTitle("Confirm");
+                    builder.setMessage("Are you sure to delete this event?");
+
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Delete the event
+                            deletedEvent = eventDataList.get(position);
+                            collectionReference.document(deletedEvent.getEventID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    db.collection("Users").document(username).collection("HabitList").document(habitID).update("finish", FieldValue.increment(-1));
+                                }
+                            });
+                            dialog.dismiss();
                         }
                     });
 
-                    Snackbar.make(eventList, "Deleted", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
                         @Override
-                        public void onClick(View view) {
-                            HashMap<String, String> data = new HashMap<>();
-                            data.put("event name", deletedEvent.getName());
-                            data.put("event comment", deletedEvent.getComment());
-                            collectionReference.document(deletedEvent.getEventID()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do nothing
+                            recyclerAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            dialog.dismiss();
                         }
-                    }).show();
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
                     break;
             }
         }

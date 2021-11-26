@@ -2,6 +2,7 @@ package com.example.habit_tracker.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,15 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     ArrayList<Friend> friends;
     Context context;
+    String currentRealname;
+    String currentUsername;
     private static final String TAG = "MyActivity";
 
-    public FriendListAdapter(Context ctx, ArrayList<Friend> friends) {
+    public FriendListAdapter(Context ctx, ArrayList<Friend> friends, String currentUsername, String realname) {
         this.context = ctx;
         this.friends = friends;
+        this.currentRealname = realname;
+        this.currentUsername = currentUsername;
     }
 
     @NonNull
@@ -43,16 +48,17 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         holder.friendName.setText((friend.getActualName()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("Friend", friend);
+                bundle.putString("username", currentUsername);
+                bundle.putParcelable("friend", friend);
+                bundle.putString("realname", currentRealname);
 
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 NavController controller = Navigation.findNavController(view);
-                //TODO next fragment un-declare
-                controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
+
+                controller.navigate(R.id.action_friendListFragment_to_friendInfoFragment, bundle);
             }
         });
 
@@ -60,7 +66,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return 0;
+        return friends.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

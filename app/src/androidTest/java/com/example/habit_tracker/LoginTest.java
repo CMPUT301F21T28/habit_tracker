@@ -67,7 +67,7 @@ public class LoginTest {
     }
 
     @Test
-    public void NavFromSignup() {
+    public void NavFromSignupViaCancel() {
         solo.assertCurrentActivity("WrongActivity", MainActivity.class);
         assertNotNull(solo.getView(R.id.login_frag_linear_layout));
         solo.clickOnText("Sign Up");
@@ -75,6 +75,18 @@ public class LoginTest {
 
         // Click cancel and ensure that it goes back to login
         solo.clickOnText("Cancel");
+        assertNotNull(solo.getView(R.id.login_frag_linear_layout));
+    }
+
+    @Test
+    public void NavFromSignupViaNav() {
+        solo.assertCurrentActivity("WrongActivity", MainActivity.class);
+        assertNotNull(solo.getView(R.id.login_frag_linear_layout));
+        solo.clickOnText("Sign Up");
+        assertNotNull(solo.getView(R.id.signup_fragment_constraint_layout));
+
+        // Click cancel and ensure that it goes back to login
+        solo.clickOnActionBarHomeButton();
         assertNotNull(solo.getView(R.id.login_frag_linear_layout));
     }
 
@@ -128,7 +140,6 @@ public class LoginTest {
         solo.finishOpenedActivities();
         removeAccount("robotiumUser");
     }
-
 
     public void removeAccount(String username) {
         db.collection("Users").document(username)

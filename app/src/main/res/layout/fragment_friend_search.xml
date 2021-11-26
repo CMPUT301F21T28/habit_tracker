@@ -90,7 +90,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
-        tools:layout_editor_absoluteY="121dp" />
+        tools:layout_editor_absoluteY="121dp"
+        android:backgroundTint="@android:color/holo_blue_dark"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

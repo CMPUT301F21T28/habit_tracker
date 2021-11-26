@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -179,6 +180,7 @@ public class EventListFragment extends Fragment {
         });
 
         */
+
 
         //press add button to add
         FloatingActionButton add_event = getView().findViewById(R.id.floatingActionButtonAdd);

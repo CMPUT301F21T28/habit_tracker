@@ -50,7 +50,6 @@ public class HabitTest {
         solo.setDatePicker(0, 2012, 2, 16);
         solo.clickOnText("OK");
         solo.clickOnView(solo.getView(R.id.textView_select_day));
-        //solo.clickOnCheckBox(3);
         solo.clickInList(1);
         solo.clickOnText("OK");
         solo.clickOnView(solo.getView(R.id.radioYes));
@@ -237,7 +236,6 @@ public class HabitTest {
 
     }
 
-    //TODO: Delete Habit
 
     /**
      * Runs after all the tests

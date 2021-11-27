@@ -8,4 +8,5 @@ public interface Info {
     String getHabitID();
     String getName();
     String getComment();
+
 }

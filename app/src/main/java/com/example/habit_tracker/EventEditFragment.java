@@ -126,9 +126,10 @@ public class EventEditFragment extends Fragment {
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
         String imageString = event.getEventImage();
         if (imageString != null) {
-            byte[] bitmapArray;
-            bitmapArray = Base64.getDecoder().decode(imageString);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+            Bitmap bitmap = stringToBitmap(imageString);
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.getDecoder().decode(imageString);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
             imageButton.setImageBitmap(bitmap);
         }
 
@@ -269,10 +270,11 @@ public class EventEditFragment extends Fragment {
                     if (imageBitmap == originBitmap){
                         imageString = null;
                     }else {
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                        byte[] imageByte = byteArrayOutputStream.toByteArray();
-                        imageString = Base64.getEncoder().encodeToString(imageByte);
+                        imageString = imageToString(imageBitmap);
+//                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//                        byte[] imageByte = byteArrayOutputStream.toByteArray();
+//                        imageString = Base64.getEncoder().encodeToString(imageByte);
                     }
                     event.setEventImage(imageString);
                     data.put("event image", imageString);
@@ -396,5 +398,13 @@ public class EventEditFragment extends Fragment {
         String imageString;
         imageString = Base64.getEncoder().encodeToString(imageByte);
         return imageString;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Bitmap stringToBitmap(String imageString){
+        byte[] bitmapArray;
+        bitmapArray = Base64.getDecoder().decode(imageString);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        //imageView.setImageBitmap(bitmap);
+        return bitmap;
     }
 }

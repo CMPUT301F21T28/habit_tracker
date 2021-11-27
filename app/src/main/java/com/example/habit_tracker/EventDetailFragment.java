@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 
 import java.util.Base64;
@@ -94,9 +95,7 @@ public class EventDetailFragment extends Fragment {
 
         String imageString = event.getEventImage();
         if (imageString != null) {
-            byte[] bitmapArray;
-            bitmapArray = Base64.getDecoder().decode(imageString);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+            Bitmap bitmap = stringToBitmap(imageString);
             imageView.setImageBitmap(bitmap);
         }
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -155,6 +154,23 @@ public class EventDetailFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Bitmap stringToBitmap(String imageString){
+        byte[] bitmapArray;
+        bitmapArray = Base64.getDecoder().decode(imageString);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        //imageView.setImageBitmap(bitmap);
+        return bitmap;
+    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public String imageToString(Bitmap imageBitmap){
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//        byte[] imageByte = byteArrayOutputStream.toByteArray();
+//        String imageString;
+//        imageString = Base64.getEncoder().encodeToString(imageByte);
+//        return imageString;
+//    }
 }
 
 

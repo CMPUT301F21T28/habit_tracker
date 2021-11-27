@@ -74,10 +74,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SUBMIT"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintBottom_toTopOf="@+id/guideline232"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline8"
+        app:layout_constraintTop_toTopOf="@+id/guideline232"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
@@ -150,55 +150,112 @@
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
-    <EditText
-        android:id="@+id/editText_dateOfStarting2"
+    <TextView
+        android:id="@+id/textView_select_day2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="yyyy/mm/dd"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintEnd_toStartOf="@+id/guideline29"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline4" />
-
-    <EditText
-        android:id="@+id/editText_repeat2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="For Example: twice a week"
+        android:padding="11dp"
+        android:hint="Select Day"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+        app:layout_constraintTop_toTopOf="@+id/guideline6"
+        android:drawablePadding="16dp"
+        android:drawableEnd="@android:drawable/arrow_down_float"
+        android:background="@android:drawable/editbox_background"
+        />
 
     <TextView
         android:id="@+id/textView_isPrivate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Set the habit to be PRIVATE"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="PRIVATE?"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
         app:layout_constraintVertical_bias="0.6" />
 
+    <RadioGroup
+        android:id="@+id/radioGroup2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        tools:ignore="MissingConstraints">
+
+        <RadioButton
+            android:id="@+id/radioYes"
+            android:layout_width="117dp"
+            android:layout_height="match_parent"
+            android:text="Yes" />
+
+        <RadioButton
+            android:id="@+id/radioNo"
+            android:layout_width="117dp"
+            android:layout_height="match_parent"
+            android:text="No" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textDateStarting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:clickable="true"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline29"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline232"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Number of Times?"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
     <EditText
-        android:id="@+id/editText_isPrivate2"
+        android:id="@+id/editTextTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="Yes/No"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        android:inputType="time"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

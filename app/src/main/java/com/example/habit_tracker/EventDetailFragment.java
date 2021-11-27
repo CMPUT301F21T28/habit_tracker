@@ -2,10 +2,14 @@ package com.example.habit_tracker;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,9 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Locale;
+
+import java.util.Base64;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +43,7 @@ public class EventDetailFragment extends Fragment {
     /*private TextView picture;
     private ImageView Image;*/
     private Button edit;
+    private ImageView imageView;
     private Button viewLocation;
 
     @Override
@@ -43,6 +51,7 @@ public class EventDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     /**
      * Create view for EventDetailFragment
      * Extract necessities (e.g. username, instance of Habit class) from bundle, set TextViews to their corresponding values
@@ -66,7 +75,7 @@ public class EventDetailFragment extends Fragment {
         event = bundle.getParcelable("Event");
 
         eventName= rootView.findViewById(R.id.textView_detail_eventName_view);
-        commentContent = rootView.findViewById(R.id.CommentContent);
+        commentContent = rootView.findViewById(R.id.nameContent);
         /* TODO image & location
         location= rootView.findViewById(R.id.Location);
         locationContent = rootView.findViewById(R.id.LocationContent);
@@ -79,6 +88,25 @@ public class EventDetailFragment extends Fragment {
         locationLongitude = event.getLocationLongitude();
         locationLatitude = event.getLocationLatitude();
         //locationContent.setText(habitevent.getEventLocation());
+
+        imageView = rootView.findViewById(R.id.imageView);
+        //imageView.getDrawable().
+
+        String imageString = event.getEventImage();
+        if (imageString != null) {
+            byte[] bitmapArray;
+            bitmapArray = Base64.getDecoder().decode(imageString);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+            imageView.setImageBitmap(bitmap);
+        }
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        final CollectionReference collectionReference = db.collection("habit");
+//        DocumentReference documentReference = collectionReference.document(habitID)
+//                .collection("EventList").document(event.getEventID());
+        //documentReference;
+
+        //String eventID = event.getEventID();
+        //String imageString =
 
         return rootView;
 

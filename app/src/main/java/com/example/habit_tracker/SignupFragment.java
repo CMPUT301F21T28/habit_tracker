@@ -38,9 +38,14 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,6 +62,7 @@ public class SignupFragment extends DialogFragment {
     private EditText firstPassword;
     private EditText secondPassword;
     private FirebaseFirestore db;
+    private static final Random _random = new SecureRandom();
 
     public SignupFragment() {
         // Required empty public constructor
@@ -107,8 +113,6 @@ public class SignupFragment extends DialogFragment {
         returnToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_signupFragment_to_loginFragment);
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_signupFragment_to_loginFragment);
             }
@@ -172,8 +176,10 @@ public class SignupFragment extends DialogFragment {
 
                                 // **** hashing pw
                                 String hashedPw = null;
+                                String salt = Utility.getNextSalt();
                                 try {
-                                    hashedPw = toHexString(getSHA(firstPassword.getText().toString()));
+                                    // Salts password at the same time
+                                    hashedPw = toHexString(getSHA(firstPassword.getText().toString().concat(salt)));
                                 } catch (NoSuchAlgorithmException e) {
                                     // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
                                     e.printStackTrace();
@@ -184,6 +190,9 @@ public class SignupFragment extends DialogFragment {
                                 data.put("username", username.getText().toString());
                                 data.put("realname", realName.getText().toString());
                                 data.put("password", hashedPw);
+                                data.put("salt", salt);
+                                data.put("friends", Collections.emptyList()); // empty list since there are no friends on the acc yet
+                                data.put("requests", Collections.emptyList()); // empty list since there are no friend requests yet
                                 CollectionReference Users = db.collection("Users");
                                 Users.document(username.getText().toString()).set(data)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {

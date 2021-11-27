@@ -12,6 +12,7 @@ public class Event implements Parcelable, Info
     private String eventComment;
     private Double locationLongitude;
     private Double locationLatitude;
+    private String eventImage;
     //private String eventLocation;
 
     /**
@@ -24,7 +25,7 @@ public class Event implements Parcelable, Info
      */
 
     // TODO location, picture
-    Event(String username, String habitID, String eventID, String eventName, String eventComment, Double locationLongitude, Double locationLatitude) {
+    Event(String username, String habitID, String eventID, String eventName, String eventComment, String eventImage) {
         this.username = username;
         this.habitID = habitID;
         this.eventID = eventID;
@@ -32,6 +33,7 @@ public class Event implements Parcelable, Info
         this.eventComment = eventComment;
         this.locationLatitude = locationLongitude;
         this.locationLongitude = locationLatitude;
+        this.eventImage = eventImage;
         //this.eventLocation = eventLocation;
     }
 
@@ -44,7 +46,8 @@ public class Event implements Parcelable, Info
         eventComment = in.readString();
         locationLongitude = in.readDouble();
         locationLatitude = in.readDouble();
-
+        eventImage = in.readString();
+        //eventLocation = in.readString();
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -68,10 +71,14 @@ public class Event implements Parcelable, Info
     void setLocationLongitude(Double longitude){this.locationLongitude= longitude;}
     void setLocationLatitude(Double latitude){this.locationLatitude= latitude;}
 
+    void setEventImage(String imageString) { this.eventImage = imageString; }
     //void setEventLocation(String Location){ this.eventLocation = Location;}
+    @Override
+
 
     public String getUsername() {return this.username;}
     public String getHabitID() {return this.habitID;}
+    public String getEventImage() {return this.eventImage;}
     public String getEventID() {return this.eventID;}
     public String getName() {return this.eventName;}
     public String getComment() {return this.eventComment;}
@@ -94,6 +101,7 @@ public class Event implements Parcelable, Info
         parcel.writeDouble(locationLongitude);
         parcel.writeDouble(locationLatitude);
         //parcel.writeString(eventLocation);
+        parcel.writeString(eventImage);
     }
 }
 

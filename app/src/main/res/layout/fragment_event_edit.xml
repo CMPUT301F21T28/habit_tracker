@@ -202,16 +202,6 @@
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
-    <ImageButton
-        android:id="@+id/editImageButton"
-        android:layout_width="135dp"
-        android:layout_height="128dp"
-        android:src="@android:drawable/ic_menu_gallery"
-        app:layout_constraintBottom_toTopOf="@+id/Submit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameContent" />
-
     <!--        TODO event name edit &#45;&#45; support in next version-->
     <!--    <TextView-->
     <!--        android:id="@+id/textView_eventName"-->
@@ -244,6 +234,18 @@
 <!--        app:layout_constraintEnd_toStartOf="@+id/guideline29"-->
 <!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
 <!--        app:layout_constraintTop_toTopOf="@+id/guideline10" />-->
+    <ImageButton
+        android:id="@+id/editImageButton"
+        android:layout_width="135dp"
+        android:layout_height="128dp"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintBottom_toTopOf="@+id/Submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameContent"
+        app:layout_constraintVertical_bias="0.842" />
+
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"

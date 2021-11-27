@@ -228,7 +228,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.395" />
+        app:layout_constraintVertical_bias="0.408" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -237,8 +237,10 @@
         android:src="@android:drawable/ic_menu_gallery"
         app:layout_constraintBottom_toTopOf="@+id/Edit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameContent" />
+        app:layout_constraintTop_toBottomOf="@+id/nameContent"
+        app:layout_constraintVertical_bias="0.675" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

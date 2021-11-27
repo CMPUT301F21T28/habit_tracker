@@ -15,26 +15,26 @@ import java.util.Base64;
 import java.util.Random;
 
 public class Utility {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static Random _random = new SecureRandom();
 
-    public void removeRequest(String username, Friend targetFriend) {
+    public static void removeRequest(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("requests", FieldValue.arrayRemove(targetFriend));
     }
 
-    public void addRequest(String username, Friend targetFriend) {
+    public static void addRequest(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("requests", FieldValue.arrayUnion(targetFriend));
     }
 
 
-    public void removeFriend(String username, Friend targetFriend) {
+    public static void removeFriend(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
     }
 
-    public void addFriend(String username, Friend targetFriend) {
+    public static void addFriend(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
     }

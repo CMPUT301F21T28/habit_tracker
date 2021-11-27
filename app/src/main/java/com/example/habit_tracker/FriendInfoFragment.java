@@ -104,13 +104,13 @@ public class FriendInfoFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // remove them from the follow list
-                        firebaseUtils.removeFriend(currentUser, friend);
+                        Utility.removeFriend(currentUser, friend);
 
                         // give them undo option
                         Snackbar.make(habitList, "Unfriended " + friend.getUserName(), Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                firebaseUtils.addFriend(currentUser, friend);
+                                Utility.addFriend(currentUser, friend);
                             }
                         }).show();
 

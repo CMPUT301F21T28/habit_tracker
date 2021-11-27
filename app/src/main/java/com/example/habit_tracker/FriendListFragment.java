@@ -139,19 +139,28 @@ public class FriendListFragment extends Fragment {
                     requestDataList.clear();
                     // Getting the array of friends
                     ArrayList<Map> friends = (ArrayList<Map>) documentSnapshot.get("friends");
-                    for (Map<String, String> map : friends) {
-                        String username = map.get("userName");
-                        String realname = map.get("actualName");
-                        friendDataList.add(new Friend(username, realname));
+                    try {
+                        for (Map<String, String> map : friends) {
+                            String username = map.get("userName");
+                            String realname = map.get("actualName");
+                            friendDataList.add(new Friend(username, realname));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                     // Getting the array of requests
-                    ArrayList<Map> requests = (ArrayList<Map>) documentSnapshot.get("requests");
-                    for (Map<String, String> map : requests) {
-                        String username = map.get("userName");
-                        String realname = map.get("actualName");
-                        requestDataList.add(new Friend(username, realname));
+                    try {
+                        ArrayList<Map> requests = (ArrayList<Map>) documentSnapshot.get("requests");
+                        for (Map<String, String> map : requests) {
+                            String username = map.get("userName");
+                            String realname = map.get("actualName");
+                            requestDataList.add(new Friend(username, realname));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
 
                     // Update the adapaters
                     friendRecyclerAdapter.notifyDataSetChanged();

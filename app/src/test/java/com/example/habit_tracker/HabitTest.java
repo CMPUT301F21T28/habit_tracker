@@ -18,7 +18,7 @@ public class HabitTest {
      */
     @BeforeEach
     public void createHabit(){
-        mockHabit= new Habit("usernameMock","habitNameMock", "habitIDMock", "dateOfStartingMock", "reasonMock","repeatMock",false, 1);
+        mockHabit= new Habit("usernameMock","habitNameMock", "habitIDMock", "dateOfStartingMock", "reasonMock","repeatMock",false, 1, 4, 2);
     }
 
     /**

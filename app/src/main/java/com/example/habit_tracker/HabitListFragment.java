@@ -144,6 +144,7 @@ public class HabitListFragment extends Fragment {
                 }
                 recyclerAdapter.notifyDataSetChanged();
 
+                //get today's habit list.
                 todayHabitDataList.clear();
                 for (Habit habit: habitDataList){
                     String repeatString = habit.getRepeat();
@@ -187,6 +188,7 @@ public class HabitListFragment extends Fragment {
             }
         });
 
+        //Navigate to friend page if the friend button is clicked
         getView().findViewById(R.id.friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,6 +253,11 @@ public class HabitListFragment extends Fragment {
             return false;
         }
 
+        /**
+         * swipe right to delete, a dialog will pop up to ask the user to confirm
+         * @param viewHolder
+         * @param direction
+         */
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 

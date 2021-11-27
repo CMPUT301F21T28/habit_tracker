@@ -1,7 +1,5 @@
 package com.example.habit_tracker;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -11,44 +9,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.CollationElementIterator;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.UUID;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -62,7 +46,6 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
     private RadioGroup radioGroup;
     private EditText habitTitle;
     private EditText habitReason;
-    private EditText dateOfStarting;
     private TextView repeatDay;
     private TextView editTextDate;
     private TextView plan;
@@ -98,15 +81,16 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         // get the bundle passed from the previous fragment
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
-        if (bundle.containsKey("habitsSize")) {
-            Log.d(TAG, "onCreateView: yes");
-        }
+//        if (bundle.containsKey("habitsSize")) {
+//            Log.d(TAG, "onCreateView: yes");
+//        }
         habitsSize = bundle.getInt("habitsSize");
         return rootView;
 
     }
 
 //    /**
+//     * previous version
 //     * function to check if the string is in the form of yyyy/mm/dd
 //     * @param date
 //     * @return a boolean, true if the string is in yyyy/mm/dd, return false otherwise
@@ -170,14 +154,14 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                             dayList.add(i);
                             //Sort dayList
                             Collections.sort(dayList);
-                            System.out.println("add:" + i);
-                            System.out.println(dayList);
+                            //System.out.println("add:" + i);
+                            //System.out.println(dayList);
                         }else {
                             //When checkbox is unselected, remove position from the list
-                            System.out.println("unselect:" + i);
+                            //System.out.println("unselect:" + i);
                             dayList.remove(Integer.valueOf(i));
-                            System.out.println("Delete" + i);
-                            System.out.println(dayList);
+                            //System.out.println("Delete" + i);
+                            //System.out.println(dayList);
                         }
 
                     }
@@ -262,18 +246,8 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                final boolean[] isValid = {true};
-                if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
-                    isValid[0] = false;
-                    habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
-                    return;
-                }
-                // if the 
-                if (30 <= habitReason.getText().toString().length()) {
-                    isValid[0] = false;
-                    habitReason.setError("The reason should be less than 30 characters.");
-                    return;
-                }
+                boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,-1,30)
+                        && selectedDayString != null && isPrivate != null;
 
                 if (TextUtils.isEmpty(datePicked)) {
                     editTextDate.setError("Date cannot be empty.");
@@ -281,35 +255,57 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                 }
 
                 if (selectedDayString == null){
-                    isValid[0] = false;
                     repeatDay.setError("Please Select at least one day");
                     return;
                 }
 
                 if (isPrivate == null){
-                    isValid[0] = false;
                     Toast.makeText(getActivity(), "the isPrivate is set to null, please choose one", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                
+                boolean isTimesValid = true;
                 Integer times = 0;
                 if (plan.getText().toString().length() == 0) {
                     times = 28;
                 } else {
                     times = Integer.parseInt(plan.getText().toString());
-                    if (times > 1000) {
-                        isValid[0] = false;
-                        plan.setError("Please enter a times less or equal to 1000 times");
+                    if (times > 1000 || times <= 0) {
+                        isTimesValid = false;
+                        plan.setError("Please enter an positive Integer less or equal to 1000 times");
                         return;
                     }
                 }
+
+                if (inputValid == false && !isTimesValid){
+                    Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+//                final boolean[] isValid = {true};
+//                isValid[0] = checkInputValidity(habitTitle, 0, 20);
+//                isValid[0] = checkInputValidity(habitReason, -1, 30);
+//                if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
+//                    isValid[0] = false;
+//                    habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
+//                    return;
+//                }
+//
+//                if (30 <= habitReason.getText().toString().length()) {
+//                    isValid[0] = false;
+//                    habitReason.setError("The reason should be less than 30 characters.");
+//                    return;
+//                }
+//
+
+
 
                 HashMap<String, Object> data = new HashMap<>();
 
                 UUID uuid = UUID.randomUUID();
                 String uuidString = uuid.toString();
 
-                if (isValid[0]) {
+                if (inputValid && isTimesValid) {
                     data.put("title", habitTitle.getText().toString());
                     data.put("reason", habitReason.getText().toString());
                     data.put("repeat", selectedDayString);
@@ -347,13 +343,38 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
 
     }
 
-    public Boolean isTitleValid(String string) {
-        Boolean isValid = true;
-        if (0 >= string.length() || 20 <= string.length()) {
-            isValid = false;
-            habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
+//    public Boolean isTitleValid(String string) {
+//        Boolean isValid = true;
+//        if (0 >= string.length() || 20 <= string.length()) {
+//            isValid = false;
+//            habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
+//        }
+//        return isValid;
+//    }
+
+    /**
+     * Check if the input title, reason, date are valid
+     * @param editTextView, lower, upper
+     * @return A boolean specify if the input date is valid
+     */
+    public boolean checkInputValidity(EditText editTextView, int lower, int upper){
+        //isStringValid(editTextView.getText().toString(), lower, upper);
+        if (isStringValid(editTextView.getText().toString(), lower, upper) == false){
+            editTextView.setError("Not valid. Please ensure that it is between " +lower + " and "+ upper + " characters.");
+            return false;
         }
-        return isValid;
+        return true;
+    }
+
+    /**
+     * check if the length of the string is between lower and upper
+     * @param string
+     * @param lower
+     * @param upper
+     * @return
+     */
+    boolean isStringValid(String string, int lower, int upper) {
+        return (string.length() > lower && string.length() <= upper);
     }
 
     /* Create a DatePicker Dialog */
@@ -367,6 +388,13 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         datePickerDialog.show();
     }
 
+    /**
+     * set the date of starting as a string
+     * @param view
+     * @param year
+     * @param month
+     * @param dayOfMonth
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         month++;

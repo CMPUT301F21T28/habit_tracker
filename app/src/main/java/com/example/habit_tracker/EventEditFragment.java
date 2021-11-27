@@ -1,5 +1,9 @@
 package com.example.habit_tracker;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +20,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -30,10 +36,20 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
@@ -47,6 +63,7 @@ public class EventEditFragment extends Fragment {
     private EditText nameContent;
     private ImageButton imageButton;
     private FirebaseFirestore db;
+    FusedLocationProviderClient client;
 
     private String username;
     private String habitID;
@@ -94,10 +111,14 @@ public class EventEditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
+        final Double[] currentLongitude = {null};
+        final Double[] currentLatitude = {null};
 
         commentContent = (EditText)getView().findViewById(R.id.commentContent);
         //locationContent = (EditText)getView().findViewById(R.id.LocationContent);
         submit= (Button) getView().findViewById(R.id.Submit);
+        Button locationButton = view.findViewById(R.id.locationButton);
+        Button removeLocationButton = view.findViewById(R.id.removeLocationButton);
         imageButton = getView().findViewById(R.id.editImageButton);
         nameContent = getView().findViewById(R.id.nameContent);
         nameContent.setText(event.getName());
@@ -113,6 +134,15 @@ public class EventEditFragment extends Fragment {
 
 
         commentContent.setText(event.getComment());
+
+        if(event.getLocationLongitude() == null && event.getLocationLatitude() == null){
+            removeLocationButton.setVisibility(View.GONE);
+            locationButton.setVisibility(View.VISIBLE);
+        }
+        else{
+            locationButton.setVisibility(View.GONE);
+            removeLocationButton.setVisibility(View.VISIBLE);
+        }
 
         ActivityResultLauncher<Intent> activityResultLauncher;
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -177,6 +207,27 @@ public class EventEditFragment extends Fragment {
 
         CollectionReference collectionReference = db.collection("habit").document(habitID).collection("EventList");
 
+
+        /*collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                currentLongitude = event.getLocationLongitude()
+
+                if (currentLongitude[0] == null && currentLatitude[0] == null) {
+                    removeLocationButton.setVisibility(View.GONE);
+                    locationButton.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    locationButton.setVisibility(View.GONE);
+                    removeLocationButton.setVisibility(View.VISIBLE);
+                }
+
+
+            }
+        });*/
+
+
         submit.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -201,11 +252,13 @@ public class EventEditFragment extends Fragment {
 //                    return;
 //                }
 
-                HashMap<String, String> data = new HashMap<>();
+                HashMap<String, Object> data = new HashMap<>();
 
                 // isValid doesnt actually do anything... please check this -- darren
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
+                    data.put("Longitude", currentLongitude[0]);
+                    data.put("Latitude", currentLatitude[0]);
                     //data.put("Location", locationContent.getText().toString());
                     data.put("event name",nameContent.getText().toString());
 
@@ -246,6 +299,90 @@ public class EventEditFragment extends Fragment {
                                     Toast.makeText(getContext(), "Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
                                 }
                             });
+                }
+            }
+        });
+
+
+        removeLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("Longitude", FieldValue.delete());
+                data.put("Latitude", FieldValue.delete());
+                collectionReference
+                        .document(event.getEventID())
+                        .update(data)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                removeLocationButton.setVisibility(View.GONE);
+                                locationButton.setVisibility(View.VISIBLE);
+                                Toast.makeText(getContext(), "Success - Successfully delete it.", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Failure - Failed to delete it .", Toast.LENGTH_LONG).show();
+                            }
+                        });}
+
+            });
+
+
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
+                    client = LocationServices.getFusedLocationProviderClient(view.getContext());
+                    Task<Location> task = client.getLastLocation();
+                    task.addOnSuccessListener(new OnSuccessListener<Location>(){
+                        @Override
+                        public void onSuccess(Location location){
+                            HashMap<String,Object> data = new HashMap<>();
+                            if (location!= null){
+                                currentLongitude[0] =location.getLongitude();
+                                currentLatitude[0] = location.getLatitude();
+                                locationButton.setVisibility(View.GONE);
+                                removeLocationButton.setVisibility(View.VISIBLE);
+
+
+
+
+                            /*data.put("Longitude", location.getLongitude());
+                            data.put("Latitude", location.getLatitude());
+                            Log.d(TAG, "onClick: " + habitID);
+                            collectionReference.document(habitID).collection("EventList")
+                                    .document(event_name + String.valueOf(System.currentTimeMillis()))
+                                    .set(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(getContext(), "submit success", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getContext(), "submit fail", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });*/
+                            }
+
+                        }
+
+                    });}
+
+                else{
+                    ActivityCompat.requestPermissions((Activity) view.getContext(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44
+                    );
+
                 }
             }
         });

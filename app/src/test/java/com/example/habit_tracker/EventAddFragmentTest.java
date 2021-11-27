@@ -6,5 +6,9 @@ public class EventAddFragmentTest {
     public void createEventAdd(){
         EventAddFragment mockEventAdd = new EventAddFragment();
     }
+
+    public void testConvertImageToString() {
+
+    }
     // nothing to test currently, file present for future tests
 }

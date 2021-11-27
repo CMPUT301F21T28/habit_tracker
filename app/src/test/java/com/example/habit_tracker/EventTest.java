@@ -13,7 +13,10 @@ public class EventTest {
      */
     @BeforeEach
     public void createMockEvent(){
-        mockEvent = new Event("mockUsername", "mockHabitId", "mockEventId", "mockName", "mockComment",null);
+        Double locationLongitude = 0.0;
+        Double locationLatitude = 0.0;
+        mockEvent = new Event("mockUsername", "mockHabitId", "mockEventId",
+                "mockName", "mockComment", locationLongitude,locationLatitude,"mockImage");
     }
 
     /**
@@ -57,6 +60,30 @@ public class EventTest {
     }
 
     /**
+     * Testing the Image string getter of Event
+     */
+    @Test
+    public void getEventImageTest() {
+        assertEquals(mockEvent.getEventImage(), "mockImage");
+    }
+
+    /**
+     * Testing the location longitude getter of Event
+     */
+    @Test
+    public void getLocationLongitudeTest() {
+        assertEquals(mockEvent.getLocationLongitude(), java.util.Optional.of(0.0));
+    }
+
+    /**
+     * Testing the location latitude getter of Event
+     */
+    @Test
+    public void getLocationLatitudeTest() {
+        assertEquals(mockEvent.getLocationLatitude(), java.util.Optional.of(0.0));
+    }
+
+    /**
      * Testing the EventName setter for Event
      */
     @Test
@@ -76,6 +103,35 @@ public class EventTest {
         assertEquals(mockEvent.getComment(), "newMockComment");
     }
 
+    /**
+     * Testing the EventLongitude setter for Event
+     */
+    @Test
+    public void setLocationLongitudeTest() {
+        assertEquals(mockEvent.getLocationLongitude(), java.util.Optional.of(0.0));
+        mockEvent.setLocationLongitude(0.1);
+        assertEquals(mockEvent.getLocationLongitude(), java.util.Optional.of(0.1));
+    }
+
+    /**
+     * Testing the EventLocationLatitude setter for Event
+     */
+    @Test
+    public void setLocationLatitudeTest() {
+        assertEquals(mockEvent.getLocationLatitude(), java.util.Optional.of(0.0));
+        mockEvent.setLocationLatitude(0.1);
+        assertEquals(mockEvent.getLocationLatitude(), java.util.Optional.of(0.1));
+    }
+
+    /**
+     * Testing the EventImage setter for Event
+     */
+    @Test
+    public void setEventImageTest() {
+        assertEquals(mockEvent.getEventImage(), "mockImage");
+        mockEvent.setEventName("newMockImage");
+        assertEquals(mockEvent.getName(), "newMockImage");
+    }
 
         // Supposed to fail: (function stub)
         //    public int describeContents()

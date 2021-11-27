@@ -25,7 +25,7 @@ public class Event implements Parcelable, Info
      */
 
     // TODO location, picture
-    Event(String username, String habitID, String eventID, String eventName, String eventComment, String eventImage) {
+    Event(String username, String habitID, String eventID, String eventName, String eventComment,  Double locationLongitude,Double locationLatitude ,String eventImage) {
         this.username = username;
         this.habitID = habitID;
         this.eventID = eventID;

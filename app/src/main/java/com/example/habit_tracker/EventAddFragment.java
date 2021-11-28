@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -221,12 +222,13 @@ public class EventAddFragment extends Fragment {
                 Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
                 String imageString;
                 if (imageBitmap != originBitmap) {
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                    byte[] imageByte = byteArrayOutputStream.toByteArray();
-                    //String imageString = imageByte.toString();
-                    //imageString.
-                    imageString = Base64.getEncoder().encodeToString(imageByte);
+                    imageString = imageToString(imageBitmap);
+//                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//                    byte[] imageByte = byteArrayOutputStream.toByteArray();
+//                    //String imageString = imageByte.toString();
+//                    //imageString.
+//                    imageString = Base64.getEncoder().encodeToString(imageByte);
                 }else {
                     imageString = null;
                 }
@@ -338,15 +340,25 @@ public class EventAddFragment extends Fragment {
                 currentLatitude[0] = null ;
                 removeLocationButton.setVisibility(View.GONE);
                 locationButton.setVisibility(View.VISIBLE);
-
             }
-
-
         });
-
-
-
-
+        }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String imageToString(Bitmap imageBitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imageByte = byteArrayOutputStream.toByteArray();
+        String imageString;
+        imageString = Base64.getEncoder().encodeToString(imageByte);
+        return imageString;
     }
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public Bitmap stringToBitmap(String imageString){
+//        byte[] bitmapArray;
+//        bitmapArray = Base64.getDecoder().decode(imageString);
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+//        //imageView.setImageBitmap(bitmap);
+//        return bitmap;
+//    }
+}
 

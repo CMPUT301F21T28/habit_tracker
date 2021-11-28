@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_add_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventAddFragment">
@@ -105,8 +106,8 @@
         android:layout_below="@id/textView3"
         android:ems="10"
         android:hint="Name"
-        android:maxLength="19"
         android:inputType="textPersonName"
+        android:maxLength="19"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
@@ -115,13 +116,13 @@
 
     <EditText
         android:id="@+id/editTextComments"
-        android:maxLength="19"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/imageHint"
         android:ems="10"
         android:hint="Up to 20 Characters"
         android:inputType="textPersonName"
+        android:maxLength="19"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"

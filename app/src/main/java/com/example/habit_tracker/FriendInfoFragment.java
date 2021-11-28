@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.habit_tracker.adapters.HabitListAdapter;
 import com.example.habit_tracker.viewholders.TextProgressViewHolder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;

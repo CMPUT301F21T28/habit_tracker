@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,8 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.habit_tracker.adapters.EventListAdapter;
-import com.example.habit_tracker.adapters.GenericAdapter;
+import com.example.habit_tracker.viewholders.TextViewHolder;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,10 +48,8 @@ public class EventListFragment extends Fragment {
     String eventID = null;
 
     RecyclerView eventList;
-    EventListAdapter recyclerAdapter;
-
-    // maybe implement this as a seperate class?
     ArrayList<Event> eventDataList;
+    GenericAdapter<Event> eventAdapter;
 
     FirebaseFirestore db;
     CollectionReference collectionReference;
@@ -84,8 +82,32 @@ public class EventListFragment extends Fragment {
 
         eventDataList = new ArrayList<>();
         eventList = (RecyclerView) rootView.findViewById(R.id.event_list);
-        recyclerAdapter = new EventListAdapter(getActivity(), eventDataList);
-        eventList.setAdapter(recyclerAdapter);
+
+        eventAdapter = new GenericAdapter<Event>(getActivity(), eventDataList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                return new TextViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.general_list_row, parent, false));
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, Event val) {
+                ((TextViewHolder) holder).getTextView().setText(val.getName());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putString("habitID", val.getHabitID());
+                        bundle.putParcelable("Event", val);
+
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_eventListFragment_to_eventDetailFragment, bundle);
+                    }
+                });
+            }
+        };
+
+        eventList.setAdapter(eventAdapter);
         eventList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // initialize ItemTouchHelper for swipe function
@@ -98,16 +120,6 @@ public class EventListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        /*
-        //implement my thing here
-        event_list.add("event1");
-        //event_list.add("evwnt2");
-        ListView listView = view.findViewById(R.id.list_view);
-        ArrayAdapter listViewAdapter = new ArrayAdapter<String>(
-                getActivity(),android.R.layout.simple_list_item_1,event_list);
-        listView.setAdapter(listViewAdapter);
-        */
 
         //connecting to firebase
         db = FirebaseFirestore.getInstance();
@@ -126,7 +138,7 @@ public class EventListFragment extends Fragment {
                     // TODO image & location
                     eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment, longitude, latitude, eventImage));
                 }
-                recyclerAdapter.notifyDataSetChanged();
+                eventAdapter.notifyDataSetChanged();
             }
         });
 
@@ -197,48 +209,6 @@ public class EventListFragment extends Fragment {
             }
         });
 
-//        FloatingActionButton back = getView().findViewById(R.id.floatingActionButtonBack);
-//        add_event.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //move to habit list fragment
-//                Log.d(TAG, "onClick: wrong button");
-//                Bundle bundle = new Bundle();
-//                bundle.putString("username", username);
-//
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_eventListFragment_to_habitListFragment,bundle);
-//            }
-//        });
-
-        /*
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position,
-                                    long arg3) {
-                Bundle bundle = new Bundle();
-
-                bundle.putString("HabitID", "0NyZLjRumQo45JOmXish" );
-                bundle.putParcelable("EventList", habitevent);
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_addHabbitEventFragment_to_viewHabitEventFragment);
-
-
-                    }
-        });
-        */
-
-
-        /*listView.setOnItemClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                NavController controller = Navigation.findNavController(view);
-                controller.navigate(R.id.action_addHabbitEventFragment_to_viewHabitEventFragment);
-            }
-        });*/
-
         // For tooltip button
         getView().findViewById(R.id.floatingActionButton_tooltip).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,7 +257,7 @@ public class EventListFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Do nothing
-                            recyclerAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            eventAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
                             dialog.dismiss();
                         }
                     });
@@ -298,6 +268,5 @@ public class EventListFragment extends Fragment {
             }
         }
     };
-
 }
 

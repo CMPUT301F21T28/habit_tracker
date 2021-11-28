@@ -199,9 +199,6 @@ public class HabitTest {
 
     }
 
-
-
-
         /**
          * Runs before all the tests
          * Creates an account and leaves the user at the friendListFragment homepage.

@@ -75,30 +75,17 @@ public class FriendListFragment extends Fragment {
         username = bundle.getString("username");
         realname = bundle.getString("realname");
 
-        Log.d("FRIENDLISTFRAG", realname);
-
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
         friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList, username, realname);
         friendList.setAdapter(friendRecyclerAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        // ItemTouchHelper helps to define the swipe function
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
-//        itemTouchHelper.attachToRecyclerView(friendList);
-
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
         requestRecyclerAdapter = new FriendRequestAdapter(getActivity(), requestDataList, username, realname);
         requestList.setAdapter(requestRecyclerAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-//        requestList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                updateFriendList(username);
-//            }
-//        });
 
         updateFriendList(username);
 
@@ -111,10 +98,6 @@ public class FriendListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // TODO use 'addSnapshotListener' to pull data from db, use for loop to add data to habitDataList (an ArrayList<Habit>),
-        //  can look up how I implement in HabitListFragment.java
-        //  for both request and friend list !!! (TWO IN TOTAL, HAVE DIFFERENT ARRAY ADAPTER)
-
         add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,7 +106,6 @@ public class FriendListFragment extends Fragment {
                 bundle.putString("realname", realname);
 
                 NavController controller = Navigation.findNavController(view);
-                // TODO havent declare next fragment
                 controller.navigate(R.id.action_friendListFragment_to_friendSearchFragment, bundle);
             }
         });

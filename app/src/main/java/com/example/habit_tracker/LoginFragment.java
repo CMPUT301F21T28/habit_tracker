@@ -65,7 +65,9 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    // TODO: add on resume clear the password textbox
+    /**
+     * On Resume, clear the password that is still stored in the password edittext
+     */
     @Override
     public void onResume () {
         super.onResume();

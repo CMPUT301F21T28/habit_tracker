@@ -2,40 +2,52 @@ package com.example.habit_tracker;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.security.NoSuchAlgorithmException;
 
 class UtilityTest {
 
-
-    @BeforeEach
-    void setUp() {
-        // Create new test user in firestore db
-    }
-
-    @AfterEach
-    void tearDownTest() {
+    //TODO: Rest of these tests
+    @Test
+    void removeRequest() {
     }
 
     @Test
-    void removeRequestTest() {
+    void addRequest() {
     }
 
     @Test
-    void addRequestTest() {
+    void removeFriend() {
     }
 
     @Test
-    void removeFriendTest() {
+    void addFriend() {
     }
 
-    @Test
-    void addFriendTest() {
-    }
-
+    /**
+     * Testing if the salts that are generated are unique and not repeating
+     */
     @Test
     void getNextSaltTest() {
-        assertNotEquals(Utility.getNextSalt(), Utility.getNextSalt());
+        String prevSalt = Utility.getNextSalt();
+        String nextSalt = Utility.getNextSalt();
+
+        assertFalse(prevSalt.equals(nextSalt));
+    }
+
+    /**
+     * Testing if hashing functions compute correct hash
+     * @throws NoSuchAlgorithmException
+     *      Should never occur as long as SHA-256 is a thing
+     */
+    @Test
+    public void getSHAandHexToStringTest() throws NoSuchAlgorithmException {
+        String inputString = "hello world";
+        String correctHash = "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9";
+        String incorrectHash = "112e476505aab51b05aeb2246c02a11df03e1187e886f7c55d4e9935c290ade";
+
+        assertEquals(Utility.toHexString(Utility.getSHA(inputString)), correctHash);
+        assertNotEquals(Utility.toHexString(Utility.getSHA(inputString)), incorrectHash);
     }
 }

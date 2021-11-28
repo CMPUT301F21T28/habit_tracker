@@ -46,7 +46,6 @@ public class FriendInfoFragment extends Fragment {
 
     Integer plan = 0;
     Integer finish = 0;
-    // TODO initialize collectionReference
 
     public FriendInfoFragment() {
         // Required empty public constructor
@@ -137,8 +136,7 @@ public class FriendInfoFragment extends Fragment {
             }
         });
 
-        //  use 'addSnapshotListener' to pull data from db, use for loop to add data to habitDataList (an ArrayList<Habit>),
-        //  can look up how I implement in HabitListFragment.java
+        // for populating habit list of the other user
         collectionReference = db.collection("Users").document(friend.getUserName()).collection("HabitList");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

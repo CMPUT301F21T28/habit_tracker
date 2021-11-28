@@ -115,7 +115,7 @@ public class HabitListFragment extends Fragment {
                         bundle.putParcelable("Habit", val);
 
                         NavController controller = Navigation.findNavController(view);
-                        controller.navigate(R.id.action_habitListFragment_to_habitDetailFragment, bundle);
+                        controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
                     }
                 });
                 ((TextProgressViewHolder) holder).getProgressButton().setOnLongClickListener(new View.OnLongClickListener() {
@@ -126,7 +126,7 @@ public class HabitListFragment extends Fragment {
                         bundle.putParcelable("Habit", val);
 
                         NavController controller = Navigation.findNavController(view);
-                        controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
+                        controller.navigate(R.id.action_habitListFragment_to_eventAddFragment, bundle);
                         return false;
                     }
                 });

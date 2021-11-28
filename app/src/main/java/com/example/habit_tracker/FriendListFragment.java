@@ -134,7 +134,7 @@ public class FriendListFragment extends Fragment {
                 });
             }
         };
-        requestList.setAdapter(friendAdapter);
+        requestList.setAdapter(requestAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateFriendList(username);

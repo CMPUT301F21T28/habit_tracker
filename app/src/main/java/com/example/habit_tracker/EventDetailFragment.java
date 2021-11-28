@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -19,6 +21,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Locale;
+
 import java.util.Base64;
 
 /**
@@ -33,11 +38,14 @@ public class EventDetailFragment extends Fragment {
     private TextView eventName;
     private TextView commentContent;
     private TextView location;
+    private Double locationLongitude;
+    private Double locationLatitude;
     //private TextView locationContent;
     /*private TextView picture;
     private ImageView Image;*/
     private Button edit;
     private ImageView imageView;
+    private Button viewLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,8 @@ public class EventDetailFragment extends Fragment {
 
         eventName.setText(event.getName());
         commentContent.setText(event.getComment());
+        locationLongitude = event.getLocationLongitude();
+        locationLatitude = event.getLocationLatitude();
         //locationContent.setText(habitevent.getEventLocation());
 
         imageView = rootView.findViewById(R.id.imageView);
@@ -85,9 +95,7 @@ public class EventDetailFragment extends Fragment {
 
         String imageString = event.getEventImage();
         if (imageString != null) {
-            byte[] bitmapArray;
-            bitmapArray = Base64.getDecoder().decode(imageString);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+            Bitmap bitmap = stringToBitmap(imageString);
             imageView.setImageBitmap(bitmap);
         }
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -113,6 +121,23 @@ public class EventDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if(locationLatitude != null && locationLongitude!= null){
+
+        viewLocation=(Button) getView().findViewById(R.id.viewLocation);
+        viewLocation.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f",locationLongitude,locationLatitude );
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent); }
+        });}
+
+        else{
+            viewLocation=(Button) getView().findViewById(R.id.viewLocation);
+            viewLocation.setVisibility(View.GONE);
+
+        }
+
         edit = (Button)getView().findViewById(R.id.Edit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +154,23 @@ public class EventDetailFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Bitmap stringToBitmap(String imageString){
+        byte[] bitmapArray;
+        bitmapArray = Base64.getDecoder().decode(imageString);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        //imageView.setImageBitmap(bitmap);
+        return bitmap;
+    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public String imageToString(Bitmap imageBitmap){
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+//        byte[] imageByte = byteArrayOutputStream.toByteArray();
+//        String imageString;
+//        imageString = Base64.getEncoder().encodeToString(imageByte);
+//        return imageString;
+//    }
 }
 
 

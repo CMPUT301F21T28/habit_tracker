@@ -51,11 +51,13 @@ public class EventTest {
         // Add event detail
         solo.enterText((EditText) solo.getView(R.id.editTextName), "robotiumHabitEvent");
 
-        solo.clickOnButton("SUBMIT");
+        solo.clickOnView(solo.getView(R.id.submitButton));
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumHabitEvent"));
 
-        //TODO: Check progress bar in event list
+        //Back to habit list to check on progress bar
+        solo.clickOnActionBarHomeButton();
+        assertTrue(solo.waitForText("50%",1,5));
 
     }
 
@@ -73,7 +75,7 @@ public class EventTest {
         // Add event detail
         solo.enterText((EditText) solo.getView(R.id.editTextName), "robotiumHabitEvent");
 
-        solo.clickOnButton("SUBMIT");
+        solo.clickOnView(solo.getView(R.id.submitButton));
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumHabitEvent"));
 
@@ -139,7 +141,8 @@ public class EventTest {
         // Add event detail
         solo.enterText((EditText) solo.getView(R.id.editTextName), "robotiumHabitEvent");
 
-        solo.clickOnButton("SUBMIT");
+        //solo.clickOnButton("SUBMIT");
+        solo.clickOnView(solo.getView(R.id.submitButton));
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumHabitEvent"));
 
@@ -210,6 +213,8 @@ public class EventTest {
         solo.clickInList(1);
         solo.clickOnText("OK");
         solo.clickOnView(solo.getView(R.id.radioYes));
+        //solo.clickOnView(solo.getView(R.id.habit_times));
+        solo.enterText((EditText) solo.getView(R.id.habit_times), "2");
         solo.clickOnView(solo.getView(R.id.submit_button));
 
         // Check current page as habit list

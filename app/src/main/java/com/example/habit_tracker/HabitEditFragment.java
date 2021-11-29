@@ -146,7 +146,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         dateOfStarting.setText("Starts on " +datePicked);
         repeatDay.setText("Repeat on every " + habit.getRepeat());
         selectedDayString = habit.getRepeat();
-        times.setHint("Plan to complete " + habit.getPlan() + " events");
+        plan.setHint("Plan to complete " + habit.getPlan() + " events");
 
         if (habit.getIsPrivate() == true) {
             radioGroup.check(R.id.radioYes);
@@ -313,21 +313,6 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
             }
         });
 
-    }
-
-
-    /**
-     * Check if the input title, reason, date are valid
-     * @param editTextView, lower, upper
-     * @return A boolean specify if the input date is valid
-     */
-    public boolean checkInputValidity(EditText editTextView, int lower, int upper){
-        //isStringValid(editTextView.getText().toString(), lower, upper);
-        if (isStringValid(editTextView.getText().toString(), lower, upper) == false){
-            editTextView.setError("Not valid. Please ensure that it is between " +lower + " and "+ upper + " characters.");
-            return false;
-        }
-        return true;
     }
 
     /**

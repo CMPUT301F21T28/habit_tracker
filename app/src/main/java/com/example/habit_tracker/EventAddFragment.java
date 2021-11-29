@@ -64,7 +64,10 @@ public class EventAddFragment extends Fragment {
     FusedLocationProviderClient client;
 
     Bitmap originBitmap;
-    Boolean isFromHabitList= false;
+    Boolean isFromHabitList = false;
+
+    double currentLongitude;
+    double currentLatitude;
 
     public EventAddFragment() {
         // Required empty public constructor
@@ -76,11 +79,10 @@ public class EventAddFragment extends Fragment {
     }
 
 
-
-
     /**
      * Create view for EventDetailFragment
      * Extract necessities (e.g. username, instance of Habit class) from bundle, set TextViews to their corresponding values
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -108,13 +110,13 @@ public class EventAddFragment extends Fragment {
      * Initialize all other parts that could cause the fragment status change
      * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
      * Fragment change by navigation
+     *
      * @param view
      * @param savedInstanceState
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
 
         EditText editTextEventName = view.findViewById(R.id.editTextName);
@@ -130,15 +132,12 @@ public class EventAddFragment extends Fragment {
         Image image = null;
         ImageView imageView;
         final File[] file = new File[1];
-        final Double[] currentLongitude = {null};
-        final Double[] currentLatitude = {null};
-
 
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
         ActivityResultLauncher<Intent> activityResultLauncher;
         Bitmap bit = null;
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
-        Toast.makeText(getContext(),"long click image to delete",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "long click image to delete", Toast.LENGTH_SHORT).show();
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -195,7 +194,6 @@ public class EventAddFragment extends Fragment {
         });
 
 
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("habit");
 
@@ -214,18 +212,18 @@ public class EventAddFragment extends Fragment {
                 String imageString;
                 if (imageBitmap != originBitmap) {
                     imageString = imageToString(imageBitmap);
-                }else {
+                } else {
                     imageString = null;
                 }
 
 
                 HashMap<String, Object> data = new HashMap<>();
-                if (event_name.length() > 0 && event_commit.length() <= 20 ) {
+                if (event_name.length() > 0 && event_commit.length() <= 20) {
                     data.put("event name", event_name);
                     data.put("event comment", event_commit);
-                    data.put("Longitude", currentLongitude[0]);
-                    data.put("Latitude", currentLatitude[0]);
-                    data.put("event image",imageString);
+                    data.put("Longitude", currentLongitude);
+                    data.put("Latitude", currentLatitude);
+                    data.put("event image", imageString);
 
                     Log.d(TAG, "onClick: " + habitID);
                     String eventID = String.valueOf(System.currentTimeMillis()) + event_name;
@@ -270,33 +268,37 @@ public class EventAddFragment extends Fragment {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.d("*****INSIDELOCATION", "BOO");
                 if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
                         android.Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
+                    Log.d("*****INSIDELOCATION", "NOW");
                     client = LocationServices.getFusedLocationProviderClient(view.getContext());
                     Task<Location> task = client.getLastLocation();
-                    task.addOnSuccessListener(new OnSuccessListener<Location>(){
-                    @Override
-                    public void onSuccess(Location location){
-                        if (location!= null){
-                            currentLongitude[0] =location.getLongitude();
-                            currentLatitude[0] = location.getLatitude();
-                            locationButton.setVisibility(View.GONE);
-                            removeLocationButton.setVisibility(View.VISIBLE);
+                    Log.d("*****INSIDELOCATION", "HERE");
 
-
+                    task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            Log.d("*****INSIDELOCATION", "BEFORE IF STATEMENT ON SUCCESS");
+                            if (location != null) {
+                                Log.d("*****INSIDELOCATION", "START OF ON SUCCESS");
+                                currentLongitude = location.getLongitude();
+                                currentLatitude = location.getLatitude();
+                                locationButton.setVisibility(View.GONE);
+                                removeLocationButton.setVisibility(View.VISIBLE);
+                                Log.d("*****INSIDELOCATION", "END OF ON SUCCESS");
+                            } else {
+                                Log.d("*****INSIDELOCATION", "FAILED LOCATION != NULL");
+                            }
                         }
-
-                    }
-
-                });}
-
-                else{
+                    });
+                    Log.d("*****INSIDELOCATION", "OUTSIDE");
+                } else {
+                    Log.d("*****INSIDELOCATION", "ELSE STATEMENT");
                     ActivityCompat.requestPermissions((Activity) view.getContext(),
                             new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44
-                           );
+                    );
 
                 }
             }
@@ -305,15 +307,16 @@ public class EventAddFragment extends Fragment {
         removeLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentLongitude[0] = null;
-                currentLatitude[0] = null ;
+                currentLongitude = 0;
+                currentLatitude = 0;
                 removeLocationButton.setVisibility(View.GONE);
                 locationButton.setVisibility(View.VISIBLE);
             }
         });
-        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public String imageToString(Bitmap imageBitmap){
+    public String imageToString(Bitmap imageBitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();

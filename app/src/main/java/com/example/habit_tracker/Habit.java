@@ -67,18 +67,42 @@ public class Habit implements Parcelable, Info {
         }
     };
 
+    /**
+     * set when will the habit is going to repeat
+     * @param repeat a string says when the habit is going to repeat
+     */
     void setRepeat(String repeat) {
         this.repeat = repeat;
     }
+
+    /**
+     * set the reason why there is a such habit (optional comment)
+     * @param reason a string of reason
+     */
     void setReason(String reason) {
         this.reason = reason;
     }
+
+    /**
+     * set the date when the habit starts
+     * @param dateOfStarting teh start date of the habit
+     */
     void setDateOfStarting(String dateOfStarting){
         this.dateOfStarting = dateOfStarting;
     }
+
+    /**
+     * set if the habit is private
+     * @param isPrivate a boolean if the habit is private
+     */
     void setPrivate(Boolean isPrivate) {
         this.isPrivate = isPrivate;
     }
+
+    /**
+     * set if the habit title
+     * @param habitName a string of title
+     */
     void setHabitTitle(String habitName) {
         this.habitName = habitName;
     }

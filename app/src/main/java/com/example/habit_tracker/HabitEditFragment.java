@@ -125,11 +125,11 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                 switch (checkedId) {
                     case R.id.radioYes:
                         isPrivate = true;
-                        Toast.makeText(getActivity(), "Set the habit to private", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Followers cannot see this habit", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.radioNo:
                         isPrivate = false;
-                        Toast.makeText(getActivity(), "Set the habit to public", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Followers can see this habit", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -289,7 +289,6 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
 
                                     NavController controller = Navigation.findNavController(view);
                                     controller.navigate(R.id.action_habitEditFragment_to_habitListFragment, bundle);
-                                    //Toast.makeText(getContext(), "Success - Successfully added this habit to the database", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -298,7 +297,6 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
 
                                     NavController controller = Navigation.findNavController(view);
                                     controller.navigate(R.id.action_habitEditFragment_to_habitListFragment);
-                                    //Toast.makeText(getContext(), "Failure - Failed to insert into database.", Toast.LENGTH_LONG).show();
                                 }
                             });
                 }

@@ -97,7 +97,6 @@ public class HabitListFragment extends Fragment {
         todayHabitSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                //Toast.makeText(getContext(), "next", Toast.LENGTH_LONG).show();
                 if (b) {
                     habitList.setAdapter(todayRecyclerAdapter);
                     todayRecyclerAdapter.notifyDataSetChanged();
@@ -125,11 +124,10 @@ public class HabitListFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.tooltip_info_button:
-                Toast.makeText(getContext(), "Swipe Right to Delete\nShort Tap to View Details\nTap Progress to View Events", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Swipe Right to Delete\nShort Tap to View Details\nTap Progress to View Events\nLong Press to Create a New Event", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
 
     }
@@ -426,10 +424,8 @@ public class HabitListFragment extends Fragment {
                             collectionReference.document(selectedHabitID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Restored", Toast.LENGTH_SHORT).show();
                                 }
                             });
-
 
                             for (int i = position+1; i < habitDataList.size(); i++) {
                                 collectionReference.document(habitDataList.get(i).getHabitID()).update("order", i);

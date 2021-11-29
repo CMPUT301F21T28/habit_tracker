@@ -174,7 +174,6 @@ public class EventAddFragment extends Fragment {
         ActivityResultLauncher<Intent> activityResultLauncher;
         Bitmap bit = null;
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
-        Toast.makeText(getContext(), "long click image to delete", Toast.LENGTH_SHORT).show();
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -338,28 +337,6 @@ public class EventAddFragment extends Fragment {
                             currentLatitude = location.getLatitude();
                             locationButton.setVisibility(View.GONE);
                             removeLocationButton.setVisibility(View.VISIBLE);
-
-
-                            /*data.put("Longitude", location.getLongitude());
-                            data.put("Latitude", location.getLatitude());
-                            Log.d(TAG, "onClick: " + habitID);
-                            collectionReference.document(habitID).collection("EventList")
-                                    .document(event_name + String.valueOf(System.currentTimeMillis()))
-                                    .set(data)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Toast.makeText(getContext(), "submit success", Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getContext(), "submit fail", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });*/
-
-
                         }}
 
                 });}

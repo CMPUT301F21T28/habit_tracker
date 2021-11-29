@@ -24,7 +24,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.habit_tracker.viewholders.TextProgressViewHolder;
 import com.google.android.material.snackbar.Snackbar;

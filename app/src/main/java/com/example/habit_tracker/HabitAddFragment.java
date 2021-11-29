@@ -240,7 +240,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                 }
 
                 if (isPrivate == null){
-                    Toast.makeText(getActivity(), "the isPrivate is set to null, please choose one", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Can your followers see this habit?\nplease choose one", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

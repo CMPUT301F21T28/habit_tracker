@@ -291,7 +291,6 @@ public class EventEditFragment extends Fragment {
 
                                     NavController controller = Navigation.findNavController(view);
                                     controller.navigate(R.id.action_eventEditFragment_to_eventListFragment, bundle);
-                                    //Toast.makeText(getContext(), "Success - Successfully added this habitevent to the database", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

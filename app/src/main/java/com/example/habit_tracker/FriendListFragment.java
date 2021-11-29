@@ -156,7 +156,11 @@ public class FriendListFragment extends Fragment {
         });
     }
 
-    // get friends and friend requests from the user that is passed in
+    /**
+     * Update the friend list of the user
+     * @param username
+     * @return
+     */
     public void updateFriendList(String username) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {

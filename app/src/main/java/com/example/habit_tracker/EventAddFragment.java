@@ -64,6 +64,8 @@ public class EventAddFragment extends Fragment {
     String username = null;
     String habitID = null;
     FusedLocationProviderClient client;
+    Double currentLongitude = null;
+    Double currentLatitude = null;
 
     Bitmap originBitmap;
 
@@ -119,8 +121,6 @@ public class EventAddFragment extends Fragment {
         Image image = null;
         ImageView imageView;
         final File[] file = new File[1];
-        final Double[] currentLongitude = {null};
-        final Double[] currentLatitude = {null};
 
 
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
@@ -236,8 +236,8 @@ public class EventAddFragment extends Fragment {
                 if (event_name.length() > 0 && event_commit.length() <= 20 ) {
                     data.put("event name", event_name);
                     data.put("event comment", event_commit);
-                    data.put("Longitude", currentLongitude[0]);
-                    data.put("Latitude", currentLatitude[0]);
+                    data.put("Longitude", currentLongitude);
+                    data.put("Latitude", currentLatitude);
                     data.put("event image",imageString);
                     //data.put("event image",image);
                     //System.currentTimeMillis() return long
@@ -291,9 +291,9 @@ public class EventAddFragment extends Fragment {
                     task.addOnSuccessListener(new OnSuccessListener<Location>(){
                     @Override
                     public void onSuccess(Location location){
-                        if (location!= null){
-                            currentLongitude[0] =location.getLongitude();
-                            currentLatitude[0] = location.getLatitude();
+                        if (location!= null) {
+                            currentLongitude = location.getLongitude();
+                            currentLatitude = location.getLatitude();
                             locationButton.setVisibility(View.GONE);
                             removeLocationButton.setVisibility(View.VISIBLE);
 
@@ -316,9 +316,9 @@ public class EventAddFragment extends Fragment {
                                             Toast.makeText(getContext(), "submit fail", Toast.LENGTH_SHORT).show();
                                         }
                                     });*/
-                        }
 
-                    }
+
+                        }}
 
                 });}
 
@@ -334,8 +334,8 @@ public class EventAddFragment extends Fragment {
         removeLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentLongitude[0] = null;
-                currentLatitude[0] = null ;
+                currentLongitude = null;
+                currentLatitude = null ;
                 removeLocationButton.setVisibility(View.GONE);
                 locationButton.setVisibility(View.VISIBLE);
 

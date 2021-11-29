@@ -64,6 +64,8 @@ public class EventEditFragment extends Fragment {
     private ImageButton imageButton;
     private FirebaseFirestore db;
     FusedLocationProviderClient client;
+    Double currentLongitude = null;
+    Double currentLatitude = null;
 
     private String username;
     private String habitID;
@@ -111,8 +113,7 @@ public class EventEditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
-        final Double[] currentLongitude = {null};
-        final Double[] currentLatitude = {null};
+
 
         commentContent = (EditText)getView().findViewById(R.id.commentContent);
         //locationContent = (EditText)getView().findViewById(R.id.LocationContent);
@@ -257,8 +258,8 @@ public class EventEditFragment extends Fragment {
                 // isValid doesnt actually do anything... please check this -- darren
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
-                    data.put("Longitude", currentLongitude[0]);
-                    data.put("Latitude", currentLatitude[0]);
+                    data.put("Longitude", currentLongitude);
+                    data.put("Latitude", currentLatitude);
                     //data.put("Location", locationContent.getText().toString());
                     data.put("event name",nameContent.getText().toString());
 
@@ -346,8 +347,8 @@ public class EventEditFragment extends Fragment {
                         public void onSuccess(Location location){
                             HashMap<String,Object> data = new HashMap<>();
                             if (location!= null){
-                                currentLongitude[0] =location.getLongitude();
-                                currentLatitude[0] = location.getLatitude();
+                                currentLongitude =location.getLongitude();
+                                currentLatitude = location.getLatitude();
                                 locationButton.setVisibility(View.GONE);
                                 removeLocationButton.setVisibility(View.VISIBLE);
 

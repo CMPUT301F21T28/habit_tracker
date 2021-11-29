@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HabitAddFragmentTest {
-    // Test this function
-    //public static boolean checkDateValidity(final String date)
+    // checkInputValidity was not tested due to incompatibility with mockito
+
     private HabitAddFragment mockHabitAdd;
 
     @BeforeEach

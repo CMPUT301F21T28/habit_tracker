@@ -133,7 +133,7 @@ public class EventTest {
         assertEquals(mockEvent.getName(), "newMockImage");
     }
 
-        // Supposed to fail: (function stub)
+    // Supposed to fail: (function stub)
         //    public int describeContents()
 
         // Dont have to test because part of superclass

@@ -43,6 +43,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -286,7 +289,26 @@ public class EventAddFragment extends Fragment {
                         android.Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
+                    LocationRequest mLocationRequest = LocationRequest.create();
+                    mLocationRequest.setInterval(60000);
+                    mLocationRequest.setFastestInterval(5000);
+                    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    LocationCallback mLocationCallback = new LocationCallback() {
+                        @Override
+                        public void onLocationResult(LocationResult locationResult) {
+                            if (locationResult == null) {
+                                return;
+                            }
+                            for (Location location : locationResult.getLocations()) {
+                                if (location != null) {
+                                    //TODO: UI updates.
+                                }
+                            }
+                        }
+                    };
+                    LocationServices.getFusedLocationProviderClient(view.getContext()).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
                     client = LocationServices.getFusedLocationProviderClient(view.getContext());
+                    /*client.requestLocationUpdates(null, null);*/
                     Task<Location> task = client.getLastLocation();
                     task.addOnSuccessListener(new OnSuccessListener<Location>(){
                     @Override
@@ -344,9 +366,6 @@ public class EventAddFragment extends Fragment {
 
         });
 
-
-
-
     }
-    }
+}
 

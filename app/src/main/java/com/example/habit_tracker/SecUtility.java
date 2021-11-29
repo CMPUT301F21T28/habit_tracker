@@ -1,3 +1,9 @@
+/**
+ * A self-written library of security based functions, everything that is needed to generate secure
+ * hashed passwords.
+ * Is grouped together with the convertImageToString method as well for easier testing.
+ */
+
 package com.example.habit_tracker;
 
 import android.graphics.Bitmap;
@@ -18,7 +24,7 @@ public class SecUtility {
     public static Random _random = new SecureRandom();
     /**
      * Returns a random salt to be used to hash a password.
-     * Credit: https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string
+     * CREDIT: https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string
      * @return a 16 bytes random salt
      */
     public static String getNextSalt() {
@@ -29,7 +35,7 @@ public class SecUtility {
     }
 
     /**
-     * Hashing support function. SRC: https://www.geeksforgeeks.org/sha-256-hash-in-java/
+     * Hashing support function. CREDIT: https://www.geeksforgeeks.org/sha-256-hash-in-java/
      * @param input
      *      string to be hashed
      * @return
@@ -44,7 +50,7 @@ public class SecUtility {
     }
 
     /**
-     * Hashing support function. SRC: https://www.geeksforgeeks.org/sha-256-hash-in-java/
+     * Hashing support function. CREDIT: https://www.geeksforgeeks.org/sha-256-hash-in-java/
      * @param hash
      *      byte array input of something that is hashed in SHA256
      * @return
@@ -67,8 +73,12 @@ public class SecUtility {
         return hexString.toString();
     }
 
-
-    // TODO: Javadoc for this function
+    /**
+     * Converted an image to a string via bitmap using a stream.
+     * @param imageBitmap
+     *      Image bitmap that is to be converted into a string.
+     * @return
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String convertImageToString(Bitmap imageBitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

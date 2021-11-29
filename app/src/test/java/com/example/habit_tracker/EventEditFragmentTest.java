@@ -20,11 +20,15 @@ public class EventEditFragmentTest {
     // nothing to test currently.
 
     @Test
+
     public void testConvertStringToBitmap() {
+
 
         byte[] bitmapArray;
         bitmapArray = Base64.getDecoder().decode(mockImageString);
-        Bitmap image = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        BitmapFactory mockBitmapFactory = new BitmapFactory();
+        Bitmap image = mockBitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+
         //imageView.setImageBitmap(bitmap);
         assertEquals(image,mockEventEdit.stringToBitmap(mockImageString));
     }

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Friend class stores Friend related information pulled from db
+ * Friend class that represents a Friend object.
  */
 public class Friend implements Parcelable{
     private String userName;

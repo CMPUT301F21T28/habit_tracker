@@ -38,7 +38,6 @@ public class EventDetailFragment extends Fragment {
     private Event event;
     private TextView eventName;
     private TextView commentContent;
-    private TextView location;
     private Double locationLongitude;
     private Double locationLatitude;
     private Button edit;

@@ -158,7 +158,6 @@ public class EventAddFragment extends Fragment {
         TextView removeLocationButton = view.findViewById(R.id.removeLocationButton);
         removeLocationButton.setVisibility(View.GONE);
 
-        //String habit = getArguments().getString("habitId");//"0NyZLjRumQo45JOmXish";//getArguments().getString("habit");
 
         Image image = null;
         ImageView imageView;

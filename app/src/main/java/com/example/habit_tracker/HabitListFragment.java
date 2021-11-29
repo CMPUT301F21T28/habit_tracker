@@ -168,6 +168,7 @@ public class HabitListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("username", username);
                         bundle.putString("habitID", val.getHabitID());
+                        bundle.putString("from_habitListFragment", "From habit list!");
 
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_habitListFragment_to_eventAddFragment, bundle);
@@ -218,6 +219,7 @@ public class HabitListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("username", username);
                         bundle.putParcelable("Habit", val);
+                        bundle.putString("habitID", val.getHabitID());
 
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
@@ -333,14 +335,6 @@ public class HabitListFragment extends Fragment {
                         }
                     }
                 });
-            }
-        });
-
-        // For tooltip
-        getView().findViewById(R.id.tooltip_floatingactionbutton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Swipe Right to Delete\nShort Tap to View Details\nTap Progress to View Events", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -16,15 +16,17 @@ public class Event implements Parcelable, Info
     private Double locationLongitude;
     private Double locationLatitude;
     private String eventImage;
-    //private String eventLocation;
+
 
     /**
-     * Habit Class has 5 variables, each co-responding to either a field in Event or a reference (e.g. username)
+     * Habit Class has 7 variables, each co-responding to either a field in Event or a reference (e.g. username)
      * @param username
      * @param habitID
      * @param eventID
      * @param eventName
      * @param eventComment
+     * @param locationLatitude
+     * @param locationLongitude
      */
 
     Event(String username, String habitID, String eventID, String eventName, String eventComment,  Double locationLongitude,Double locationLatitude ,String eventImage) {
@@ -36,7 +38,7 @@ public class Event implements Parcelable, Info
         this.locationLatitude = locationLongitude;
         this.locationLongitude = locationLatitude;
         this.eventImage = eventImage;
-        //this.eventLocation = eventLocation;
+
     }
 
 
@@ -49,7 +51,7 @@ public class Event implements Parcelable, Info
         locationLongitude = in.readDouble();
         locationLatitude = in.readDouble();
         eventImage = in.readString();
-        //eventLocation = in.readString();
+
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -74,7 +76,6 @@ public class Event implements Parcelable, Info
     void setLocationLatitude(Double latitude){this.locationLatitude= latitude;}
 
     void setEventImage(String imageString) { this.eventImage = imageString; }
-    //void setEventLocation(String Location){ this.eventLocation = Location;}
     @Override
 
 
@@ -86,7 +87,7 @@ public class Event implements Parcelable, Info
     public String getComment() {return this.eventComment;}
     public Double getLocationLongitude() {return this.locationLongitude;}
     public Double getLocationLatitude() {return this.locationLatitude;}
-    //String getEventLocation() {return this.eventLocation;}
+
 
     @Override
     public int describeContents() {
@@ -100,9 +101,8 @@ public class Event implements Parcelable, Info
         parcel.writeString(eventID);
         parcel.writeString(eventName);
         parcel.writeString(eventComment);;
-        //parcel.writeDouble(locationLongitude);
-        //parcel.writeDouble(locationLatitude);
-        //parcel.writeString(eventLocation);
+        parcel.writeDouble(locationLongitude);
+        parcel.writeDouble(locationLatitude);
         parcel.writeString(eventImage);
     }
 }

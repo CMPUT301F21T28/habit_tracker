@@ -73,6 +73,8 @@ public class EventEditFragment extends Fragment {
     private TextView hasLocation;
     private TextView noLocation;
     FusedLocationProviderClient client;
+    Double currentLongitude = null;
+    Double currentLatitude = null;
 
     private String username;
     private String habitID;
@@ -149,6 +151,7 @@ public class EventEditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
+
 
         commentContent = (EditText)getView().findViewById(R.id.commentContent);
         submit= (FloatingActionButton) getView().findViewById(R.id.Submit);
@@ -256,8 +259,9 @@ public class EventEditFragment extends Fragment {
                 // isValid doesnt actually do anything... please check this -- darren
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
-                    //data.put("Longitude", currentLongitude[0]);
-                    //data.put("Latitude", currentLatitude[0]);
+                    data.put("Longitude", currentLongitude);
+                    data.put("Latitude", currentLatitude);
+                    //data.put("Location", locationContent.getText().toString());
                     data.put("event name",nameContent.getText().toString());
 
                     event.setEventComment(commentContent.getText().toString());
@@ -340,8 +344,8 @@ public class EventEditFragment extends Fragment {
                         public void onSuccess(Location location){
                             HashMap<String,Object> data = new HashMap<>();
                             if (location!= null){
-                                //currentLongitude[0] =location.getLongitude();
-                                //currentLatitude[0] = location.getLatitude();
+                                currentLongitude =location.getLongitude();
+                                currentLatitude = location.getLatitude();
                                 noLocation.setVisibility(View.GONE);
                                 hasLocation.setVisibility(View.VISIBLE);
                             }

@@ -1,0 +1,212 @@
+@startuml
+
+title __HABIT_TRACKER.APP's Class Diagram__\n
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.BuildConfig {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.Event {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.EventAddFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.EventDetailFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.EventEditFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.EventListFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.Friend {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.FriendInfoFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.FriendListFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.FriendSearchFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    abstract class com.example.habit_tracker.GenericAdapter {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.Habit {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.HabitAddFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.HabitDetailFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.HabitEditFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.HabitListFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    interface com.example.habit_tracker.Info {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.LoginFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.MainActivity {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.SecUtility {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.SignupFragment {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.Utility {
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    namespace viewholders {
+      class com.example.habit_tracker.viewholders.TextGrantViewHolder {
+      }
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    namespace viewholders {
+      class com.example.habit_tracker.viewholders.TextProgressViewHolder {
+      }
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    namespace viewholders {
+      class com.example.habit_tracker.viewholders.TextSearchViewHolder {
+      }
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    namespace viewholders {
+      class com.example.habit_tracker.viewholders.TextViewHolder {
+      }
+    }
+  }
+  
+
+  com.example.habit_tracker.Event .up.|> android.os.Parcelable
+  com.example.habit_tracker.Event .up.|> com.example.habit_tracker.Info
+  com.example.habit_tracker.EventAddFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.EventDetailFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.EventDetailFragment o-- com.example.habit_tracker.Event : event
+  com.example.habit_tracker.EventEditFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.EventEditFragment o-- com.example.habit_tracker.Event : event
+  com.example.habit_tracker.EventListFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.EventListFragment o-- com.example.habit_tracker.Event : deletedEvent
+  com.example.habit_tracker.EventListFragment o-- com.example.habit_tracker.Event : event
+  com.example.habit_tracker.EventListFragment o-- com.example.habit_tracker.Habit : habit
+  com.example.habit_tracker.Friend .up.|> android.os.Parcelable
+  com.example.habit_tracker.FriendInfoFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.FriendInfoFragment o-- com.example.habit_tracker.Friend : friend
+  com.example.habit_tracker.FriendListFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.FriendSearchFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.GenericAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.example.habit_tracker.Habit .up.|> android.os.Parcelable
+  com.example.habit_tracker.Habit .up.|> com.example.habit_tracker.Info
+  com.example.habit_tracker.HabitAddFragment .up.|> android.app.DatePickerDialog.OnDateSetListener
+  com.example.habit_tracker.HabitAddFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.HabitDetailFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.HabitDetailFragment o-- com.example.habit_tracker.Habit : habit
+  com.example.habit_tracker.HabitEditFragment .up.|> android.app.DatePickerDialog.OnDateSetListener
+  com.example.habit_tracker.HabitEditFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.HabitEditFragment o-- com.example.habit_tracker.Habit : habit
+  com.example.habit_tracker.HabitListFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.LoginFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.habit_tracker.SignupFragment -up-|> androidx.fragment.app.DialogFragment
+  com.example.habit_tracker.viewholders.TextGrantViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.example.habit_tracker.viewholders.TextProgressViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.example.habit_tracker.viewholders.TextSearchViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.example.habit_tracker.viewholders.TextViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

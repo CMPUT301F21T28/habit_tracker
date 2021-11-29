@@ -385,6 +385,15 @@ public class EventEditFragment extends Fragment {
         });
     }
 
+    public Boolean goodString(String string){
+        if (string.length() > 0 && string.length() < 20){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
     // class function to help with the image translation
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String imageToString(Bitmap imageBitmap){

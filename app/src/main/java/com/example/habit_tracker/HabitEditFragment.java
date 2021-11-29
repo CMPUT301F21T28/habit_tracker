@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -40,7 +41,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
-    private Button submitButton;
+    private FloatingActionButton submitButton;
     private EditText habitTitle;
     private EditText habitReason;
     private TextView dateOfStarting;
@@ -88,29 +89,6 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         habitOrder = habit.getOrder();
         return rootView;
     }
-
-//    /**
-//     * Check if the input date is valid
-//     * @param date
-//     * @return A boolean specify if the input date is valid
-//     */
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    public static boolean checkDateValidity(final String date) {
-//        boolean valid = false;
-//        try {
-//
-//            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
-//            LocalDate.parse(date,
-//                    DateTimeFormatter.ofPattern("uuuu/MM/dd")
-//                            .withResolverStyle(ResolverStyle.STRICT)
-//            );
-//            valid = true;
-//        } catch (DateTimeParseException e) {
-//            e.printStackTrace();
-//            valid = false;
-//        }
-//        return valid;
-//    }
 
     /**
      * Check if the input title, reason, date are valid
@@ -160,15 +138,15 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
             }
         });
 
-        submitButton = (Button) getView().findViewById(R.id.button_submit);
+        submitButton = (FloatingActionButton) getView().findViewById(R.id.button_submit);
 
         habitTitle.setText(habit.getName());
         habitReason.setText(habit.getComment());
         datePicked = habit.getDateOfStarting();
-        dateOfStarting.setText(datePicked + " (tap to edit)");
-        repeatDay.setText(habit.getRepeat());
+        dateOfStarting.setText("Starts on " +datePicked);
+        repeatDay.setText("Repeat on every " + habit.getRepeat());
         selectedDayString = habit.getRepeat();
-        times.setHint(habit.getPlan() + "times (tap to change)");
+        times.setHint("Plan to complete " + habit.getPlan() + " events");
 
         if (habit.getIsPrivate() == true) {
             radioGroup.check(R.id.radioYes);

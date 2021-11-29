@@ -22,25 +22,47 @@
 
             <Button
                 android:id="@+id/button_request"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:fontFamily="@font/raleway_medium_italic"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
                 android:text="Request"
+                android:textAllCaps="false"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:layout_editor_absoluteX="294dp" />
+                app:layout_constraintStart_toStartOf="@+id/guideline90"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/friend_name_search"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway"
                 android:text="TextView"
+                android:textSize="@dimen/recyclerView_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button_request"
+                app:layout_constraintEnd_toStartOf="@+id/guideline99"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.517" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline90"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.76" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline99"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.74" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

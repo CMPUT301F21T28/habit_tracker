@@ -24,29 +24,72 @@
                 android:id="@+id/friend_name_grant"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway"
                 android:text="TextView"
+                android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/request_accept_button"
+                app:layout_constraintEnd_toStartOf="@+id/guideline90"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.551" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline90"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.54" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.56" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.77" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.79" />
 
             <Button
                 android:id="@+id/request_deny_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:fontFamily="@font/raleway_italic"
+                android:minHeight="0dp"
                 android:text="Deny"
+                android:textAllCaps="false"
+                android:textSize="@dimen/button_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/request_accept_button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:fontFamily="@font/raleway_italic"
+                android:minHeight="0dp"
                 android:text="Accept"
+                android:textAllCaps="false"
+                android:textSize="@dimen/button_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/request_deny_button"
+                app:layout_constraintEnd_toStartOf="@+id/guideline0"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

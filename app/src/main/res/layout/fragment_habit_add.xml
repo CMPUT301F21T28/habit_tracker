@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.12" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.9" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline33"
@@ -46,111 +46,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.44" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.28" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.36" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.04" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.10" />
+        app:layout_constraintGuide_percent="0.03" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.90" />
+        app:layout_constraintGuide_percent="0.97" />
 
-
-    <Button
-        android:id="@+id/submit_button"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SUBMIT"
-        app:layout_constraintBottom_toTopOf="@+id/guideline232"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline232"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <TextView
-        android:id="@+id/textView_habitTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/StringHabitTitle"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline10"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline10" />
-
-    <TextView
-        android:id="@+id/textView_habitReason"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/StringHabitReason"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
-
-    <TextView
-        android:id="@+id/textView_dateOfStarting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/StringDatOofStarting"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline4" />
-
-    <TextView
-        android:id="@+id/textView_Repeat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/StringRepeat"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.82" />
 
 
     <EditText
         android:id="@+id/editText_habitTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="Up to 20 characters"
+        android:fontFamily="@font/damion"
+        android:hint="Everything starts with a title"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        android:textColor="@color/add_button"
+        android:textColorHint="@color/add_button"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
@@ -158,10 +111,13 @@
         android:id="@+id/editText_habitReason"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="Up to 30 characters"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        android:fontFamily="@font/raleway_italic"
+        android:hint="Give your habit an optional reason"
+        android:textColor="@color/add_button"
+        android:textColorHint="@color/add_button"
+        android:textSize="@dimen/editText_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
@@ -170,16 +126,17 @@
         android:id="@+id/textView_select_day"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:background="@android:drawable/editbox_background"
         android:drawableEnd="@android:drawable/arrow_down_float"
         android:drawablePadding="16dp"
         android:ems="10"
-        android:hint="Select Day"
+        android:fontFamily="@font/raleway_italic"
+        android:hint="Do it on which day?"
         android:padding="11dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        android:textColor="@color/add_button"
+        android:textColorHint="@color/add_button"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
@@ -187,14 +144,15 @@
         android:id="@+id/textView_isPrivate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        android:text="PRIVATE?"
-        android:textSize="20sp"
+        android:fontFamily="@font/raleway"
+        android:text="Followers"
+        android:textColor="@color/add_button"
+        android:textSize="@dimen/editText_text_size"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline3"
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -202,24 +160,36 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@+id/textView_isPrivate"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
         tools:ignore="MissingConstraints">
 
         <RadioButton
             android:id="@+id/radioYes"
-            android:layout_width="117dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Yes" />
+            android:fontFamily="@font/raleway_italic"
+            android:maxHeight="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="cannot"
+            android:textColor="@color/add_button"
+            android:textSize="@dimen/editText_text_size" />
 
         <RadioButton
             android:id="@+id/radioNo"
-            android:layout_width="117dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="No" />
+            android:fontFamily="@font/raleway_italic"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="can"
+            android:textColor="@color/add_button"
+            android:textSize="@dimen/editText_text_size" />
 
     </RadioGroup>
 
@@ -227,68 +197,59 @@
         android:id="@+id/textDatePicker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="4dp"
         android:clickable="true"
-        android:hint="Type to pick a date"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        android:fontFamily="@font/raleway_italic"
+        android:hint="It starts on..."
+        android:textColor="@color/add_button"
+        android:textColorHint="@color/add_button"
+        android:textSize="@dimen/editText_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline4" />
-
-    <TextView
-        android:id="@+id/textView_times"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Completion Times?"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="i.e. your friends cannot see your private habits"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline29"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/raleway"
+        android:text="see this habit"
+        android:textColor="@color/add_button"
+        android:textSize="@dimen/editText_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@+id/radioGroup"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="research suggest a habit takes 28 times to form"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline29"
-        app:layout_constraintTop_toTopOf="@+id/guideline5" />
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="each habit event count as a successful completion"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline29"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <EditText
         android:id="@+id/habit_times"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:ems="10"
-        android:hint="Default is 28, max 1000 times"
+        android:fontFamily="@font/raleway_italic"
+        android:hint="Plan to complete how many events (default is 28)"
         android:inputType="number"
+        android:textColor="@color/add_button"
+        android:textColorHint="@color/add_button"
+        android:textSize="@dimen/editText_text_size"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/ic_baseline_check_24"
+        app:backgroundTint="@color/friends"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toTopOf="@+id/guideline232" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

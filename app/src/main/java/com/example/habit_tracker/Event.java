@@ -64,35 +64,98 @@ public class Event implements Parcelable, Info
         }
     };
 
+    /**
+     * set the event name
+     * @param eventName the event name
+     */
     void setEventName(String eventName) {
         this.eventName = eventName;
     }
-    void setEventComment(String Comment) {
-        this.eventComment = Comment;
-    }
+
+    /**
+     * set the comment of the event if the user write one
+     * @param Comment the comment
+     */
+    void setEventComment(String Comment) { this.eventComment = Comment; }
+
+    /**
+     * set the longitude of the location of the user
+     * @param longitude the double of longitude
+     */
     void setLocationLongitude(Double longitude){this.locationLongitude= longitude;}
+
+    /**
+     * set the latitude of the location of the user
+     * @param latitude the double of latitude
+     */
     void setLocationLatitude(Double latitude){this.locationLatitude= latitude;}
 
+    /**
+     * set the image as a string, if the
+     * @param imageString the image string
+     */
     void setEventImage(String imageString) { this.eventImage = imageString; }
-    //void setEventLocation(String Location){ this.eventLocation = Location;}
+
+
+    /**
+     * get the username of the user
+     * @return string Username
+     */
     @Override
-
-
     public String getUsername() {return this.username;}
+
+    /**
+     * get the habitID of the specific habit
+     * @return string of habitID
+     */
     public String getHabitID() {return this.habitID;}
+
+    /**
+     * get the optional event image
+     * @return string of event image, will be converted to a image
+     */
     public String getEventImage() {return this.eventImage;}
+
+    /**
+     * get the id of the selected event
+     * @return string of the event id
+     */
     public String getEventID() {return this.eventID;}
+
+    /**
+     * get the name of the selected event
+     * @return string of event name
+     */
     public String getName() {return this.eventName;}
+
+    /**
+     * get the optional comment
+     * @return string of optional comment
+     */
     public String getComment() {return this.eventComment;}
+
+    /**
+     * get the longitude of the location if the user set one
+     * @return double of the location (longitude)
+     */
     public Double getLocationLongitude() {return this.locationLongitude;}
+
+    /**
+     * get the latitude of the location if the user set one
+     * @return double of the location (latitude)
+     */
     public Double getLocationLatitude() {return this.locationLatitude;}
-    //String getEventLocation() {return this.eventLocation;}
 
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * the necessary function to make event parcelable
+     * @param parcel
+     * @param i
+     */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(username);

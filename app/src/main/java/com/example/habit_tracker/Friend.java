@@ -32,7 +32,16 @@ public class Friend implements Parcelable{
         }
     };
 
+    /**
+     * get user's name
+     * @return String, username
+     */
     public String getUserName() {return this.userName;}
+
+    /**
+     * get actual name/real name of a user
+     * @return String, user's actual name
+     */
     public String getActualName() {return this.actualName;}
 
 

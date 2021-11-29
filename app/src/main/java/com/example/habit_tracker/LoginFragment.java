@@ -35,8 +35,7 @@ import java.security.NoSuchAlgorithmException;
 import io.grpc.okhttp.internal.Util;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * LoginFragment creates a fragment for user to login the app
  */
 public class LoginFragment extends Fragment {
     private Button signInButton;
@@ -71,7 +70,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onResume () {
         super.onResume();
-
         editTextPassword.setText("");
     }
 
@@ -103,6 +101,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        // handle the signin button
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,6 +168,13 @@ public class LoginFragment extends Fragment {
 
     }
 
+    /**
+     * class function to test if a password is valid
+     * @param inputPassword password input by user
+     * @param dbPassword password retrieve from db
+     * @param salt a salted string to secure the password
+     * @return
+     */
     public boolean validPassword(String inputPassword, String dbPassword, String salt){
         // Salt the PW
         String saltedPw = inputPassword.concat(salt);

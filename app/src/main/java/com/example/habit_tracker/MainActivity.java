@@ -14,6 +14,12 @@ import android.view.MenuItem;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * MainActivity is the start of the programme
+ * The programme adopts the single activity, multiple fragment practice
+ * That's why MainActivity is the only activity the programme has
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
@@ -23,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
     NavController navController;
 
+    /**
+     * Creates the activity, and assign the navigation to the activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +42,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Create the app bar for the programme, gives each fragment a chance to redesign
+     * @param menu the app bar
+     * @return a boolean for telling if the app bar created successfully
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.general, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Inflate the back button, applies to all fragment
+     * @return a boolean for telling if the back button created successfully
+     */
     @Override
     public boolean onSupportNavigateUp() {
         navController.navigateUp();

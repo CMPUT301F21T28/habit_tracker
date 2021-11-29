@@ -48,9 +48,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link SignupFragment} factory method to
- * create an instance of this fragment.
+ * SignupFragment creates a fragment for user to sign up a new account
  */
 public class SignupFragment extends DialogFragment {
 

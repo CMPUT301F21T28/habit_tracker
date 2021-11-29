@@ -28,6 +28,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * FriendListFragment creates a fragment showing all friend you have followed
+ * If there is a new friend want to follow you, their request will show
+ */
+
 public class FriendListFragment extends Fragment {
 
     RecyclerView friendList;
@@ -90,7 +95,6 @@ public class FriendListFragment extends Fragment {
         };
         friendList.setAdapter(friendAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         friendList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
 
         requestDataList = new ArrayList<>();
@@ -113,11 +117,18 @@ public class FriendListFragment extends Fragment {
                         friendAdapter.notifyDataSetChanged();
                     }
                 });
+                ((TextGrantViewHolder) holder).getDeny().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        firebaseUtils.removeRequest(username, val);
+                        friendDataList.remove(val);
+                        friendAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         };
         requestList.setAdapter(requestAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         requestList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
 
         updateFriendList(username);
@@ -131,6 +142,7 @@ public class FriendListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // handle add friend button
         add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

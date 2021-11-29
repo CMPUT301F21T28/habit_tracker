@@ -9,6 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habit_tracker.R;
 
+/**
+ *  TextGrantViewHolder creates a viewHolder to display a single recyclerView row
+ *  It provides a user's name, an accept button and a deny button
+ */
+
 public class TextGrantViewHolder extends RecyclerView.ViewHolder{
     private final TextView friendName;
     private final Button accept;

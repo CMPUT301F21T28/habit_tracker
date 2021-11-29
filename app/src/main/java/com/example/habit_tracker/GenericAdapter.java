@@ -9,6 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * This is a generic adapter for recyclerView
+ * Every recyclerView needs its own adapter, the project got a number of recyclerView, that's why the generic adapter is here
+ * @param <T> the class type
+ */
+
 public abstract class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;

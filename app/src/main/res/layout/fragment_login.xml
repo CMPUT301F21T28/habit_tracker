@@ -21,6 +21,7 @@
         android:layout_marginBottom="10pt"
         android:fontFamily="@font/damion"
         android:text="Habit Tracker"
+        android:textColor="@color/add_button"
         android:textSize="34sp"
         android:textStyle="bold" />
 
@@ -82,8 +83,10 @@
         android:layout_marginTop="10pt"
         android:layout_marginRight="10pt"
         android:backgroundTint="@color/friends"
-        android:fontFamily="@font/raleway"
-        android:text="LOG IN" />
+        android:fontFamily="@font/raleway_italic"
+        android:minHeight="0dp"
+        android:text="Log in"
+        android:textAllCaps="false" />
 
     <TextView
         android:id="@+id/Nav_to_signup"

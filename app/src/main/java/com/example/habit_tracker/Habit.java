@@ -3,6 +3,10 @@ package com.example.habit_tracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Habit class stores Habit related information pulled from db
+ */
+
 public class Habit implements Parcelable, Info {
     private String userName;
     private String habitName;

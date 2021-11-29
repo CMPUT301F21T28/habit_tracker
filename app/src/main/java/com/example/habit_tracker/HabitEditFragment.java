@@ -40,6 +40,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * HabitEditFragment creates a fragment to edit the details of a habit
+ */
+
 public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
     private FloatingActionButton submitButton;
     private EditText habitTitle;
@@ -47,7 +51,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
     private TextView dateOfStarting;
     private RadioGroup radioGroup;
     private TextView repeatDay;
-    private EditText plan;
+    private EditText times;
 
     private boolean[] selectedDay;
     private ArrayList<Integer> dayList = new ArrayList<>();
@@ -119,7 +123,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason2);
         dateOfStarting = (TextView) getView().findViewById(R.id.textDateStarting);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day2);
-        plan = (EditText) getView().findViewById(R.id.editTextTime);
+        times = (EditText) getView().findViewById(R.id.editTextTime);
 
         radioGroup = getView().findViewById(R.id.radioGroup2);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -148,12 +152,14 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         selectedDayString = habit.getRepeat();
         plan.setHint("Plan to complete " + habit.getPlan() + " events");
 
+        // handles the radio button, if the habit is set to private
         if (habit.getIsPrivate() == true) {
             radioGroup.check(R.id.radioYes);
         } else {
             radioGroup.check(R.id.radioNo);
         }
 
+        // handles the repeat selector
         selectedDay = new boolean[dayArray.length];
         repeatDay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,6 +236,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
             }
         });
 
+        // handle the date picker
         dateOfStarting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -239,6 +246,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
 
         CollectionReference collectionReference = db.collection("Users").document(username).collection("HabitList");
 
+        // handles the submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -247,29 +255,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                 //Check if input is in range
                 boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,-1,30)
                         && selectedDayString != null && isPrivate != null;
-
-                //set error if there is no select date.
-                if (selectedDayString == null){
-                    repeatDay.setError("Please Select at least one day");
-                    return;
-                }
-
-                //check if the time entered is valid
-                boolean isTimesValid = true;
-                Integer times = 0;
-                if (plan.getText().toString().length() == 0) {
-                    times = habit.getPlan();
-                } else {
-                    times = Integer.parseInt(plan.getText().toString());
-                    if (times > 1000 || times <= 0) {
-                        isTimesValid = false;
-                        plan.setError("Please enter an positive Integer less or equal to 1000 times");
-                        return;
-                    }
-                }
-
-
-                if (inputValid == false && !isTimesValid){
+                if (inputValid == false){
                     Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
                     return;
                 }

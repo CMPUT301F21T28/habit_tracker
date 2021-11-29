@@ -12,10 +12,18 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
+            app:destination="@id/signupFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_loginFragment_to_habitListFragment"
-            app:destination="@id/habitListFragment" />
+            app:destination="@id/habitListFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/habitListFragment"
@@ -24,19 +32,39 @@
         tools:layout="@layout/fragment_habit_list" >
         <action
             android:id="@+id/action_habitListFragment_to_habitDetailFragment"
-            app:destination="@id/habitDetailFragment" />
+            app:destination="@id/habitDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_habitListFragment_to_habitAddFragment"
-            app:destination="@id/habitAddFragment" />
+            app:destination="@id/habitAddFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_habitListFragment_to_eventListFragment"
-            app:destination="@id/eventListFragment" />
+            app:destination="@id/eventListFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_habitListFragment_to_friendListFragment"
-            app:destination="@id/friendListFragment" />
+            app:destination="@id/friendListFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_habitListFragment_to_eventAddFragment"
-            app:destination="@id/eventAddFragment" />
+            app:destination="@id/eventAddFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/habitDetailFragment"
@@ -45,7 +73,11 @@
         tools:layout="@layout/fragment_habit_detail" >
         <action
             android:id="@+id/action_habitDetailFragment_to_habitEditFragment"
-            app:destination="@id/habitEditFragment" />
+            app:destination="@id/habitEditFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/habitEditFragment"
@@ -56,7 +88,11 @@
             android:id="@+id/action_habitEditFragment_to_habitListFragment"
             app:destination="@id/habitListFragment"
             app:popUpTo="@id/habitListFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/habitAddFragment"
@@ -67,7 +103,11 @@
             android:id="@+id/action_habitAddFragment_to_habitListFragment"
             app:destination="@id/habitListFragment"
             app:popUpTo="@id/habitListFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
@@ -77,6 +117,10 @@
         <action
             android:id="@+id/action_signupFragment_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -87,15 +131,27 @@
         tools:layout="@layout/fragment_event_list">
         <action
             android:id="@+id/action_eventListFragment_to_eventAddFragment"
-            app:destination="@id/eventAddFragment" />
+            app:destination="@id/eventAddFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_eventListFragment_to_habitListFragment"
             app:destination="@id/habitListFragment"
             app:popUpTo="@id/habitListFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_eventListFragment_to_eventDetailFragment"
-            app:destination="@id/eventDetailFragment" />
+            app:destination="@id/eventDetailFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/eventAddFragment"
@@ -104,12 +160,22 @@
         tools:layout="@layout/fragment_event_add">
         <action
             android:id="@+id/action_eventAddFragment_to_eventListFragment"
-            app:destination="@id/eventListFragment" />
+            app:destination="@id/eventListFragment"
+            app:popUpTo="@id/eventListFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_eventAddFragment_to_habitListFragment"
             app:destination="@id/habitListFragment"
             app:popUpTo="@id/habitListFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/eventDetailFragment"
@@ -118,7 +184,11 @@
         tools:layout="@layout/fragment_event_detail" >
         <action
             android:id="@+id/action_eventDetailFragment_to_eventEditFragment"
-            app:destination="@id/eventEditFragment" />
+            app:destination="@id/eventEditFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/eventEditFragment"
@@ -129,7 +199,11 @@
             android:id="@+id/action_eventEditFragment_to_eventListFragment"
             app:destination="@id/eventListFragment"
             app:popUpTo="@id/eventListFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/friendListFragment"
@@ -138,10 +212,18 @@
         tools:layout="@layout/fragment_friend_list" >
         <action
             android:id="@+id/action_friendListFragment_to_friendSearchFragment"
-            app:destination="@id/friendSearchFragment" />
+            app:destination="@id/friendSearchFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_friendListFragment_to_friendInfoFragment"
-            app:destination="@id/friendInfoFragment" />
+            app:destination="@id/friendInfoFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/friendSearchFragment"
@@ -152,7 +234,11 @@
             android:id="@+id/action_friendSearchFragment_to_friendListFragment"
             app:destination="@id/friendListFragment"
             app:popUpTo="@id/friendListFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/friendInfoFragment"
@@ -162,7 +248,12 @@
         <action
             android:id="@+id/action_friendInfoFragment_to_friendListFragment"
             app:destination="@id/friendListFragment"
-            app:popUpTo="@id/friendListFragment" />
+            app:popUpTo="@id/friendListFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
 
 </navigation>

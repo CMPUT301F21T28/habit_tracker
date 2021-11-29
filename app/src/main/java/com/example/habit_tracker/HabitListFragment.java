@@ -56,8 +56,7 @@ import java.util.Collections;
 import java.util.Locale;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * HabitListFragment creates a fragment with a recyclerView to view all the habit's titles with their progress
  */
 public class HabitListFragment extends Fragment {
 
@@ -83,6 +82,12 @@ public class HabitListFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    /**
+     * declare that the app bar is going to be modified
+     * Adding a switch that shows today event only
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.tooltip_info_switch, menu);
@@ -110,6 +115,11 @@ public class HabitListFragment extends Fragment {
         todayTextView.setTextColor(getResources().getColor(R.color.white));
     }
 
+    /**
+     * Filling out other app bar's function, which is a tooltip
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -140,6 +150,7 @@ public class HabitListFragment extends Fragment {
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
 
+        // inflate the recyclerView for habit with generic adapter
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
         habitAdapter = new GenericAdapter<Habit>(getActivity(), habitDataList) {
@@ -152,6 +163,7 @@ public class HabitListFragment extends Fragment {
             public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
                 ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
                 ((TextProgressViewHolder) holder).getProgressButton().setText(Math.round(val.getProgress()) + "%");
+                ((TextProgressViewHolder) holder).getProgressBar().setProgress(Math.round(val.getProgress()));
                 ((TextProgressViewHolder) holder).getProgressButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -168,7 +180,8 @@ public class HabitListFragment extends Fragment {
                     public boolean onLongClick(View view) {
                         Bundle bundle = new Bundle();
                         bundle.putString("username", username);
-                        bundle.putParcelable("Habit", val);
+                        bundle.putString("habitID", val.getHabitID());
+                        bundle.putString("from_habitListFragment", "From habit list!");
 
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_habitListFragment_to_eventAddFragment, bundle);
@@ -192,6 +205,7 @@ public class HabitListFragment extends Fragment {
         habitList.setAdapter(habitAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        // today recyclerAdapter is for the habit that happens today
         todayRecyclerAdapter = new GenericAdapter<Habit>(getActivity(), todayHabitDataList) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
@@ -201,6 +215,7 @@ public class HabitListFragment extends Fragment {
             public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
                 ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
                 ((TextProgressViewHolder) holder).getProgressButton().setText(Math.round(val.getProgress()) + "%");
+                ((TextProgressViewHolder) holder).getProgressBar().setProgress(Math.round(val.getProgress()));
                 ((TextProgressViewHolder) holder).getProgressButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -218,6 +233,7 @@ public class HabitListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("username", username);
                         bundle.putParcelable("Habit", val);
+                        bundle.putString("habitID", val.getHabitID());
 
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
@@ -257,6 +273,7 @@ public class HabitListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // retrieve the info from db and give to the class instances, to create an array list
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users").document(username).collection("HabitList");
         collectionReference.orderBy("order").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -278,7 +295,6 @@ public class HabitListFragment extends Fragment {
                 }
                 habitAdapter.notifyDataSetChanged();
 
-                //get today's habit list.
                 todayHabitDataList.clear();
                 for (Habit habit: habitDataList){
                     String repeatString = habit.getRepeat();

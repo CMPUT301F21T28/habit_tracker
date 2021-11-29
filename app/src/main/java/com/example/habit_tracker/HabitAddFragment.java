@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -14,6 +16,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +42,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of Add Habit Fragment.
+ * HabitAddFragment creates a fragment for adding a new habit
  */
 public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
 
@@ -83,9 +85,9 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         // get the bundle passed from the previous fragment
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
-//        if (bundle.containsKey("habitsSize")) {
-//            Log.d(TAG, "onCreateView: yes");
-//        }
+        if (bundle.containsKey("habitsSize")) {
+            Log.d(TAG, "onCreateView: yes");
+        }
         habitsSize = bundle.getInt("habitsSize");
         return rootView;
 
@@ -241,7 +243,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                     Toast.makeText(getActivity(), "the isPrivate is set to null, please choose one", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                
+
                 boolean isTimesValid = true;
                 Integer times = 0;
                 if (plan.getText().toString().length() == 0) {
@@ -259,7 +261,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                     Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                
+
                 HashMap<String, Object> data = new HashMap<>();
 
                 UUID uuid = UUID.randomUUID();
@@ -328,7 +330,9 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         return (string.length() > lower && string.length() <= upper);
     }
 
-    /* Create a DatePicker Dialog */
+    /**
+     *  Create a DatePicker Dialog
+     */
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getActivity(),

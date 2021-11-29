@@ -28,11 +28,15 @@ import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -42,6 +46,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -55,14 +60,18 @@ import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 
+/**
+ * EventEditFragment creates a fragment for editing an event's details
+ */
 
 public class EventEditFragment extends Fragment {
-    private Button submit;
+    private FloatingActionButton submit;
     private EditText commentContent;
-    private EditText locationContent;
     private EditText nameContent;
     private ImageButton imageButton;
     private FirebaseFirestore db;
+    private TextView hasLocation;
+    private TextView noLocation;
     FusedLocationProviderClient client;
 
     private String username;
@@ -75,6 +84,34 @@ public class EventEditFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    /**
+     * inflate the app bar for me to edit
+     * @param menu
+     * @param inflater
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.tooltip_info, menu);
+    }
+
+    /**
+     * Gives app bar a certain button and its functions
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.tooltip_info_button:
+                Toast.makeText(getContext(), "Photo is optional\nLong click your added photo to delete", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -90,6 +127,7 @@ public class EventEditFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_event_edit, container, false);
 
+        // get things out of bundle
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
         habitID = bundle.getString("habitID");
@@ -111,34 +149,22 @@ public class EventEditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
-        final Double[] currentLongitude = {null};
-        final Double[] currentLatitude = {null};
 
         commentContent = (EditText)getView().findViewById(R.id.commentContent);
-        submit= (Button) getView().findViewById(R.id.Submit);
-        Button locationButton = view.findViewById(R.id.locationButton);
-        Button removeLocationButton = view.findViewById(R.id.removeLocationButton);
+        submit= (FloatingActionButton) getView().findViewById(R.id.Submit);
+        noLocation = view.findViewById(R.id.textViewNoLocation);
+        hasLocation = view.findViewById(R.id.textViewHasLocation);
         imageButton = getView().findViewById(R.id.editImageButton);
         nameContent = getView().findViewById(R.id.nameContent);
         nameContent.setText(event.getName());
+        commentContent.setText(event.getComment());
 
+        // get the image
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
         String imageString = event.getEventImage();
         if (imageString != null) {
             Bitmap bitmap = stringToBitmap(imageString);
             imageButton.setImageBitmap(bitmap);
-        }
-
-
-        commentContent.setText(event.getComment());
-
-        if(event.getLocationLongitude() == null && event.getLocationLatitude() == null){
-            removeLocationButton.setVisibility(View.GONE);
-            locationButton.setVisibility(View.VISIBLE);
-        }
-        else{
-            locationButton.setVisibility(View.GONE);
-            removeLocationButton.setVisibility(View.VISIBLE);
         }
 
         ActivityResultLauncher<Intent> activityResultLauncher;
@@ -196,13 +222,17 @@ public class EventEditFragment extends Fragment {
             }
         });
 
-
+        // get the location
+        if(event.getLocationLongitude() == null && event.getLocationLatitude() == null){
+            hasLocation.setVisibility(View.GONE);
+            noLocation.setVisibility(View.VISIBLE);
+        }
+        else{
+            noLocation.setVisibility(View.GONE);
+            hasLocation.setVisibility(View.VISIBLE);
+        }
 
         CollectionReference collectionReference = db.collection("habit").document(habitID).collection("EventList");
-
-
-
-
         submit.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -226,8 +256,8 @@ public class EventEditFragment extends Fragment {
                 // isValid doesnt actually do anything... please check this -- darren
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
-                    data.put("Longitude", currentLongitude[0]);
-                    data.put("Latitude", currentLatitude[0]);
+                    //data.put("Longitude", currentLongitude[0]);
+                    //data.put("Latitude", currentLatitude[0]);
                     data.put("event name",nameContent.getText().toString());
 
                     event.setEventComment(commentContent.getText().toString());
@@ -268,7 +298,7 @@ public class EventEditFragment extends Fragment {
         });
 
 
-        removeLocationButton.setOnClickListener(new View.OnClickListener() {
+        hasLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HashMap<String, Object> data = new HashMap<>();
@@ -280,8 +310,8 @@ public class EventEditFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                removeLocationButton.setVisibility(View.GONE);
-                                locationButton.setVisibility(View.VISIBLE);
+                                hasLocation.setVisibility(View.GONE);
+                                noLocation.setVisibility(View.VISIBLE);
                                 Toast.makeText(getContext(), "Success - Successfully delete it.", Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -295,7 +325,7 @@ public class EventEditFragment extends Fragment {
             });
 
 
-        locationButton.setOnClickListener(new View.OnClickListener() {
+        noLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -310,13 +340,10 @@ public class EventEditFragment extends Fragment {
                         public void onSuccess(Location location){
                             HashMap<String,Object> data = new HashMap<>();
                             if (location!= null){
-                                currentLongitude[0] =location.getLongitude();
-                                currentLatitude[0] = location.getLatitude();
-                                locationButton.setVisibility(View.GONE);
-                                removeLocationButton.setVisibility(View.VISIBLE);
-
-
-
+                                //currentLongitude[0] =location.getLongitude();
+                                //currentLatitude[0] = location.getLatitude();
+                                noLocation.setVisibility(View.GONE);
+                                hasLocation.setVisibility(View.VISIBLE);
                             }
 
                         }
@@ -331,8 +358,9 @@ public class EventEditFragment extends Fragment {
                 }
             }
         });
-
     }
+
+    // class function to help with the image translation
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String imageToString(Bitmap imageBitmap){
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

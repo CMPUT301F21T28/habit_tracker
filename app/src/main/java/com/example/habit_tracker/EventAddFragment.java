@@ -1,5 +1,8 @@
 package com.example.habit_tracker;
 
+import static androidx.constraintlayout.motion.widget.Debug.getLocation;
+
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -37,14 +40,29 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -52,22 +70,19 @@ import java.util.Base64;
 import java.util.HashMap;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * EventAddFragment creates a fragment for event to add function
  */
+
 public class EventAddFragment extends Fragment {
 
     private static final String TAG = "MyActivity";
 
     String username = null;
-    String habitID = null;
+    String habitID;
     FusedLocationProviderClient client;
 
     Bitmap originBitmap;
     Boolean isFromHabitList = false;
-
-    double currentLongitude;
-    double currentLatitude;
 
     public EventAddFragment() {
         // Required empty public constructor
@@ -76,8 +91,25 @@ public class EventAddFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.tooltip_info, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.tooltip_info_button:
+                Toast.makeText(getContext(), "Photo is optional\nLong click your added photo to delete", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     /**
      * Create view for EventDetailFragment
@@ -122,9 +154,9 @@ public class EventAddFragment extends Fragment {
         EditText editTextEventName = view.findViewById(R.id.editTextName);
         EditText editTextEventCommit = view.findViewById(R.id.editTextComments);
 
-        Button submitButton = view.findViewById(R.id.submitButton);
-        Button locationButton = view.findViewById(R.id.locationButton);
-        Button removeLocationButton = view.findViewById(R.id.removeLocationButton);
+        FloatingActionButton submitButton = view.findViewById(R.id.submitButton);
+        TextView locationButton = view.findViewById(R.id.locationButton);
+        TextView removeLocationButton = view.findViewById(R.id.removeLocationButton);
         removeLocationButton.setVisibility(View.GONE);
 
         //String habit = getArguments().getString("habitId");//"0NyZLjRumQo45JOmXish";//getArguments().getString("habit");
@@ -242,11 +274,10 @@ public class EventAddFragment extends Fragment {
                                     bundle.putString("username", username);
                                     bundle.putString("habitID", habitID);
 
+                                    NavController controller = Navigation.findNavController(view);
                                     if (isFromHabitList) {
-                                        NavController controller = Navigation.findNavController(view);
                                         controller.navigate(R.id.action_eventAddFragment_to_habitListFragment, bundle);
                                     } else {
-                                        NavController controller = Navigation.findNavController(view);
                                         controller.navigate(R.id.action_eventAddFragment_to_eventListFragment, bundle);
                                     }
                                 }
@@ -301,6 +332,34 @@ public class EventAddFragment extends Fragment {
                     );
 
                 }
+//                if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
+//                        android.Manifest.permission.ACCESS_FINE_LOCATION)
+//                        == PackageManager.PERMISSION_GRANTED) {
+//                    Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
+//                    client = LocationServices.getFusedLocationProviderClient(view.getContext());
+//                    Task<Location> task = client.getLastLocation();
+//                    task.addOnSuccessListener(new OnSuccessListener<Location>(){
+//                        @Override
+//                        public void onSuccess(Location location){
+//                            if (location!= null){
+//                                currentLongitude[0] =location.getLongitude();
+//                                currentLatitude[0] = location.getLatitude();
+//                                locationButton.setVisibility(View.GONE);
+//                                removeLocationButton.setVisibility(View.VISIBLE);
+//
+//
+//                            }
+//
+//                        }
+//
+//                    });}
+//
+//                else{
+//                    ActivityCompat.requestPermissions((Activity) view.getContext(),
+//                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44
+//                    );
+//
+//                }
             }
         });
 

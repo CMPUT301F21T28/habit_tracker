@@ -21,14 +21,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 
 import java.util.Base64;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * EventDetailFragment creates a fragment for showing a event's details
  */
 public class EventDetailFragment extends Fragment {
 
@@ -40,12 +41,10 @@ public class EventDetailFragment extends Fragment {
     private TextView location;
     private Double locationLongitude;
     private Double locationLatitude;
-    //private TextView locationContent;
-    /*private TextView picture;
-    private ImageView Image;*/
     private Button edit;
     private ImageView imageView;
-    private Button viewLocation;
+    private TextView viewLocation;
+    private FloatingActionButton editButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +76,7 @@ public class EventDetailFragment extends Fragment {
 
         eventName= rootView.findViewById(R.id.textView_detail_eventName_view);
         commentContent = rootView.findViewById(R.id.nameContent);
-
+        viewLocation = (TextView) rootView.findViewById(R.id.viewLocation);
         eventName.setText(event.getName());
         commentContent.setText(event.getComment());
         locationLongitude = event.getLocationLongitude();
@@ -106,24 +105,20 @@ public class EventDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if(locationLatitude != null && locationLongitude!= null){
-
-        viewLocation=(Button) getView().findViewById(R.id.viewLocation);
-        viewLocation.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f",locationLongitude,locationLatitude );
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                startActivity(intent); }
-        });}
-
-        else{
-            viewLocation=(Button) getView().findViewById(R.id.viewLocation);
-            viewLocation.setVisibility(View.GONE);
-
+            viewLocation.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f",locationLongitude,locationLatitude );
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    startActivity(intent); }
+        });
+        } else{
+            viewLocation.setText("Location is optional... you didn't set one");
         }
 
-        edit = (Button)getView().findViewById(R.id.Edit);
-        edit.setOnClickListener(new View.OnClickListener() {
+        // handle the edit button
+        editButton = (FloatingActionButton) getView().findViewById(R.id.Edit);
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -138,6 +133,7 @@ public class EventDetailFragment extends Fragment {
         });
     }
 
+    // class function help to translate the image
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Bitmap stringToBitmap(String imageString){
         byte[] bitmapArray;

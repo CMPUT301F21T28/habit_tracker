@@ -157,32 +157,6 @@ public class FriendTest {
         assertFalse(solo.waitForText("testRequest1Name", 1, 5));
     }
 
-    @Test
-    public void UndoUnfriendUserTest() {
-        // Create and add request
-        addRequest("robotiumUser", "testRequest1User", "testRequest1Name");
-        solo.clickOnButton("Accept");
-        assertTrue(solo.waitForText("testRequest1Name"));
-
-        // Click on friend to view info
-        solo.clickOnText("testRequest1Name");
-        assertNotNull(solo.getView(R.id.friend_info_constraint_layout));
-
-        // Click on unfriend button
-        solo.clickOnButton("Unfriend");
-
-        // Click on confirmation
-        solo.clickOnText("YES");
-
-        // Make sure that the name is removed from friend list.
-        assertNotNull(solo.getView(R.id.friend_list_constraint_layout));
-        assertFalse(solo.waitForText("testRequest1Name", 1, 5));
-
-        // Click on snackbar by clicking on underlying button before the snackbar dissapears
-        // TODO: Add
-        solo.clickOnView((FloatingActionButton) solo.getView(R.id.add_friend_button));
-    }
-
     /**
      * Runs before all the tests
      * Creates an account and leaves the user at the friendListFragment homepage.

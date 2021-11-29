@@ -49,7 +49,6 @@ public class FriendInfoFragment extends Fragment {
     Button unfollowBtn;
     String currentReal;
     String currentUser;
-    Utility firebaseUtils = new Utility();
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference;
@@ -172,7 +171,7 @@ public class FriendInfoFragment extends Fragment {
                     Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
                     Integer habitPlan = Integer.parseInt(String.valueOf(doc.getData().get("plan")));
                     Integer habitFinish = Integer.parseInt(String.valueOf(doc.getData().get("finish")));
-                    if (habitIsPrivate == false) {
+                    if (!habitIsPrivate) {
                         habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder, habitPlan, habitFinish));
                     }
                 }

@@ -9,14 +9,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.habit_tracker.viewholders.TextProgressViewHolder;
 import com.google.android.material.snackbar.Snackbar;
@@ -70,7 +78,7 @@ public class FriendInfoFragment extends Fragment {
 
         // setting the friend username and realname
         tvUsername = rootView.findViewById(R.id.textView_username);
-        tvUsername.setText(friend.getUserName().toString());
+        tvUsername.setText(friend.getActualName() + " (" + friend.getUserName() + ")");
 
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friendInfo);
@@ -88,6 +96,9 @@ public class FriendInfoFragment extends Fragment {
         };
         habitList.setAdapter(habitAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        habitList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
+        // unfollowBtn.findViewById(R.id.unfollow_button);
 
         return rootView;
     }

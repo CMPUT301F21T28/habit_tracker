@@ -1,6 +1,7 @@
 package com.example.habit_tracker;
 
 import android.content.DialogInterface;
+
 import android.os.Build;
 import android.os.Bundle;
 
@@ -11,16 +12,24 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Space;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.habit_tracker.viewholders.TextProgressViewHolder;
@@ -49,7 +58,6 @@ import java.util.Locale;
  * create an instance of this fragment.
  */
 public class HabitListFragment extends Fragment {
-    Switch todayHabitSwitch;
 
     FirebaseFirestore db;
     CollectionReference collectionReference;
@@ -70,6 +78,48 @@ public class HabitListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.tooltip_info_switch, menu);
+
+        MenuItem todaySwitch = menu.findItem(R.id.toggle);
+        Switch todayHabitSwitch = (Switch) todaySwitch.getActionView();
+        todayHabitSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //Toast.makeText(getContext(), "next", Toast.LENGTH_LONG).show();
+                if (b) {
+                    habitList.setAdapter(todayRecyclerAdapter);
+                    todayRecyclerAdapter.notifyDataSetChanged();
+                    //System.out.println(todayHabitDataList);
+                }else {
+                    habitList.setAdapter(habitAdapter);
+                    habitAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        MenuItem todayText = menu.findItem(R.id.today);
+        TextView todayTextView = (TextView) todayText.getActionView();
+        todayTextView.setText("Today ");
+        todayTextView.setTextColor(getResources().getColor(R.color.white));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.tooltip_info_button:
+                Toast.makeText(getContext(), "Swipe Right to Delete\nShort Tap to View Details\nTap Progress to View Events", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
     }
 
     /**
@@ -186,6 +236,8 @@ public class HabitListFragment extends Fragment {
             }
         };
 
+        habitList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
+
         // initialize ItemTouchHelper for swipe & reorder function
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(habitList);
@@ -237,22 +289,6 @@ public class HabitListFragment extends Fragment {
             }
         });
 
-        //Add filter to only show today's list.
-        todayHabitSwitch = getView().findViewById(R.id.today_habit_switch);
-        todayHabitSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    habitList.setAdapter(todayRecyclerAdapter);
-                    todayRecyclerAdapter.notifyDataSetChanged();
-                    //System.out.println(todayHabitDataList);
-                }else {
-                    habitList.setAdapter(habitAdapter);
-                    habitAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-
         // add a habit (go to new fragment)
         getView().findViewById(R.id.add_habit_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,14 +330,6 @@ public class HabitListFragment extends Fragment {
                         }
                     }
                 });
-            }
-        });
-
-        // For tooltip
-        getView().findViewById(R.id.tooltip_floatingactionbutton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Swipe Right to Delete\nShort Tap to View Details\nTap Progress to View Events", Toast.LENGTH_LONG).show();
             }
         });
     }

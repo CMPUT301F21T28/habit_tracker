@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import org.w3c.dom.Text;
 
 public class HabitDetailFragment extends Fragment {
@@ -27,7 +29,7 @@ public class HabitDetailFragment extends Fragment {
     TextView isPrivate;
     ProgressBar visualIndicator;
     TextView percentage;
-    Button edit;
+    FloatingActionButton edit;
     TextView progress;
 
     private static final String TAG = "MyActivity";
@@ -65,13 +67,21 @@ public class HabitDetailFragment extends Fragment {
         progress = rootView.findViewById(R.id.textView5);
 
         habitTitle.setText(habit.getName());
-        habitReason.setText(habit.getComment());
-        dateOfStarting.setText(habit.getDateOfStarting());
-        repeat.setText(habit.getRepeat());
-        isPrivate.setText(Boolean.toString(habit.getIsPrivate()));
+        if (habit.getComment().length() == 0) {
+            habitReason.setText("Comment is not set");
+        } else {
+            habitReason.setText(habit.getComment());
+        }
+        dateOfStarting.setText("Starts on " + habit.getDateOfStarting());
+        repeat.setText("Repeat on every" + habit.getRepeat());
+        if (habit.getIsPrivate()) {
+            isPrivate.setText("Followers cannot see this habit");
+        } else {
+            isPrivate.setText("Followers can see this habit");
+        }
         visualIndicator.setProgress(Math.round(habit.getProgress()));
         percentage.setText(Math.round(habit.getProgress()) + "%");
-        progress.setText("Finish " + habit.getFinish() + "/" + habit.getPlan() + " times");
+        progress.setText("Complete " + habit.getFinish() + "/" + habit.getPlan() + " times");
 
         //TODO visual indicator
 

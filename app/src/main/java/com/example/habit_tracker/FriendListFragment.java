@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,10 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.habit_tracker.viewholders.TextGrantViewHolder;
 import com.example.habit_tracker.viewholders.TextViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -99,6 +103,12 @@ public class FriendListFragment extends Fragment {
         friendList.setAdapter(friendAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        friendList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
+
+        // ItemTouchHelper helps to define the swipe function
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+//        itemTouchHelper.attachToRecyclerView(friendList);
+
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
         requestAdapter = new GenericAdapter<Friend>(getActivity(), requestDataList) {
@@ -127,6 +137,15 @@ public class FriendListFragment extends Fragment {
         };
         requestList.setAdapter(requestAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        requestList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
+
+//        requestList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                updateFriendList(username);
+//            }
+//        });
 
         updateFriendList(username);
 

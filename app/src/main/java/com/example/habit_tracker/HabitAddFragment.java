@@ -46,6 +46,7 @@ import java.util.UUID;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -58,7 +59,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
 
-    private Button submitButton;
+    private FloatingActionButton submitButton;
     private RadioGroup radioGroup;
     private EditText habitTitle;
     private EditText habitReason;
@@ -147,7 +148,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         editTextDate = (TextView) getView().findViewById(R.id.textDatePicker);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day);
         radioGroup = getView().findViewById(R.id.radioGroup);
-        submitButton = (Button) getView().findViewById(R.id.submit_button);
+        submitButton = (FloatingActionButton) getView().findViewById(R.id.submit_button);
         plan = (EditText) getView().findViewById(R.id.habit_times);
 
         //Initialize selected repeat day

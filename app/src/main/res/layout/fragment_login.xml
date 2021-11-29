@@ -18,8 +18,9 @@
         android:layout_marginTop="10pt"
         android:layout_marginRight="4pt"
         android:layout_marginBottom="10pt"
-        android:text="Log in or Sign up"
-        android:textSize="30sp"
+        android:fontFamily="@font/damion"
+        android:text="Habit Tracker"
+        android:textSize="34sp"
         android:textStyle="bold" />
 
 
@@ -30,6 +31,7 @@
         android:layout_marginLeft="10pt"
         android:layout_marginTop="10pt"
         android:layout_marginRight="10pt"
+        android:fontFamily="@font/raleway"
         android:text="Username"
         android:textSize="20sp" />
 
@@ -39,8 +41,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10pt"
         android:layout_marginRight="10pt"
+        android:fontFamily="@font/raleway_italic"
         android:hint="Please enter your username here."
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="@color/add_button"
+        android:textColorHint="@color/add_button"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/password_title"
@@ -49,6 +55,7 @@
         android:layout_marginLeft="10pt"
         android:layout_marginTop="10pt"
         android:layout_marginRight="10pt"
+        android:fontFamily="@font/raleway"
         android:text="Password"
         android:textSize="20sp" />
 
@@ -58,9 +65,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10pt"
         android:layout_marginRight="10pt"
+        android:fontFamily="@font/raleway_italic"
         android:hint="Please enter your password here."
         android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textColor="@color/add_button"
+        android:textColorHint="@color/add_button"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/Nav_to_mainpage"
@@ -69,7 +80,8 @@
         android:layout_marginLeft="10pt"
         android:layout_marginTop="10pt"
         android:layout_marginRight="10pt"
-        android:backgroundTint="@android:color/holo_blue_dark"
+        android:backgroundTint="@color/friends"
+        android:fontFamily="@font/raleway"
         android:text="LOG IN" />
 
     <TextView
@@ -80,8 +92,9 @@
         android:layout_marginTop="10pt"
         android:layout_marginRight="10pt"
         android:clickable="true"
+        android:fontFamily="@font/raleway"
         android:minHeight="48dp"
         android:text="Sign Up"
-        android:textColor="#1362A1" />
+        android:textColor="@color/friends" />
 
 </LinearLayout>

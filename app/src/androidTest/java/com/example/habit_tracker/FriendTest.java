@@ -51,7 +51,7 @@ public class FriendTest {
 
         solo.clickOnButton("Deny");
 
-        assertFalse(solo.waitForText("testRequest1Name", 1, 5));
+        assertFalse(solo.waitForText("testRequest1Name(testRequest1User)", 1, 5));
     }
 
     @Test
@@ -178,9 +178,9 @@ public class FriendTest {
         assertNotNull(solo.getView(R.id.friend_list_constraint_layout));
         assertFalse(solo.waitForText("testRequest1Name", 1, 5));
 
-        // Click on snackbar
-        // TODO: Click on snackbar
-        solo.clickOnView(solo.getView(R.id.snackbar_action));
+        // Click on snackbar by clicking on underlying button before the snackbar dissapears
+        // TODO: Add
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.add_friend_button));
     }
 
     /**

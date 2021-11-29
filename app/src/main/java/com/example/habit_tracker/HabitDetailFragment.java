@@ -88,8 +88,6 @@ public class HabitDetailFragment extends Fragment {
         percentage.setText(Math.round(habit.getProgress()) + "%");
         progress.setText("Complete " + habit.getFinish() + "/" + habit.getPlan() + " times");
 
-        //TODO visual indicator
-
         return rootView;
     }
 

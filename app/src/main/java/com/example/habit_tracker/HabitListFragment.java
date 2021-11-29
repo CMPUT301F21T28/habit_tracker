@@ -358,7 +358,6 @@ public class HabitListFragment extends Fragment {
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            // TODO drag to reorder the list (possible solution: put arrayList in mainActivity)
 
             int fromPosition = viewHolder.getAdapterPosition();
             int toPosition = target.getAdapterPosition();

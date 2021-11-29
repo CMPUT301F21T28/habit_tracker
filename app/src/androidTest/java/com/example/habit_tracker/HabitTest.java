@@ -122,7 +122,6 @@ public class HabitTest {
 
         //Click on the new habit
         solo.clickOnText("robotiumHabit");
-        // TODO CHANGE TO FLOATING ACTION BUTTON 126
         solo.clickOnView((FloatingActionButton) solo.getView(R.id.button_edit));
         //Edit habit details
         solo.clearEditText((EditText) solo.getView(R.id.editText_habitReason2));

@@ -68,7 +68,13 @@ public class SecUtility {
     }
 
 
-    // TODO: Javadoc for this function
+    /**
+     * Convert Image in bitmap form to String
+     * @param imageBitmap
+     *      Image bitmap to be converted into string
+     * @return
+     *      Returns the image as a string.
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String convertImageToString(Bitmap imageBitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

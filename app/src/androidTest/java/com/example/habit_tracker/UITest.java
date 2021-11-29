@@ -129,7 +129,6 @@ public class UITest {
         assertEquals("Followers cannot see this habit",view.getText().toString());
 
         // Editing habit
-//       TODO: solo.clickOnButton("Edit");
         solo.clickOnView((FloatingActionButton) solo.getView(R.id.button_edit));
         solo.clearEditText((EditText) solo.getView(R.id.editText_habitReason2));
         solo.enterText((EditText) solo.getView(R.id.editText_habitReason2), "robotiumHabitReasonNew");
@@ -179,7 +178,6 @@ public class UITest {
         // Add event detail
         solo.enterText((EditText) solo.getView(R.id.editTextName), "robotiumHabitEvent");
 
-        // TODO: solo.clickOnButton("SUBMIT");
         solo.clickOnView((FloatingActionButton) solo.getView(R.id.submitButton));
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumHabitEvent", 1 ,5));
@@ -192,19 +190,16 @@ public class UITest {
         assertEquals("robotiumHabitEvent",view.getText().toString());
 
         // Edit event
-        //TODO: solo.clickOnButton("Edit");
         solo.clickOnView((FloatingActionButton) solo.getView(R.id.Edit));
         assertNotNull(solo.getView(R.id.event_edit_constraint_layout));
         // Add event detail
         solo.clearEditText((EditText) solo.getView(R.id.nameContent));
         solo.enterText((EditText) solo.getView(R.id.nameContent), "robotiumEventNew");
-        //TODO: solo.clickOnButton("Submit");
         solo.clickOnView((FloatingActionButton) solo.getView(R.id.Submit));
 
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumEventNew"));
 
-        // TODO: FIX THIS - after
         solo.clickOnActionBarHomeButton();
 
         // Swipe to delete current habit
@@ -266,7 +261,6 @@ public class UITest {
         solo.clickOnButton("Request");
 
         // Logging into friend acc
-        // TODO: FIX THIS (MERGE WITH LUCAS' BRANCH)
         solo.clickOnActionBarHomeButton();
         solo.clickOnActionBarHomeButton();
         solo.clickOnActionBarHomeButton();

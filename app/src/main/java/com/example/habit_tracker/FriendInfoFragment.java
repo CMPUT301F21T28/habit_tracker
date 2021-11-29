@@ -56,8 +56,6 @@ public class FriendInfoFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference;
 
-    // TODO initialize collectionReference
-
     public FriendInfoFragment() {
         // Required empty public constructor
     }
@@ -110,8 +108,6 @@ public class FriendInfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // TODO Generic adapter: setOnClick to be disabled!!
 
         unfollowBtn = getView().findViewById(R.id.unfollow_button);
 

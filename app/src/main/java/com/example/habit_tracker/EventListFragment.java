@@ -189,7 +189,6 @@ public class EventListFragment extends Fragment {
                     String eventImage = (String) doc.getData().get("event image");
                     Double longitude = (Double) doc.getData().get("Longitude");
                     Double latitude = (Double) doc.getData().get("Latitude");
-                    // TODO image & location
                     eventDataList.add(new Event(username, habitID, eventID, eventName, eventComment, longitude, latitude, eventImage));
                 }
                 eventAdapter.notifyDataSetChanged();

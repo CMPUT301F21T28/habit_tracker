@@ -45,7 +45,6 @@ public class FriendSearchFragment extends Fragment {
     ArrayList<Friend> searchDataList;
     ArrayList<String> friendDataList;
 
-    // TODO initialize the following
     FirebaseFirestore db;
     CollectionReference collectionReference;
 

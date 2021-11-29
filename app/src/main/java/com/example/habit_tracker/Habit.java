@@ -83,16 +83,73 @@ public class Habit implements Parcelable, Info {
         this.habitName = habitName;
     }
 
+    /**
+     * Get username
+     * @return
+     *      Returns username
+     */
     public String getUsername() {return this.userName;}
+
+    /**
+     * Get habit name
+     * @return
+     *      Returns habit name
+     */
     public String getName() {return this.habitName;}
+
+    /**
+     * Get HabitID
+     * @return  Returns HabitID
+     */
     public String getHabitID() {return this.habitID;}
+
+    /**
+     * Gets starting date
+     * @return  Returns date of start
+     */
     public String getDateOfStarting() {return this.dateOfStarting;}
+
+    /**
+     * Get habit reason
+     * @return Returns habit reason
+     */
     public String getComment() {return this.reason;}
+
+    /**
+     * Get the repeat days
+     * @return Returns a string of the repeats days (in full eg. Monday)
+     */
     public String getRepeat() {return  this.repeat;}
+
+    /**
+     * Returns if the habit is private
+     * @return Returns isPrivate as a boolean
+     */
     public Boolean getIsPrivate() {return this.isPrivate;}
+
+    /**
+     * Gets the placement order of the habit for consistent ordering
+     * @return  Return the ordering index of the habit
+     */
     public Integer getOrder() {return this.order;}
+
+    /**
+     * Gets the planned number of times to complete the habit
+     * @return     Returns # of times this habit is to be completed
+     */
     public Integer getPlan() {return this.plan;}
+
+    /**
+     * Gets the number of times this habit has been finished already. This is counted
+     * by the number of habitevents the habit has
+     * @return  Returns the number of times the habit has been finished already.
+     */
     public Integer getFinish() {return this.finish;}
+
+    /**
+     * Get the progress of the current habit (as a percentage)
+     * @return Return the progress of the current habit as a percentage (already multiplied by 100)
+     */
     public Float getProgress() {return this.progress;}
 
     @Override

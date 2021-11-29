@@ -319,7 +319,9 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
     }
 
 
-    /* Create a DatePicker Dialog */
+    /**
+     * Create Datepicker Dialog
+     */
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getActivity(),

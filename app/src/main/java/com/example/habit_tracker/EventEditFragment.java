@@ -329,7 +329,7 @@ public class EventEditFragment extends Fragment {
             });
 
 
-        locationButton.setOnClickListener(new View.OnClickListener() {
+        noLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

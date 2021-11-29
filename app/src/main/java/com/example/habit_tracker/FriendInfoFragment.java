@@ -52,7 +52,6 @@ public class FriendInfoFragment extends Fragment {
     Button unfollowBtn;
     String currentReal;
     String currentUser;
-    Utility firebaseUtils = new Utility();
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference;
@@ -81,7 +80,7 @@ public class FriendInfoFragment extends Fragment {
 
         // setting the friend username and realname
         tvUsername = rootView.findViewById(R.id.textView_username);
-        tvUsername.setText(friend.getActualName() + " (" + friend.getUserName() + ")");
+        tvUsername.setText(friend.getActualName().concat("(").concat(friend.getUserName()).concat(")"));
 
         // create the recyclerview for the habitDataList, with my generic adapter
         habitDataList = new ArrayList<>();
@@ -114,7 +113,6 @@ public class FriendInfoFragment extends Fragment {
 
         // TODO Generic adapter: setOnClick to be disabled!!
 
-        // set onClickListener for unfollowBtn
         unfollowBtn = getView().findViewById(R.id.unfollow_button);
 
         unfollowBtn.setOnClickListener(new View.OnClickListener() {
@@ -129,13 +127,13 @@ public class FriendInfoFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // remove them from the follow list
-                        firebaseUtils.removeFriend(currentUser, friend);
+                        Utility.removeFriend(currentUser, friend);
 
                         // give them undo option
                         Snackbar.make(habitList, "Unfriended " + friend.getUserName(), Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                firebaseUtils.addFriend(currentUser, friend);
+                                Utility.addFriend(currentUser, friend);
                             }
                         }).show();
 
@@ -162,8 +160,7 @@ public class FriendInfoFragment extends Fragment {
             }
         });
 
-        //  use 'addSnapshotListener' to pull data from db, use for loop to add data to habitDataList (an ArrayList<Habit>),
-        //  can look up how I implement in HabitListFragment.java
+        // for populating habit list of the other user
         collectionReference = db.collection("Users").document(friend.getUserName()).collection("HabitList");
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -179,7 +176,7 @@ public class FriendInfoFragment extends Fragment {
                     Boolean habitIsPrivate = (Boolean) doc.getData().get("isPrivate");
                     Integer habitPlan = Integer.parseInt(String.valueOf(doc.getData().get("plan")));
                     Integer habitFinish = Integer.parseInt(String.valueOf(doc.getData().get("finish")));
-                    if (habitIsPrivate == false) {
+                    if (!habitIsPrivate) {
                         habitDataList.add(new Habit(friend.getUserName(), habitName, habitID, habitDateOfStarting, habitReason, habitRepeat, false, habitOrder, habitPlan, habitFinish));
                     }
                 }

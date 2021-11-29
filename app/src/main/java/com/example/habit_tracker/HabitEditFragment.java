@@ -88,6 +88,19 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
     }
 
     /**
+     * Check if the input title, reason, date are valid
+     * @param editTextView, lower, upper
+     * @return A boolean specify if the input date is valid
+     */
+    public boolean checkInputValidity(EditText editTextView, int lower, int upper){
+        if (editTextView.getText().toString().length() < lower || editTextView.getText().toString().length() > upper){
+            editTextView.setError("Not valid. Please ensure that it is between " +lower + " and "+ upper + " characters.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Initialize all other parts that could cause the fragment status change
      * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
      * Fragment change by navigation
@@ -292,21 +305,6 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
             }
         });
 
-    }
-
-
-    /**
-     * Check if the input title, reason, date are valid
-     * @param editTextView, lower, upper
-     * @return A boolean specify if the input date is valid
-     */
-    public boolean checkInputValidity(EditText editTextView, int lower, int upper){
-        //isStringValid(editTextView.getText().toString(), lower, upper);
-        if (isStringValid(editTextView.getText().toString(), lower, upper) == false){
-            editTextView.setError("Not valid. Please ensure that it is between " +lower + " and "+ upper + " characters.");
-            return false;
-        }
-        return true;
     }
 
     /**

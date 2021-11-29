@@ -1,0 +1,481 @@
+@startuml
+
+title __HABIT_TRACKER's Class Diagram__\n
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.Event {
+        {static} + CREATOR : Creator<Event>
+        - eventComment : String
+        - eventID : String
+        - eventImage : String
+        - eventName : String
+        - habitID : String
+        - locationLatitude : Double
+        - locationLongitude : Double
+        - username : String
+        + describeContents()
+        + getComment()
+        + getEventID()
+        + getEventImage()
+        + getHabitID()
+        + getLocationLatitude()
+        + getLocationLongitude()
+        + getName()
+        + getUsername()
+        + writeToParcel()
+        # Event()
+        ~ Event()
+        ~ setEventComment()
+        ~ setEventImage()
+        ~ setEventName()
+        ~ setLocationLatitude()
+        ~ setLocationLongitude()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.EventAddFragment {
+        ~ client : FusedLocationProviderClient
+        ~ currentLatitude : Double
+        ~ currentLongitude : Double
+        ~ habitID : String
+        ~ isFromHabitList : Boolean
+        ~ originBitmap : Bitmap
+        ~ username : String
+        {static} - TAG : String
+        + EventAddFragment()
+        + imageToString()
+        + onCreate()
+        + onCreateOptionsMenu()
+        + onCreateView()
+        + onOptionsItemSelected()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.EventDetailFragment {
+        - commentContent : TextView
+        - edit : Button
+        - editButton : FloatingActionButton
+        - eventName : TextView
+        - habitID : String
+        - imageView : ImageView
+        - location : TextView
+        - locationLatitude : Double
+        - locationLongitude : Double
+        - username : String
+        - viewLocation : TextView
+        + onCreate()
+        + onCreateView()
+        + onViewCreated()
+        + stringToBitmap()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.EventEditFragment {
+        ~ client : FusedLocationProviderClient
+        ~ currentLatitude : Double
+        ~ currentLongitude : Double
+        ~ originBitmap : Bitmap
+        - commentContent : EditText
+        - db : FirebaseFirestore
+        - habitID : String
+        - hasLocation : TextView
+        - imageButton : ImageButton
+        - nameContent : EditText
+        - noLocation : TextView
+        - submit : FloatingActionButton
+        - username : String
+        + imageToString()
+        + onCreate()
+        + onCreateOptionsMenu()
+        + onCreateView()
+        + onOptionsItemSelected()
+        + onViewCreated()
+        + stringToBitmap()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.EventListFragment {
+        ~ collectionReference : CollectionReference
+        ~ db : FirebaseFirestore
+        ~ eventAdapter : GenericAdapter<Event>
+        ~ eventDataList : ArrayList<Event>
+        ~ eventID : String
+        ~ eventList : RecyclerView
+        ~ habitID : String
+        ~ itemTouchHelperCallback : SimpleCallback
+        ~ username : String
+        {static} - TAG : String
+        + EventListFragment()
+        + onCreate()
+        + onCreateOptionsMenu()
+        + onCreateView()
+        + onOptionsItemSelected()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.Friend {
+        {static} + CREATOR : Creator<Friend>
+        - actualName : String
+        - userName : String
+        + Friend()
+        + describeContents()
+        + getActualName()
+        + getUserName()
+        + writeToParcel()
+        # Friend()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.FriendInfoFragment {
+        ~ collectionReference : CollectionReference
+        ~ currentReal : String
+        ~ currentUser : String
+        ~ db : FirebaseFirestore
+        ~ habitAdapter : GenericAdapter<Habit>
+        ~ habitDataList : ArrayList<Habit>
+        ~ habitList : RecyclerView
+        ~ tvUsername : TextView
+        ~ unfollowBtn : Button
+        + FriendInfoFragment()
+        + onCreate()
+        + onCreateView()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.FriendListFragment {
+        ~ add_friend : FloatingActionButton
+        ~ db : FirebaseFirestore
+        ~ friendAdapter : GenericAdapter<Friend>
+        ~ friendDataList : ArrayList<Friend>
+        ~ friendList : RecyclerView
+        ~ realname : String
+        ~ requestAdapter : GenericAdapter<Friend>
+        ~ requestDataList : ArrayList<Friend>
+        ~ requestList : RecyclerView
+        ~ username : String
+        + FriendListFragment()
+        + onCreate()
+        + onCreateView()
+        + onViewCreated()
+        + updateFriendList()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.FriendSearchFragment {
+        ~ collectionReference : CollectionReference
+        ~ db : FirebaseFirestore
+        ~ friendDataList : ArrayList<String>
+        ~ searchAdapter : GenericAdapter<Friend>
+        ~ searchDataList : ArrayList<Friend>
+        ~ searchList : RecyclerView
+        - editTextSearchUsername : EditText
+        - searchButton : Button
+        + FriendSearchFragment()
+        + getFriendList()
+        + onCreate()
+        + onCreateView()
+        + onViewCreated()
+        + updateSearchList()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    abstract class com.example.habit_tracker.GenericAdapter {
+        - context : Context
+        - items : ArrayList<T>
+        + GenericAdapter()
+        + getItemCount()
+        {abstract} + onBindData()
+        + onBindViewHolder()
+        + onCreateViewHolder()
+        {abstract} + setViewHolder()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.Habit {
+        {static} + CREATOR : Creator<Habit>
+        - dateOfStarting : String
+        - finish : Integer
+        - habitID : String
+        - habitName : String
+        - isPrivate : Boolean
+        - order : Integer
+        - plan : Integer
+        - progress : Float
+        - reason : String
+        - repeat : String
+        - userName : String
+        + describeContents()
+        + getComment()
+        + getDateOfStarting()
+        + getFinish()
+        + getHabitID()
+        + getIsPrivate()
+        + getName()
+        + getOrder()
+        + getPlan()
+        + getProgress()
+        + getRepeat()
+        + getUsername()
+        + writeToParcel()
+        # Habit()
+        ~ Habit()
+        ~ setDateOfStarting()
+        ~ setHabitTitle()
+        ~ setPrivate()
+        ~ setReason()
+        ~ setRepeat()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.HabitAddFragment {
+        - datePicked : String
+        - dayArray : String[]
+        - dayList : ArrayList<Integer>
+        - db : FirebaseFirestore
+        - editTextDate : TextView
+        - habitReason : EditText
+        - habitTitle : EditText
+        - habitsSize : Integer
+        - isPrivate : Boolean
+        - plan : TextView
+        - radioGroup : RadioGroup
+        - repeatDay : TextView
+        - selectedDay : boolean[]
+        - selectedDayString : String
+        - submitButton : FloatingActionButton
+        - username : String
+        + HabitAddFragment()
+        + checkInputValidity()
+        + onCreate()
+        + onCreateView()
+        + onDateSet()
+        + onViewCreated()
+        ~ isStringValid()
+        - showDatePickerDialog()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.HabitDetailFragment {
+        ~ dateOfStarting : TextView
+        ~ edit : FloatingActionButton
+        ~ habitReason : TextView
+        ~ habitTitle : TextView
+        ~ isPrivate : TextView
+        ~ percentage : TextView
+        ~ progress : TextView
+        ~ repeat : TextView
+        ~ visualIndicator : ProgressBar
+        {static} - TAG : String
+        + onCreate()
+        + onCreateView()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.HabitEditFragment {
+        - dateOfStarting : TextView
+        - datePicked : String
+        - dayArray : String[]
+        - dayList : ArrayList<Integer>
+        - db : FirebaseFirestore
+        - habitOrder : Integer
+        - habitReason : EditText
+        - habitTitle : EditText
+        - isPrivate : Boolean
+        - plan : EditText
+        - radioGroup : RadioGroup
+        - repeatDay : TextView
+        - selectedDay : boolean[]
+        - selectedDayString : String
+        - submitButton : FloatingActionButton
+        - username : String
+        + checkInputValidity()
+        + onCreate()
+        + onCreateView()
+        + onDateSet()
+        + onViewCreated()
+        ~ isStringValid()
+        - showDatePickerDialog()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.HabitListFragment {
+        ~ collectionReference : CollectionReference
+        ~ collectionReferenceEvent : CollectionReference
+        ~ db : FirebaseFirestore
+        ~ habitAdapter : GenericAdapter<Habit>
+        ~ habitDataList : ArrayList<Habit>
+        ~ habitList : RecyclerView
+        ~ itemTouchHelperCallback : SimpleCallback
+        ~ todayHabitDataList : ArrayList<Habit>
+        ~ todayRecyclerAdapter : GenericAdapter<Habit>
+        ~ username : String
+        + HabitListFragment()
+        + onCreate()
+        + onCreateOptionsMenu()
+        + onCreateView()
+        + onOptionsItemSelected()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    interface com.example.habit_tracker.Info {
+        {abstract} + getComment()
+        {abstract} + getHabitID()
+        {abstract} + getName()
+        {abstract} + getUsername()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.LoginFragment {
+        ~ db : FirebaseFirestore
+        ~ realname : String
+        ~ toLoginButton : Button
+        - editTextPassword : EditText
+        - editTextUsername : EditText
+        - navToSignup : TextView
+        - signInButton : Button
+        + LoginFragment()
+        + onCreate()
+        + onCreateView()
+        + onResume()
+        + onViewCreated()
+        + validPassword()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.MainActivity {
+        ~ db : FirebaseFirestore
+        ~ fragment : Fragment
+        ~ fragmentManager : FragmentManager
+        ~ fragmentTransaction : FragmentTransaction
+        ~ navController : NavController
+        + onCreateOptionsMenu()
+        + onSupportNavigateUp()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.SecUtility {
+        {static} + _random : Random
+        {static} + convertImageToString()
+        {static} + getNextSalt()
+        {static} + getSHA()
+        {static} + toHexString()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.SignupFragment {
+        {static} - _random : Random
+        - db : FirebaseFirestore
+        - firstPassword : EditText
+        - realName : EditText
+        - returnToLoginButton : TextView
+        - secondPassword : EditText
+        - signupButton : Button
+        - username : EditText
+        + SignupFragment()
+        {static} + checkFirstPassValid()
+        {static} + checkRealnameValid()
+        {static} + checkSecondPassValid()
+        {static} + checkUsernameValid()
+        + onCreate()
+        + onCreateView()
+        + onViewCreated()
+    }
+  }
+  
+
+  namespace com.example.habit_tracker {
+    class com.example.habit_tracker.Utility {
+        {static} - _random : Random
+        {static} - db : FirebaseFirestore
+        {static} + addFriend()
+        {static} + addRequest()
+        {static} + removeFriend()
+        {static} + removeRequest()
+    }
+  }
+  
+
+  com.example.habit_tracker.Event .up.|> android.os.Parcelable
+  com.example.habit_tracker.Event .up.|> com.example.habit_tracker.Info
+  com.example.habit_tracker.EventAddFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.EventDetailFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.EventDetailFragment o-- com.example.habit_tracker.Event : event
+  com.example.habit_tracker.EventEditFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.EventEditFragment o-- com.example.habit_tracker.Event : event
+  com.example.habit_tracker.EventListFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.EventListFragment o-- com.example.habit_tracker.Event : deletedEvent
+  com.example.habit_tracker.EventListFragment o-- com.example.habit_tracker.Event : event
+  com.example.habit_tracker.EventListFragment o-- com.example.habit_tracker.Habit : habit
+  com.example.habit_tracker.Friend .up.|> android.os.Parcelable
+  com.example.habit_tracker.FriendInfoFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.FriendInfoFragment o-- com.example.habit_tracker.Friend : friend
+  com.example.habit_tracker.FriendListFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.FriendSearchFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.GenericAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.example.habit_tracker.Habit .up.|> android.os.Parcelable
+  com.example.habit_tracker.Habit .up.|> com.example.habit_tracker.Info
+  com.example.habit_tracker.HabitAddFragment .up.|> android.app.DatePickerDialog.OnDateSetListener
+  com.example.habit_tracker.HabitAddFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.HabitDetailFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.HabitDetailFragment o-- com.example.habit_tracker.Habit : habit
+  com.example.habit_tracker.HabitEditFragment .up.|> android.app.DatePickerDialog.OnDateSetListener
+  com.example.habit_tracker.HabitEditFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.HabitEditFragment o-- com.example.habit_tracker.Habit : habit
+  com.example.habit_tracker.HabitListFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.LoginFragment -up-|> androidx.fragment.app.Fragment
+  com.example.habit_tracker.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.habit_tracker.SignupFragment -up-|> androidx.fragment.app.DialogFragment
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

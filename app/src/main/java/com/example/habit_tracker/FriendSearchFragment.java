@@ -52,8 +52,6 @@ public class FriendSearchFragment extends Fragment {
     private Button searchButton;
     private EditText editTextSearchUsername;
 
-    Utility newUtil = new Utility();
-
     public FriendSearchFragment() {
         // Required empty public constructor
     }
@@ -94,11 +92,11 @@ public class FriendSearchFragment extends Fragment {
                     public void onClick(View view) {
                         if (requestButton.getText().toString().equals("Request")){
                             Log.d("tag", "Value: " + requestButton.getText().toString());
-                            newUtil.addRequest(val.getUserName(),currentUser);
+                            Utility.addRequest(val.getUserName(),currentUser);
                             requestButton.setText("Cancel");
                         }
                         else if (requestButton.getText().toString().equals("Cancel")){
-                            newUtil.removeRequest(val.getUserName(),currentUser);
+                            Utility.removeRequest(val.getUserName(),currentUser);
                             requestButton.setText("Request");
                         }
                     }

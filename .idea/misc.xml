@@ -3,9 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/fragment_event_add.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_event_detail.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_event_edit.xml" value="0.335" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_event_add.xml" value="0.264" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_event_detail.xml" value="0.264" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_event_edit.xml" value="0.2" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_event_list.xml" value="0.1" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_friend_info.xml" value="0.203515625" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_friend_list.xml" value="0.203515625" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_friend_search.xml" value="0.203515625" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_habit_detail.xml" value="0.2" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_habit_edit.xml" value="0.203515625" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_habit_list.xml" value="0.2" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_login.xml" value="0.2" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/fragment_signup.xml" value="0.203515625" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/request_list_row.xml" value="0.203515625" />
+        <entry key="..\:/Users/wangd/Desktop/301project/habit_tracker/app/src/main/res/layout/search_list_row.xml" value="0.203515625" />
       </map>
     </option>
   </component>

@@ -174,10 +174,10 @@ public class SignupFragment extends DialogFragment {
 
                                 // **** hashing pw
                                 String hashedPw = null;
-                                String salt = Utility.getNextSalt();
+                                String salt = SecUtility.getNextSalt();
                                 try {
                                     // Salts password at the same time
-                                    hashedPw = toHexString(getSHA(firstPassword.getText().toString().concat(salt)));
+                                    hashedPw = SecUtility.toHexString(SecUtility.getSHA(firstPassword.getText().toString().concat(salt)));
                                 } catch (NoSuchAlgorithmException e) {
                                     // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
                                     e.printStackTrace();
@@ -261,45 +261,5 @@ public class SignupFragment extends DialogFragment {
     public static boolean checkSecondPassValid(String firstpass, String secondpass) {
         // check second pass password matching
         return firstpass.equals(secondpass);
-    }
-
-
-    /**
-     * Hashing support function. SRC: https://www.geeksforgeeks.org/sha-256-hash-in-java/
-     * @param input
-     *      string to be hashed
-     * @return
-     *      returns the hashed result as a bytearray
-     * @throws NoSuchAlgorithmException
-     *      if the hash function specified does not exist. SHOULD NOT OCCUR
-     */
-    public static byte[] getSHA(String input) throws NoSuchAlgorithmException
-    {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        return md.digest(input.getBytes(StandardCharsets.UTF_8));
-    }
-
-    /**
-     * Hashing support function. SRC: https://www.geeksforgeeks.org/sha-256-hash-in-java/
-     * @param hash
-     *      byte array input of something that is hashed in SHA256
-     * @return
-     *      returns the string representation of the hash in hex
-     */
-    public static String toHexString(byte[] hash)
-    {
-        // Convert byte array into signum representation
-        BigInteger number = new BigInteger(1, hash);
-
-        // Convert message digest into hex value
-        StringBuilder hexString = new StringBuilder(number.toString(16));
-
-        // Pad with leading zeros
-        while (hexString.length() < 32)
-        {
-            hexString.insert(0, '0');
-        }
-
-        return hexString.toString();
     }
 }

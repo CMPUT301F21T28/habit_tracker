@@ -12,13 +12,13 @@ public class EventTest {
      * Sets mockEvent to a new Event before each test.
      */
     @BeforeEach
-    public void createMockEvent(){
+    public void createMockEvent() {
         Double locationLongitude = 0.0;
         Double locationLatitude = 0.0;
-        mockEvent = new Event("mockUsername", "mockHabitId", "mockEventId",
-                "mockName", "mockComment", locationLongitude,locationLatitude,"mockImage");
-    }
 
+        mockEvent = new Event("mockUsername", "mockHabitId", "mockEventId", "mockName", "mockComment", locationLongitude, locationLatitude, "mockImage");
+
+    }
     /**
      * Testing the username getter of Event
      */
@@ -72,7 +72,7 @@ public class EventTest {
      */
     @Test
     public void getLocationLongitudeTest() {
-        assertEquals(mockEvent.getLocationLongitude(), (Double) (0.0));
+        assertEquals(mockEvent.getLocationLongitude(), (Double) 0.0);
     }
 
     /**
@@ -80,7 +80,7 @@ public class EventTest {
      */
     @Test
     public void getLocationLatitudeTest() {
-        assertEquals(mockEvent.getLocationLatitude(), (Double) (0.0));
+        assertEquals(mockEvent.getLocationLatitude(), (Double) 0.0);
     }
 
     /**
@@ -133,7 +133,7 @@ public class EventTest {
         assertEquals(mockEvent.getName(), "newMockImage");
     }
 
-        // Supposed to fail: (function stub)
+    // Supposed to fail: (function stub)
         //    public int describeContents()
 
         // Dont have to test because part of superclass

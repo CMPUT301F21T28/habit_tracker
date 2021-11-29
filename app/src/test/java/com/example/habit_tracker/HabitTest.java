@@ -168,4 +168,58 @@ public class HabitTest {
         assertEquals(false, field.get(mockHabit), "Fields didn't match");
     }
 
+    @Test
+    void getUsername() {
+        assertEquals("usernameMock", mockHabit.getUsername());
+    }
+
+    @Test
+    void getName() {
+        assertEquals("habitNameMock", mockHabit.getName());
+    }
+
+    @Test
+    void getHabitID() {
+        assertEquals("habitIDMock", mockHabit.getHabitID());
+    }
+
+    @Test
+    void getDateOfStarting() {
+        assertEquals("dateOfStartingMock", mockHabit.getDateOfStarting());
+    }
+
+    @Test
+    void getComment() {
+        assertEquals("reasonMock", mockHabit.getComment());
+    }
+
+    @Test
+    void getRepeat() {
+        assertEquals("repeatMock", mockHabit.getRepeat());
+    }
+
+    @Test
+    void getIsPrivate() {
+        assertEquals(false, mockHabit.getIsPrivate());
+    }
+
+    @Test
+    void getOrder() {
+        assertEquals((Integer) 1, mockHabit.getOrder());
+    }
+
+    @Test
+    void getPlan() {
+        assertEquals((Integer) 4, mockHabit.getPlan());
+    }
+
+    @Test
+    void getFinish() {
+        assertEquals((Integer) 2, mockHabit.getFinish());
+    }
+
+    @Test
+    void getProgress() {
+        assertEquals((Float) 50.0f, mockHabit.getProgress());
+    }
 }

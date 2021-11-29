@@ -41,6 +41,9 @@ import android.widget.Toast;
 
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -73,6 +76,8 @@ public class EventEditFragment extends Fragment {
     private TextView hasLocation;
     private TextView noLocation;
     FusedLocationProviderClient client;
+    Double currentLongitude = null;
+    Double currentLatitude = null;
 
     private String username;
     private String habitID;
@@ -149,6 +154,7 @@ public class EventEditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
+
 
         commentContent = (EditText)getView().findViewById(R.id.commentContent);
         submit= (FloatingActionButton) getView().findViewById(R.id.Submit);
@@ -256,8 +262,9 @@ public class EventEditFragment extends Fragment {
                 // isValid doesnt actually do anything... please check this -- darren
                 if (isValid[0] == true) {
                     data.put("event comment", commentContent.getText().toString());
-                    //data.put("Longitude", currentLongitude[0]);
-                    //data.put("Latitude", currentLatitude[0]);
+                    data.put("Longitude", currentLongitude);
+                    data.put("Latitude", currentLatitude);
+                    //data.put("Location", locationContent.getText().toString());
                     data.put("event name",nameContent.getText().toString());
 
                     event.setEventComment(commentContent.getText().toString());
@@ -333,6 +340,24 @@ public class EventEditFragment extends Fragment {
                         Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
+                    LocationRequest mLocationRequest = LocationRequest.create();
+                    mLocationRequest.setInterval(60000);
+                    mLocationRequest.setFastestInterval(5000);
+                    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    LocationCallback mLocationCallback = new LocationCallback() {
+                        @Override
+                        public void onLocationResult(LocationResult locationResult) {
+                            if (locationResult == null) {
+                                return;
+                            }
+                            for (Location location : locationResult.getLocations()) {
+                                if (location != null) {
+                                    //TODO: UI updates.
+                                }
+                            }
+                        }
+                    };
+                    LocationServices.getFusedLocationProviderClient(view.getContext()).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
                     client = LocationServices.getFusedLocationProviderClient(view.getContext());
                     Task<Location> task = client.getLastLocation();
                     task.addOnSuccessListener(new OnSuccessListener<Location>(){
@@ -340,8 +365,8 @@ public class EventEditFragment extends Fragment {
                         public void onSuccess(Location location){
                             HashMap<String,Object> data = new HashMap<>();
                             if (location!= null){
-                                //currentLongitude[0] =location.getLongitude();
-                                //currentLatitude[0] = location.getLatitude();
+                                currentLongitude =location.getLongitude();
+                                currentLatitude = location.getLatitude();
                                 noLocation.setVisibility(View.GONE);
                                 hasLocation.setVisibility(View.VISIBLE);
                             }
@@ -358,6 +383,15 @@ public class EventEditFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public Boolean goodString(String string){
+        if (string.length() > 0 && string.length() < 20){
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
     // class function to help with the image translation

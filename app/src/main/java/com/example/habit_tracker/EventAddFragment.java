@@ -49,6 +49,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -75,6 +78,8 @@ public class EventAddFragment extends Fragment {
     String username = null;
     String habitID;
     FusedLocationProviderClient client;
+    Double currentLongitude = null;
+    Double currentLatitude = null;
 
     Bitmap originBitmap;
     Boolean isFromHabitList = false;
@@ -158,8 +163,6 @@ public class EventAddFragment extends Fragment {
         Image image = null;
         ImageView imageView;
         final File[] file = new File[1];
-        final Double[] currentLongitude = {null};
-        final Double[] currentLatitude = {null};
 
 
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
@@ -251,8 +254,8 @@ public class EventAddFragment extends Fragment {
                 if (event_name.length() > 0 && event_commit.length() <= 20 ) {
                     data.put("event name", event_name);
                     data.put("event comment", event_commit);
-                    data.put("Longitude", currentLongitude[0]);
-                    data.put("Latitude", currentLatitude[0]);
+                    data.put("Longitude", currentLongitude);
+                    data.put("Latitude", currentLatitude);
                     data.put("event image",imageString);
 
                     Log.d(TAG, "onClick: " + habitID);
@@ -297,59 +300,80 @@ public class EventAddFragment extends Fragment {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("TAG", "onClick: before if");
-                client = LocationServices.getFusedLocationProviderClient(getContext());
-//                if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
-//                        android.Manifest.permission.ACCESS_FINE_LOCATION)
-//                        == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-                }
+                if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
+                    LocationRequest mLocationRequest = LocationRequest.create();
+                    mLocationRequest.setInterval(60000);
+                    mLocationRequest.setFastestInterval(5000);
+                    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    LocationCallback mLocationCallback = new LocationCallback() {
+                        @Override
+                        public void onLocationResult(LocationResult locationResult) {
+                            if (locationResult == null) {
+                                return;
+                            }
+                            for (Location location : locationResult.getLocations()) {
+                                if (location != null) {
+                                    //TODO: UI updates.
+                                }
+                            }
+                        }
+                    };
+                    LocationServices.getFusedLocationProviderClient(view.getContext()).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+                    client = LocationServices.getFusedLocationProviderClient(view.getContext());
+                    /*client.requestLocationUpdates(null, null);*/
+                    Task<Location> task = client.getLastLocation();
+                    task.addOnSuccessListener(new OnSuccessListener<Location>(){
+                    @Override
+                    public void onSuccess(Location location){
+                        if (location!= null) {
+                            currentLongitude = location.getLongitude();
+                            currentLatitude = location.getLatitude();
+                            locationButton.setVisibility(View.GONE);
+                            removeLocationButton.setVisibility(View.VISIBLE);
 
 
+                            /*data.put("Longitude", location.getLongitude());
+                            data.put("Latitude", location.getLatitude());
+                            Log.d(TAG, "onClick: " + habitID);
+                            collectionReference.document(habitID).collection("EventList")
+                                    .document(event_name + String.valueOf(System.currentTimeMillis()))
+                                    .set(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(getContext(), "submit success", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getContext(), "submit fail", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });*/
+
+
+                        }}
+
+                });}
 
                 else{
-                    ActivityCompat.requestPermissions((Activity) getContext(),
+                    ActivityCompat.requestPermissions((Activity) view.getContext(),
                             new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44
                            );
 
                 }
-//                if (ContextCompat.checkSelfPermission(view.getContext().getApplicationContext(),
-//                        android.Manifest.permission.ACCESS_FINE_LOCATION)
-//                        == PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(getContext(),"Add success",Toast.LENGTH_SHORT).show();
-//                    client = LocationServices.getFusedLocationProviderClient(view.getContext());
-//                    Task<Location> task = client.getLastLocation();
-//                    task.addOnSuccessListener(new OnSuccessListener<Location>(){
-//                        @Override
-//                        public void onSuccess(Location location){
-//                            if (location!= null){
-//                                currentLongitude[0] =location.getLongitude();
-//                                currentLatitude[0] = location.getLatitude();
-//                                locationButton.setVisibility(View.GONE);
-//                                removeLocationButton.setVisibility(View.VISIBLE);
-//
-//
-//                            }
-//
-//                        }
-//
-//                    });}
-//
-//                else{
-//                    ActivityCompat.requestPermissions((Activity) view.getContext(),
-//                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44
-//                    );
-//
-//                }
             }
         });
 
         removeLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentLongitude[0] = null;
-                currentLatitude[0] = null ;
+                currentLongitude = null;
+                currentLatitude = null ;
                 removeLocationButton.setVisibility(View.GONE);
                 locationButton.setVisibility(View.VISIBLE);
             }

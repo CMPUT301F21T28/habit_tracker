@@ -258,6 +258,14 @@ public class SignupFragment extends DialogFragment {
         return firstpass.length() > 5;
     }
 
+    /**
+     * Checks if the second password is valid (equals the first one)
+     * @param firstpass
+     *      First password (to check against)
+     * @param secondpass
+     *      Second password (the one to be checked)
+     * @return
+     */
     public static boolean checkSecondPassValid(String firstpass, String secondpass) {
         // check second pass password matching
         return firstpass.equals(secondpass);

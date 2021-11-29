@@ -19,7 +19,8 @@ import java.util.Base64;
 import java.util.Random;
 
 /**
- * Utility is a class specific for handling db retrieve in Friend's related fragment and password salting
+ * A Utility class that contains methods related to creating and removing friends and friend requests
+ * from the FirebaseDB. Methods are all static so no instantiation of the class is required.
  */
 
 public class Utility {

@@ -45,7 +45,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull FriendListAdapter.ViewHolder holder, int position) {
         Friend friend = friends.get(position);
-        holder.friendName.setText((friend.getActualName()));
+        holder.friendName.setText(friend.getActualName().concat("(").concat(friend.getUserName()).concat(")"));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +61,6 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                 controller.navigate(R.id.action_friendListFragment_to_friendInfoFragment, bundle);
             }
         });
-
     }
 
     @Override

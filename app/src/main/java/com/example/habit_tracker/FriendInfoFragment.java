@@ -69,15 +69,13 @@ public class FriendInfoFragment extends Fragment {
 
         // setting the friend username and realname
         tvUsername = rootView.findViewById(R.id.textView_username);
-        tvUsername.setText(friend.getUserName().toString());
+        tvUsername.setText(friend.getActualName().concat("(").concat(friend.getUserName()).concat(")"));
 
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friendInfo);
         habitListAdapter = new HabitListAdapter(getActivity(), habitDataList);
         habitList.setAdapter(habitListAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        // unfollowBtn.findViewById(R.id.unfollow_button);
 
         return rootView;
     }
@@ -88,7 +86,6 @@ public class FriendInfoFragment extends Fragment {
 
         // TODO Generic adapter: setOnClick to be disabled!!
 
-        // set onClickListener for unfollowBtn
         unfollowBtn = getView().findViewById(R.id.unfollow_button);
 
         unfollowBtn.setOnClickListener(new View.OnClickListener() {

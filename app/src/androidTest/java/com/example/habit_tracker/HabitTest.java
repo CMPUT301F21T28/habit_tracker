@@ -64,11 +64,11 @@ public class HabitTest {
 
     @Test
     public void ViewHabitTest() {
-        //create a habit
+        // create a habit
         solo.clickOnView(solo.getView(R.id.add_habit_button));
         assertNotNull(solo.getView(R.id.habit_add_constraint_layout));
 
-        //set details for habit
+        // set details for habit
         solo.enterText((EditText) solo.getView(R.id.editText_habitTitle), "robotiumHabit");
         solo.enterText((EditText) solo.getView(R.id.editText_habitReason), "robotiumHabitReason");
         solo.clickOnView(solo.getView(R.id.textDatePicker));
@@ -83,7 +83,7 @@ public class HabitTest {
         // Check current page as habit list
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));
 
-        //Click on the new habit
+        // Click on the new habit
         solo.clickOnText("robotiumHabit");
         // Check current page as habit detail
         assertNotNull(solo.getView(R.id.habit_detail_layout));
@@ -230,7 +230,6 @@ public class HabitTest {
 
         // Check if entered into habitlistfragment
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));
-
     }
 
 

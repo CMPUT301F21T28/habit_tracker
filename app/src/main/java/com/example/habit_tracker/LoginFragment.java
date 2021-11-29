@@ -35,8 +35,7 @@ import java.security.NoSuchAlgorithmException;
 import io.grpc.okhttp.internal.Util;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * LoginFragment creates a fragment for user to login the app
  */
 public class LoginFragment extends Fragment {
     private Button signInButton;
@@ -65,11 +64,12 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    // TODO: add on resume clear the password textbox
+    /**
+     * onResume handles the action of a back button
+     */
     @Override
     public void onResume () {
         super.onResume();
-
         editTextPassword.setText("");
     }
 
@@ -77,14 +77,6 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        getView().findViewById(R.id.Nav_to_mainpage).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavController controller = Navigation.findNavController(view);
-//                controller.navigate(R.id.action_loginFragment_to_mainPageFragment);
-//            }
-//        });
-        //View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_login, null);
         signInButton = (Button) getView().findViewById(R.id.Nav_to_mainpage);
         editTextUsername = (EditText) getView().findViewById(R.id.username);
         editTextPassword = (EditText) getView().findViewById(R.id.password);
@@ -109,6 +101,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        // handle the signin button
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,6 +168,13 @@ public class LoginFragment extends Fragment {
 
     }
 
+    /**
+     * class function to test if a password is valid
+     * @param inputPassword password input by user
+     * @param dbPassword password retrieve from db
+     * @param salt a salted string to secure the password
+     * @return
+     */
     public boolean validPassword(String inputPassword, String dbPassword, String salt){
         // Salt the PW
         String saltedPw = inputPassword.concat(salt);

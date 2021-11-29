@@ -3,6 +3,9 @@ package com.example.habit_tracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Friend class stores Friend related information pulled from db
+ */
 public class Friend implements Parcelable{
     private String userName;
     private String actualName;

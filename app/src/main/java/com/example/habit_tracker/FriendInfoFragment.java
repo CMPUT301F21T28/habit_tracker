@@ -37,6 +37,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * FriendInfo create a fragment to show details of a friend, including his/her public habit
+ */
 public class FriendInfoFragment extends Fragment {
 
     RecyclerView habitList;
@@ -80,6 +83,7 @@ public class FriendInfoFragment extends Fragment {
         tvUsername = rootView.findViewById(R.id.textView_username);
         tvUsername.setText(friend.getActualName() + " (" + friend.getUserName() + ")");
 
+        // create the recyclerview for the habitDataList, with my generic adapter
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friendInfo);
         habitAdapter = new GenericAdapter<Habit>(getActivity(), habitDataList) {

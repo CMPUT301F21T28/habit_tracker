@@ -3,6 +3,9 @@ package com.example.habit_tracker;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Event class stores Event related information pulled from db
+ */
 public class Event implements Parcelable, Info
 {
     private String username;

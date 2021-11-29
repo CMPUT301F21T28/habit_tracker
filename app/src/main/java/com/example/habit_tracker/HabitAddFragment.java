@@ -41,8 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of Add Habit Fragment.
+ * HabitAddFragment creates a fragment for adding a new habit
  */
 public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
 
@@ -92,30 +91,6 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         return rootView;
 
     }
-
-//    /**
-//     * previous version
-//     * function to check if the string is in the form of yyyy/mm/dd
-//     * @param date
-//     * @return a boolean, true if the string is in yyyy/mm/dd, return false otherwise
-//     */
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    public static boolean checkDateValidity(final String date) {
-//        boolean valid = false;
-//        try {
-//
-//            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
-//            LocalDate.parse(date,
-//                    DateTimeFormatter.ofPattern("uuuu/MM/dd")
-//                            .withResolverStyle(ResolverStyle.STRICT)
-//            );
-//            valid = true;
-//        } catch (DateTimeParseException e) {
-//            e.printStackTrace();
-//            valid = false;
-//        }
-//        return valid;
-//    }
 
     /**
      * Called after the view is created. User Interface fields (eg. edittext) are bound to their variables,
@@ -329,15 +304,6 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
 
     }
 
-//    public Boolean isTitleValid(String string) {
-//        Boolean isValid = true;
-//        if (0 >= string.length() || 20 <= string.length()) {
-//            isValid = false;
-//            habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
-//        }
-//        return isValid;
-//    }
-
     /**
      * Check if the input title, reason, date are valid
      * @param editTextView, lower, upper
@@ -363,7 +329,9 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         return (string.length() > lower && string.length() <= upper);
     }
 
-    /* Create a DatePicker Dialog */
+    /**
+     *  Create a DatePicker Dialog
+     */
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getActivity(),
@@ -387,47 +355,4 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         datePicked = year + "-" + month + "-" +dayOfMonth;
         editTextDate.setText("Date Selected: " + datePicked);
     }
-
-//    public Boolean isReasonValid(String string) {
-//        Boolean isValid = true;
-//        if (0 >= string.length() || 30 <= string.length()) {
-//            isValid = false;
-//            habitReason.setError("Habit Reason is not valid. Please ensure that it is between 0 and 30 characters.");
-//        }
-//        return isValid;
-//    }
-//
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    public Boolean isDateValid(String string){
-//        Boolean isValid = true;
-//        if (string.length() >= 0){
-//            isValid = checkDateValidity(string);
-//            if (isValid == false){
-//                dateOfStarting.setError("Invalid date format! Please enter date in yyyy/mm/dd.");
-//            }
-//        }
-//        return isValid;
-//    }
-//
-//    public Boolean isRepeatValid(String string) {
-//        Boolean isValid = true;
-//        if (0 >= string.length() || 30 <= string.length()) {
-//            isValid = false;
-//            repeat.setError("The reason is not valid. Please ensure that it is between 0 and 30 characters.");
-//        }
-//        return isValid;
-//    }
-//
-//    public Boolean isPrivateValid(String string){
-//        Boolean isValid = true;
-//        if (string.toLowerCase().equals("yes")) {
-//            isPrivateBoolean = true;
-//        } else if (string.toLowerCase().equals("no")){
-//            isPrivateBoolean = false;
-//        }else {
-//            isValid = false;
-//            isPrivate.setError("Your input should be Yes or No.");
-//        }
-//        return isValid;
-//    }
 }

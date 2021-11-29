@@ -64,6 +64,10 @@ import java.io.File;
 import java.util.Base64;
 import java.util.HashMap;
 
+/**
+ * EventAddFragment creates a fragment for event to add function
+ */
+
 public class EventAddFragment extends Fragment {
 
     private static final String TAG = "MyActivity";

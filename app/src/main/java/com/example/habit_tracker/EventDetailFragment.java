@@ -29,8 +29,7 @@ import java.util.Locale;
 import java.util.Base64;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * EventDetailFragment creates a fragment for showing a event's details
  */
 public class EventDetailFragment extends Fragment {
 
@@ -117,6 +116,7 @@ public class EventDetailFragment extends Fragment {
             viewLocation.setText("Location is optional... you didn't set one");
         }
 
+        // handle the edit button
         editButton = (FloatingActionButton) getView().findViewById(R.id.Edit);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +133,7 @@ public class EventDetailFragment extends Fragment {
         });
     }
 
+    // class function help to translate the image
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Bitmap stringToBitmap(String imageString){
         byte[] bitmapArray;

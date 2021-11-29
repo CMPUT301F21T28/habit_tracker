@@ -43,8 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * EventListFragment uses a recyclerView to show all Events title
  */
 public class EventListFragment extends Fragment {
 
@@ -75,11 +74,21 @@ public class EventListFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    /**
+     * Inflate the app bar, declare the app bar will be changed by me
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.tooltip_info, menu);
     }
 
+    /**
+     * Gives app bar a certain buttons and its functions
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -90,9 +99,7 @@ public class EventListFragment extends Fragment {
 
             default:
                 return super.onOptionsItemSelected(item);
-
         }
-
     }
 
     /**
@@ -108,6 +115,7 @@ public class EventListFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_event_list, container, false);
 
+        // get things out of bundle
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
         if (bundle.containsKey("Habit")) {
@@ -117,9 +125,9 @@ public class EventListFragment extends Fragment {
             habitID = bundle.getString("habitID");
         }
 
+        // inflate the recyclerView with my generic adapter
         eventDataList = new ArrayList<>();
         eventList = (RecyclerView) rootView.findViewById(R.id.event_list);
-
         eventAdapter = new GenericAdapter<Event>(getActivity(), eventDataList) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
@@ -188,9 +196,6 @@ public class EventListFragment extends Fragment {
             }
         });
 
-
-
-
         //press add button to add
         FloatingActionButton add_event = getView().findViewById(R.id.floatingActionButtonAdd);
         add_event.setOnClickListener(new View.OnClickListener() {
@@ -205,9 +210,9 @@ public class EventListFragment extends Fragment {
                 controller.navigate(R.id.action_eventListFragment_to_eventAddFragment,bundle);
             }
         });
-
     }
 
+    // Touch helper initialize actions for swiping to delete
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {

@@ -25,8 +25,8 @@ public class EventDetailFragmentTest {
 
         byte[] bitmapArray;
         bitmapArray = Base64.getDecoder().decode(mockImageString);
-        Bitmap image = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        Bitmap mockImage = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
         //imageView.setImageBitmap(bitmap);
-        assertEquals(image,mockEventDetail.stringToBitmap(mockImageString));
+        assertEquals(mockImage,mockEventDetail.stringToBitmap(mockImageString));
     }
 }

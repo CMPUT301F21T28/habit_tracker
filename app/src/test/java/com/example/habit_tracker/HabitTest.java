@@ -18,7 +18,7 @@ public class HabitTest {
      */
     @BeforeEach
     public void createHabit(){
-        mockHabit= new Habit("usernameMock","habitNameMock", "habitIDMock", "dateOfStartingMock", "reasonMock","repeatMock",false, 1);
+        //mockHabit= new Habit("usernameMock","habitNameMock", "habitIDMock", "dateOfStartingMock", "reasonMock","repeatMock",false, 1);
     }
 
     /**
@@ -28,7 +28,7 @@ public class HabitTest {
      */
     @Test
     public void testSetRepeat() throws NoSuchFieldException, IllegalAccessException {
-        mockHabit.setRepeat("Monday");
+        //mockHabit.setRepeat("Monday");
         final Field field = mockHabit.getClass().getDeclaredField("repeat");
         field.setAccessible(true);
         assertEquals("Monday", field.get(mockHabit), "Fields didn't match");

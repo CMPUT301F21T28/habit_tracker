@@ -28,6 +28,13 @@
         app:layout_constraintGuide_percent="0.40" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,6 +105,7 @@
         android:layout_below="@id/textView3"
         android:ems="10"
         android:hint="Name"
+        android:maxLength="19"
         android:inputType="textPersonName"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -107,10 +115,10 @@
 
     <EditText
         android:id="@+id/editTextComments"
-        android:maxLength="20"
+        android:maxLength="19"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView4"
+        android:layout_below="@id/imageHint"
         android:ems="10"
         android:hint="Up to 20 Characters"
         android:inputType="textPersonName"
@@ -127,11 +135,12 @@
         android:layout_centerHorizontal="true"
         android:includeFontPadding="false"
         android:text="SUBMIT"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintBottom_toTopOf="@+id/guideline232"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline8"
-        android:backgroundTint="@android:color/holo_blue_dark"/>
+        app:layout_constraintTop_toTopOf="@+id/guideline232"
+        app:layout_constraintVertical_bias="0.166" />
 
     <TextView
         android:id="@+id/textView3"
@@ -145,16 +154,17 @@
         app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/imageHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextName"
         android:layout_marginStart="8dp"
-        android:text="Comments (Optional)"
+        android:text="long click to delete image"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextComments"
+        app:layout_constraintVertical_bias="0.67" />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -163,30 +173,47 @@
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toTopOf="@+id/submitButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextComments" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextComments"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <!--        TODO image, location-->
-<!--    <TextView-->
-<!--        android:id="@+id/textView5"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/editTextComments"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:text="TextView"-->
-<!--        android:textSize="25dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/guideline4"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/guideline4" />-->
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Location (Optional)"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:layout_constraintVertical_bias="0.343" />
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/imageButton"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_below="@id/textView5"-->
-<!--        android:src="@android:drawable/ic_input_add"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/guideline5"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/guideline29"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline9"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/guideline40" />-->
+    <Button
+        android:id="@+id/locationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Location"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.412" />
+
+
+    <Button
+        android:id="@+id/removeLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove Location"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.412" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

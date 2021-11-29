@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -19,9 +21,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import java.io.ByteArrayOutputStream;
+import java.util.Locale;
 
 import java.util.Base64;
 
@@ -37,11 +38,14 @@ public class EventDetailFragment extends Fragment {
     private TextView eventName;
     private TextView commentContent;
     private TextView location;
+    private Double locationLongitude;
+    private Double locationLatitude;
     //private TextView locationContent;
     /*private TextView picture;
     private ImageView Image;*/
     private Button edit;
     private ImageView imageView;
+    private Button viewLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,36 +76,20 @@ public class EventDetailFragment extends Fragment {
         event = bundle.getParcelable("Event");
 
         eventName= rootView.findViewById(R.id.textView_detail_eventName_view);
-        commentContent = rootView.findViewById(R.id.CommentContent);
-        /* TODO image & location
-        location= rootView.findViewById(R.id.Location);
-        locationContent = rootView.findViewById(R.id.LocationContent);
-        picture= rootView.findViewById(R.id.Picture);
-        Image = rootView.findViewById(R.id.PictureContent);
-        */
+        commentContent = rootView.findViewById(R.id.nameContent);
 
         eventName.setText(event.getName());
         commentContent.setText(event.getComment());
-        //locationContent.setText(habitevent.getEventLocation());
+        locationLongitude = event.getLocationLongitude();
+        locationLatitude = event.getLocationLatitude();
 
         imageView = rootView.findViewById(R.id.imageView);
-        //imageView.getDrawable().
 
         String imageString = event.getEventImage();
         if (imageString != null) {
-            byte[] bitmapArray;
-            bitmapArray = Base64.getDecoder().decode(imageString);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+            Bitmap bitmap = stringToBitmap(imageString);
             imageView.setImageBitmap(bitmap);
         }
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        final CollectionReference collectionReference = db.collection("habit");
-//        DocumentReference documentReference = collectionReference.document(habitID)
-//                .collection("EventList").document(event.getEventID());
-        //documentReference;
-
-        //String eventID = event.getEventID();
-        //String imageString =
 
         return rootView;
 
@@ -116,6 +104,23 @@ public class EventDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(locationLatitude != null && locationLongitude!= null){
+
+        viewLocation=(Button) getView().findViewById(R.id.viewLocation);
+        viewLocation.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f",locationLongitude,locationLatitude );
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent); }
+        });}
+
+        else{
+            viewLocation=(Button) getView().findViewById(R.id.viewLocation);
+            viewLocation.setVisibility(View.GONE);
+
+        }
 
         edit = (Button)getView().findViewById(R.id.Edit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +138,14 @@ public class EventDetailFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Bitmap stringToBitmap(String imageString){
+        byte[] bitmapArray;
+        bitmapArray = Base64.getDecoder().decode(imageString);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        //imageView.setImageBitmap(bitmap);
+        return bitmap;
+    }
 }
 
 

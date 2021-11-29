@@ -21,6 +21,7 @@ public class EventDetailFragmentTest {
     }
 
 //    @Test
+    // BitmapFactory cannot mock
 //    public void testConvertStringToBitmap() {
 //
 //        byte[] bitmapArray;

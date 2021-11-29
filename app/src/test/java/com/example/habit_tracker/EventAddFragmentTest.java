@@ -23,13 +23,22 @@ public class EventAddFragmentTest {
     }
 
 //    @Test
-//    BitmapFactory have issues with mock
+//    //BitmapFactory have issues with mock, it cannot mock
 //    public void testConvertImageToString() {
 //
+//        EventAddFragment mockEventAdd = new EventAddFragment();
 //        byte[] bitmapArray;
 //        bitmapArray = Base64.getDecoder().decode(mockImageString);
 //        Bitmap image = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
 //        //imageView.setImageBitmap(bitmap);
 //        assertEquals(mockImageString,mockEventAdd.imageToString(image));
 //    }
+    @Test
+    public void testIsStringValidTrue(){
+        EventAddFragment mockEventAdd = new EventAddFragment();
+        String name = "habitA";
+        String commit = "";
+        assertEquals(true, mockEventAdd.isStringValid(name, 0, 20));
+        assertEquals(true, mockEventAdd.isStringValid(commit, -1, 30));
+    }
 }

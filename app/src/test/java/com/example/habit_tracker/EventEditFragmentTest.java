@@ -20,7 +20,7 @@ public class EventEditFragmentTest {
     // nothing to test currently.
 
 //    @Test
-//
+//    Bitmap factory cannot mock
 //    public void testConvertStringToBitmap() {
 //
 //        //
@@ -41,4 +41,13 @@ public class EventEditFragmentTest {
 //        //imageView.setImageBitmap(bitmap);
 //        assertEquals(mockImageString,mockEventEdit.imageToString(image));
 //    }
+    @Test
+    public void testIsStringValidTrue(){
+        EventEditFragment mockEventEdit= new EventEditFragment();
+        String eventName = "habitA";
+        String eventComment = "";
+        assertEquals(true, mockEventEdit.isStringValid(eventName, 0, 20));
+        assertEquals(true, mockEventEdit.isStringValid(eventComment, -1, 30));
+    }
+
 }

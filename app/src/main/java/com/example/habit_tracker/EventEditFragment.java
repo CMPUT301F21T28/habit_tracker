@@ -412,4 +412,7 @@ public class EventEditFragment extends Fragment {
         //imageView.setImageBitmap(bitmap);
         return bitmap;
     }
+    boolean isStringValid(String string, int lower, int upper) {
+        return (string.length() > lower && string.length() <= upper);
+    }
 }

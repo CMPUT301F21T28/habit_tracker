@@ -168,4 +168,47 @@ public class HabitTest {
         assertEquals(false, field.get(mockHabit), "Fields didn't match");
     }
 
+    @Test
+    void getUsername() {
+    }
+
+    @Test
+    void getName() {
+    }
+
+    @Test
+    void getHabitID() {
+    }
+
+    @Test
+    void getDateOfStarting() {
+    }
+
+    @Test
+    void getComment() {
+    }
+
+    @Test
+    void getRepeat() {
+    }
+
+    @Test
+    void getIsPrivate() {
+    }
+
+    @Test
+    void getOrder() {
+    }
+
+    @Test
+    void getPlan() {
+    }
+
+    @Test
+    void getFinish() {
+    }
+
+    @Test
+    void getProgress() {
+    }
 }

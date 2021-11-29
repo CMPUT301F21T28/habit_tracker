@@ -129,7 +129,7 @@ public class LoginTest {
         solo.enterText((EditText) solo.getView(R.id.password), "robotiumPw");
 
         // Click log in
-        solo.clickOnButton("LOG IN");
+        solo.clickOnButton("Log in");
 
         // Check if entered into habitlistfragment
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));

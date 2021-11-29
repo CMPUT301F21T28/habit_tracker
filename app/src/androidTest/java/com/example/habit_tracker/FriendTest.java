@@ -5,6 +5,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -82,7 +83,7 @@ public class FriendTest {
         solo.clearEditText((EditText) solo.getView(R.id.password));
         solo.enterText((EditText) solo.getView(R.id.username), "robotiumFriend");
         solo.enterText((EditText) solo.getView(R.id.password), "robotiumPw");
-        solo.clickOnButton("LOG IN");
+        solo.clickOnButton("Log in");
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));
         solo.clickOnView((FloatingActionButton) solo.getView(R.id.friend_button));
         assertNotNull(solo.getView(R.id.friend_list_constraint_layout));
@@ -114,7 +115,7 @@ public class FriendTest {
         solo.clearEditText((EditText) solo.getView(R.id.password));
         solo.enterText((EditText) solo.getView(R.id.username), "robotiumFriend");
         solo.enterText((EditText) solo.getView(R.id.password), "robotiumPw");
-        solo.clickOnButton("LOG IN");
+        solo.clickOnButton("Log in");
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));
         solo.clickOnView((FloatingActionButton) solo.getView(R.id.friend_button));
         assertNotNull(solo.getView(R.id.friend_list_constraint_layout));
@@ -194,7 +195,8 @@ public class FriendTest {
         solo.enterText((EditText) solo.getView(R.id.password), "robotiumPw");
 
         // Click log in
-        solo.clickOnButton("LOG IN");
+        solo.clickOnButton("Log in");
+//        solo.clickOnButton(R.id.Nav_to_mainpage);
 
         // Check if entered into habitlistfragment
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));

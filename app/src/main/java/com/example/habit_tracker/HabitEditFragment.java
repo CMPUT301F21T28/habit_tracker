@@ -150,7 +150,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         dateOfStarting.setText("Starts on " +datePicked);
         repeatDay.setText("Repeat on every " + habit.getRepeat());
         selectedDayString = habit.getRepeat();
-        plan.setHint("Plan to complete " + habit.getPlan() + " events");
+        times.setHint("Plan to complete " + habit.getPlan() + " events");
 
         // handles the radio button, if the habit is set to private
         if (habit.getIsPrivate() == true) {

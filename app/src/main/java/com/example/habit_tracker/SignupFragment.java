@@ -174,10 +174,10 @@ public class SignupFragment extends DialogFragment {
 
                                 // **** hashing pw
                                 String hashedPw = null;
-                                String salt = Utility.getNextSalt();
+                                String salt = SecUtility.getNextSalt();
                                 try {
                                     // Salts password at the same time
-                                    hashedPw = Utility.toHexString(Utility.getSHA(firstPassword.getText().toString().concat(salt)));
+                                    hashedPw = SecUtility.toHexString(SecUtility.getSHA(firstPassword.getText().toString().concat(salt)));
                                 } catch (NoSuchAlgorithmException e) {
                                     // SHOULD NEVER OCCUR GIVEN THAT SHA-256 IS A THING
                                     e.printStackTrace();

@@ -129,21 +129,6 @@
         app:layout_constraintStart_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
-    <Button
-        android:id="@+id/Edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Edit"
-        app:layout_constraintBottom_toTopOf="@+id/guideline20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline20"
-        android:backgroundTint="@android:color/holo_blue_dark"/>
-
     <TextView
         android:id="@+id/textView_detail_eventName_view"
         android:layout_width="wrap_content"

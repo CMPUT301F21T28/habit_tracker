@@ -18,6 +18,7 @@ import androidx.test.rule.ActivityTestRule;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -101,7 +102,7 @@ public class EventTest {
         // Add event detail
         solo.enterText((EditText) solo.getView(R.id.editTextName), "robotiumHabitEvent");
 
-        solo.clickOnButton("SUBMIT");
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.submitButton));
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumHabitEvent"));
 
@@ -113,12 +114,14 @@ public class EventTest {
         assertEquals("robotiumHabitEvent",view.getText().toString());
 
         // Edit event
-        solo.clickOnButton("Edit");
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.Edit));
         assertNotNull(solo.getView(R.id.event_edit_constraint_layout));
         // Add event detail
         solo.clearEditText((EditText) solo.getView(R.id.nameContent));
         solo.enterText((EditText) solo.getView(R.id.nameContent), "robotiumEventNew");
-        solo.clickOnButton("Submit");
+
+
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.Submit));
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumEventNew"));
 
@@ -190,7 +193,7 @@ public class EventTest {
         solo.enterText((EditText) solo.getView(R.id.password), "robotiumPw");
 
         // Click log in
-        solo.clickOnButton("LOG IN");
+        solo.clickOnButton("Log in");
 
         // Check if entered into habitlistfragment
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));

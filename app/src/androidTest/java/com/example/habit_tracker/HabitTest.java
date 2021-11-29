@@ -92,7 +92,7 @@ public class HabitTest {
         view = (TextView)solo.getView(R.id.textView_habitReason);
         assertEquals("robotiumHabitReason",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_dateOfStarting);
-        assertEquals("2012-3-16",view.getText().toString());
+        assertEquals("Starts on 2012-3-16",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_repeat);
         assertEquals("Monday",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_private);
@@ -122,7 +122,8 @@ public class HabitTest {
 
         //Click on the new habit
         solo.clickOnText("robotiumHabit");
-        solo.clickOnButton("Edit");
+        // TODO CHANGE TO FLOATING ACTION BUTTON 126
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.button_edit));
         //Edit habit details
         solo.clearEditText((EditText) solo.getView(R.id.editText_habitReason2));
         solo.enterText((EditText) solo.getView(R.id.editText_habitReason2), "robotiumHabitReasonNew");
@@ -226,7 +227,7 @@ public class HabitTest {
         solo.enterText((EditText) solo.getView(R.id.password), "robotiumPw");
 
         // Click log in
-        solo.clickOnButton("LOG IN");
+        solo.clickOnButton("Log in");
 
         // Check if entered into habitlistfragment
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));

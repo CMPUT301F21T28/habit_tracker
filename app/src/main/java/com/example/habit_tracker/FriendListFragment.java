@@ -120,7 +120,7 @@ public class FriendListFragment extends Fragment {
                 ((TextGrantViewHolder) holder).getDeny().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        firebaseUtils.removeRequest(username, val);
+                        Utility.removeRequest(username, val);
                         friendDataList.remove(val);
                         friendAdapter.notifyDataSetChanged();
                     }

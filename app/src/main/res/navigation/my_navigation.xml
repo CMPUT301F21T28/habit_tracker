@@ -104,7 +104,9 @@
         tools:layout="@layout/fragment_event_add">
         <action
             android:id="@+id/action_eventAddFragment_to_eventListFragment"
-            app:destination="@id/eventListFragment" />
+            app:destination="@id/eventListFragment"
+            app:popUpTo="@id/eventListFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_eventAddFragment_to_habitListFragment"
             app:destination="@id/habitListFragment"
@@ -162,7 +164,8 @@
         <action
             android:id="@+id/action_friendInfoFragment_to_friendListFragment"
             app:destination="@id/friendListFragment"
-            app:popUpTo="@id/friendListFragment" />
+            app:popUpTo="@id/friendListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

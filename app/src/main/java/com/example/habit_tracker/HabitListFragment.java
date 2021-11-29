@@ -168,6 +168,7 @@ public class HabitListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("username", username);
                         bundle.putString("habitID", val.getHabitID());
+                        bundle.putString("from_habitListFragment", "From habit list!");
 
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_habitListFragment_to_eventAddFragment, bundle);
@@ -218,6 +219,7 @@ public class HabitListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("username", username);
                         bundle.putParcelable("Habit", val);
+                        bundle.putString("habitID", val.getHabitID());
 
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_habitListFragment_to_eventListFragment, bundle);
@@ -305,6 +307,7 @@ public class HabitListFragment extends Fragment {
         });
 
         // go to friend list
+        //Navigate to friend page if the friend button is clicked
         getView().findViewById(R.id.friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -360,6 +363,11 @@ public class HabitListFragment extends Fragment {
             return false;
         }
 
+        /**
+         * swipe right to delete, a dialog will pop up to ask the user to confirm
+         * @param viewHolder
+         * @param direction
+         */
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 

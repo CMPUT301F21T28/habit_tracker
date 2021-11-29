@@ -90,18 +90,29 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         return rootView;
     }
 
-    /**
-     * Check if the input title, reason, date are valid
-     * @param editTextView, lower, upper
-     * @return A boolean specify if the input date is valid
-     */
-    public boolean checkInputValidity(EditText editTextView, int lower, int upper){
-        if (editTextView.getText().toString().length() < lower || editTextView.getText().toString().length() > upper){
-            editTextView.setError("Not valid. Please ensure that it is between " +lower + " and "+ upper + " characters.");
-            return false;
-        }
-        return true;
-    }
+//    /**
+//     * Check if the input date is valid
+//     * @param date
+//     * @return A boolean specify if the input date is valid
+//     */
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public static boolean checkDateValidity(final String date) {
+//        boolean valid = false;
+//        try {
+//
+//            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
+//            LocalDate.parse(date,
+//                    DateTimeFormatter.ofPattern("uuuu/MM/dd")
+//                            .withResolverStyle(ResolverStyle.STRICT)
+//            );
+//            valid = true;
+//        } catch (DateTimeParseException e) {
+//            e.printStackTrace();
+//            valid = false;
+//        }
+//        return valid;
+//    }
+
 
     /**
      * Initialize all other parts that could cause the fragment status change
@@ -178,7 +189,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                         }
                     }
                 });
-
+                //if the user click Ok, then check if the date selected is null.
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
@@ -202,6 +213,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                     }
                 });
 
+                //if the user click cancel, then nothing happens
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -209,6 +221,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                     }
                 });
 
+                //if the user click clear all then the list is cleared.
                 builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
@@ -243,7 +256,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
             public void onClick(View view) {
                 //final boolean[] isValid = {true};
                 //Check if input is in range
-                boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,0,30)
+                boolean inputValid = checkInputValidity(habitTitle,0,20) && checkInputValidity(habitReason,-1,30)
                         && selectedDayString != null && isPrivate != null;
                 if (inputValid == false){
                     Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
@@ -259,7 +272,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                     data.put("dateOfStarting", datePicked);
                     data.put("isPrivate", isPrivate);
                     data.put("order", habitOrder);
-                    data.put("plan", times.getText().toString().length() == 0? habit.getPlan(): Integer.parseInt(times.getText().toString()));
+                    data.put("plan", times);
                     data.put("finish", habit.getFinish());
 
                     collectionReference
@@ -291,6 +304,33 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
 
     }
 
+
+    /**
+     * Check if the input title, reason, date are valid
+     * @param editTextView, lower, upper
+     * @return A boolean specify if the input date is valid
+     */
+    public boolean checkInputValidity(EditText editTextView, int lower, int upper){
+        //isStringValid(editTextView.getText().toString(), lower, upper);
+        if (isStringValid(editTextView.getText().toString(), lower, upper) == false){
+            editTextView.setError("Not valid. Please ensure that it is between " +lower + " and "+ upper + " characters.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * check if the length of the string is between lower and upper
+     * @param string
+     * @param lower
+     * @param upper
+     * @return
+     */
+    boolean isStringValid(String string, int lower, int upper) {
+        return (string.length() > lower && string.length() <= upper);
+    }
+
+
     /* Create a DatePicker Dialog */
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -302,6 +342,13 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         datePickerDialog.show();
     }
 
+    /**
+     * set the date of starting as a string
+     * @param view
+     * @param year
+     * @param month
+     * @param dayOfMonth
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         month++;

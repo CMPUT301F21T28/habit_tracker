@@ -13,14 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,10 +28,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -51,7 +44,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
     private TextView dateOfStarting;
     private RadioGroup radioGroup;
     private TextView repeatDay;
-    private EditText times;
+    private EditText plan;
 
     private boolean[] selectedDay;
     private ArrayList<Integer> dayList = new ArrayList<>();
@@ -110,7 +103,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         habitReason = (EditText) getView().findViewById(R.id.editText_habitReason2);
         dateOfStarting = (TextView) getView().findViewById(R.id.textDateStarting);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day2);
-        times = (EditText) getView().findViewById(R.id.editTextTime);
+        plan = (EditText) getView().findViewById(R.id.editTextTime);
 
         radioGroup = getView().findViewById(R.id.radioGroup2);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -137,7 +130,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         dateOfStarting.setText("Starts on " +datePicked);
         repeatDay.setText("Repeat on every " + habit.getRepeat());
         selectedDayString = habit.getRepeat();
-        times.setHint("Plan to complete " + habit.getPlan() + " events");
+        plan.setHint("Plan to complete " + habit.getPlan() + " events");
 
         // handles the radio button, if the habit is set to private
         if (habit.getIsPrivate() == true) {
@@ -247,6 +240,20 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                     return;
                 }
 
+                // check if the "times" work
+                boolean isTimesValid = true;
+                Integer times = 0;
+                if (plan.getText().toString().length() == 0) {
+                    times = habit.getPlan();
+                } else {
+                    times = Integer.parseInt(plan.getText().toString());
+                    if (times > 1000 || times <= 0) {
+                        isTimesValid = false;
+                        plan.setError("Please enter an positive Integer less or equal to 1000 times");
+                        return;
+                    }
+                }
+
                 HashMap<String, Object> data = new HashMap<>();
 
                 if (inputValid) {
@@ -258,7 +265,6 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
                     data.put("order", habitOrder);
                     data.put("plan", times);
                     data.put("finish", habit.getFinish());
-
                     collectionReference
                             .document(habit.getHabitID())
                             .set(data)

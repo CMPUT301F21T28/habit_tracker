@@ -62,7 +62,6 @@ import java.util.HashMap;
 public class EventEditFragment extends Fragment {
     private Button submit;
     private EditText commentContent;
-    private EditText locationContent;
     private EditText nameContent;
     private ImageButton imageButton;
     private FirebaseFirestore db;

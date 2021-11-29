@@ -149,7 +149,6 @@ public class EventAddFragment extends Fragment {
                 });
 
 
-        /* TODO image adding*/
         //ImageButton imageButton = getView().findViewById(R.id.imageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,7 +218,6 @@ public class EventAddFragment extends Fragment {
 
                 String event_name = editTextEventName.getText().toString();
                 String event_commit = editTextEventCommit.getText().toString();
-                //Matrix image_matrix = imageButton.getImageMatrix()
 
                 Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
                 String imageString;

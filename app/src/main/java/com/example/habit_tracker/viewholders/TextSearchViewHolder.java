@@ -9,6 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.habit_tracker.R;
 
+/**
+ *  TextSearchViewHolder creates a viewHolder to display a single recyclerView row
+ *  It provides a user's name, a button for requesting others to follow
+ */
+
 public class TextSearchViewHolder extends RecyclerView.ViewHolder {
     private final TextView userName;
     private final Button request;

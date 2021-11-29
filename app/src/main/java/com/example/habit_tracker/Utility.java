@@ -14,6 +14,10 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Random;
 
+/**
+ * Utility is a class specific for handling db retrieve in Friend's related fragment and password salting
+ */
+
 public class Utility {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static Random _random = new SecureRandom();

@@ -34,6 +34,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * FriendSearchFragment creates a fragment for searching a friend in the db
+ */
+
 public class FriendSearchFragment extends Fragment {
 
     RecyclerView searchList;
@@ -65,12 +69,16 @@ public class FriendSearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_friend_search, container, false);
 
-        // TODO implement a bundle
+        // handle the bundle
+        Bundle bundle = getArguments();
+        Friend currentUser = new Friend(bundle.getString("username"), bundle.getString("realname"));
+
+        db = FirebaseFirestore.getInstance();
+
+        // inflate the recyclerView with generic adapter
         searchDataList = new ArrayList<>();
         friendDataList = new ArrayList<>();
         searchList = (RecyclerView) rootView.findViewById(R.id.search_recyclerView);
-        Bundle bundle = getArguments();
-        Friend currentUser = new Friend(bundle.getString("username"), bundle.getString("realname"));
         searchAdapter = new GenericAdapter<Friend>(getActivity(), searchDataList) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
@@ -97,11 +105,8 @@ public class FriendSearchFragment extends Fragment {
                 });
             }
         };
-
         searchList.setAdapter(searchAdapter);
         searchList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        db = FirebaseFirestore.getInstance();
-
         searchList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
 
         return rootView;
@@ -111,13 +116,10 @@ public class FriendSearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // TODO use 'addSnapshotListener' to pull data from db, use for loop to add data to habitDataList (an ArrayList<Habit>),
-        //  can look up how I implement in HabitListFragment.java
-
         searchButton = (Button) getView().findViewById(R.id.button_search);
         editTextSearchUsername = (EditText) getView().findViewById(R.id.editTextTextPersonName);
 
-
+        // Handle the search button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,10 +143,9 @@ public class FriendSearchFragment extends Fragment {
                 updateSearchList(username);
             }
         });
-
-
     }
 
+    // class function for searching the match user
     public void updateSearchList(String username) {
         final CollectionReference usernameRef = db.collection("Users");
         Query query = usernameRef.whereEqualTo("username", username);

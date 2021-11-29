@@ -54,8 +54,7 @@ import java.util.Collections;
 import java.util.Locale;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * HabitListFragment creates a fragment with a recyclerView to view all the habit's titles with their progress
  */
 public class HabitListFragment extends Fragment {
 
@@ -81,6 +80,12 @@ public class HabitListFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    /**
+     * declare that the app bar is going to be modified
+     * Adding a switch that shows today event only
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.tooltip_info_switch, menu);
@@ -108,6 +113,11 @@ public class HabitListFragment extends Fragment {
         todayTextView.setTextColor(getResources().getColor(R.color.white));
     }
 
+    /**
+     * Filling out other app bar's function, which is a tooltip
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -138,6 +148,7 @@ public class HabitListFragment extends Fragment {
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
 
+        // inflate the recyclerView for habit with generic adapter
         habitDataList = new ArrayList<>();
         habitList = (RecyclerView) rootView.findViewById(R.id.habit_list);
         habitAdapter = new GenericAdapter<Habit>(getActivity(), habitDataList) {
@@ -192,6 +203,7 @@ public class HabitListFragment extends Fragment {
         habitList.setAdapter(habitAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        // today recyclerAdapter is for the habit that happens today
         todayRecyclerAdapter = new GenericAdapter<Habit>(getActivity(), todayHabitDataList) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
@@ -259,6 +271,7 @@ public class HabitListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // retrieve the info from db and give to the class instances, to create an array list
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users").document(username).collection("HabitList");
         collectionReference.orderBy("order").addSnapshotListener(new EventListener<QuerySnapshot>() {

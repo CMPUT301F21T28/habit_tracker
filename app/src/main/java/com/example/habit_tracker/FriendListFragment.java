@@ -33,6 +33,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * FriendListFragment creates a fragment showing all friend you have followed
+ * If there is a new friend want to follow you, their request will show
+ */
+
 public class FriendListFragment extends Fragment {
 
     RecyclerView friendList;
@@ -75,6 +80,7 @@ public class FriendListFragment extends Fragment {
 
         Log.d("FRIENDLISTFRAG", realname);
 
+        // inflate the friend data list and request data list with the generic adatper
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
         friendAdapter = new GenericAdapter<Friend>(getActivity(), friendDataList) {
@@ -102,12 +108,7 @@ public class FriendListFragment extends Fragment {
         };
         friendList.setAdapter(friendAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         friendList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
-
-        // ItemTouchHelper helps to define the swipe function
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
-//        itemTouchHelper.attachToRecyclerView(friendList);
 
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
@@ -133,20 +134,21 @@ public class FriendListFragment extends Fragment {
                         friendAdapter.notifyDataSetChanged();
                     }
                 });
+                ((TextGrantViewHolder) holder).getDeny().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        firebaseUtils.removeRequest(username, val);
+                        friendDataList.remove(val);
+                        friendAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         };
         requestList.setAdapter(requestAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         requestList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
 
-//        requestList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                updateFriendList(username);
-//            }
-//        });
-
+        // retrieve info from db
         updateFriendList(username);
 
         add_friend = (FloatingActionButton) rootView.findViewById(R.id.add_friend_button);
@@ -158,10 +160,7 @@ public class FriendListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // TODO use 'addSnapshotListener' to pull data from db, use for loop to add data to habitDataList (an ArrayList<Habit>),
-        //  can look up how I implement in HabitListFragment.java
-        //  for both request and friend list !!! (TWO IN TOTAL, HAVE DIFFERENT ARRAY ADAPTER)
-
+        // handle add friend button
         add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

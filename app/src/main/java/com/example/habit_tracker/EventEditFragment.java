@@ -60,6 +60,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 
+/**
+ * EventEditFragment creates a fragment for editing an event's details
+ */
 
 public class EventEditFragment extends Fragment {
     private FloatingActionButton submit;
@@ -84,11 +87,21 @@ public class EventEditFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    /**
+     * inflate the app bar for me to edit
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.tooltip_info, menu);
     }
 
+    /**
+     * Gives app bar a certain button and its functions
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -114,6 +127,7 @@ public class EventEditFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_event_edit, container, false);
 
+        // get things out of bundle
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
         habitID = bundle.getString("habitID");
@@ -143,23 +157,14 @@ public class EventEditFragment extends Fragment {
         imageButton = getView().findViewById(R.id.editImageButton);
         nameContent = getView().findViewById(R.id.nameContent);
         nameContent.setText(event.getName());
+        commentContent.setText(event.getComment());
 
+        // get the image
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
         String imageString = event.getEventImage();
         if (imageString != null) {
             Bitmap bitmap = stringToBitmap(imageString);
             imageButton.setImageBitmap(bitmap);
-        }
-
-        commentContent.setText(event.getComment());
-
-        if(event.getLocationLongitude() == null && event.getLocationLatitude() == null){
-            hasLocation.setVisibility(View.GONE);
-            noLocation.setVisibility(View.VISIBLE);
-        }
-        else{
-            noLocation.setVisibility(View.GONE);
-            hasLocation.setVisibility(View.VISIBLE);
         }
 
         ActivityResultLauncher<Intent> activityResultLauncher;
@@ -216,6 +221,16 @@ public class EventEditFragment extends Fragment {
                 return true;
             }
         });
+
+        // get the location
+        if(event.getLocationLongitude() == null && event.getLocationLatitude() == null){
+            hasLocation.setVisibility(View.GONE);
+            noLocation.setVisibility(View.VISIBLE);
+        }
+        else{
+            noLocation.setVisibility(View.GONE);
+            hasLocation.setVisibility(View.VISIBLE);
+        }
 
         CollectionReference collectionReference = db.collection("habit").document(habitID).collection("EventList");
         submit.setOnClickListener(new View.OnClickListener() {
@@ -343,8 +358,9 @@ public class EventEditFragment extends Fragment {
                 }
             }
         });
-
     }
+
+    // class function to help with the image translation
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String imageToString(Bitmap imageBitmap){
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

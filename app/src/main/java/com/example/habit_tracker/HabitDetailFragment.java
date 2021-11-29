@@ -19,6 +19,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.Text;
 
+/**
+ * HabitDetailFragment creates a fragment to show all the detail about a habit
+ */
+
 public class HabitDetailFragment extends Fragment {
 
     Habit habit;
@@ -66,6 +70,7 @@ public class HabitDetailFragment extends Fragment {
         edit = rootView.findViewById(R.id.button_edit);
         progress = rootView.findViewById(R.id.textView5);
 
+        // gives all the textView its value
         habitTitle.setText(habit.getName());
         if (habit.getComment().length() == 0) {
             habitReason.setText("Comment is not set");

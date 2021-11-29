@@ -40,6 +40,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * HabitEditFragment creates a fragment to edit the details of a habit
+ */
+
 public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
     private FloatingActionButton submitButton;
     private EditText habitTitle;
@@ -90,30 +94,6 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         return rootView;
     }
 
-//    /**
-//     * Check if the input date is valid
-//     * @param date
-//     * @return A boolean specify if the input date is valid
-//     */
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    public static boolean checkDateValidity(final String date) {
-//        boolean valid = false;
-//        try {
-//
-//            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
-//            LocalDate.parse(date,
-//                    DateTimeFormatter.ofPattern("uuuu/MM/dd")
-//                            .withResolverStyle(ResolverStyle.STRICT)
-//            );
-//            valid = true;
-//        } catch (DateTimeParseException e) {
-//            e.printStackTrace();
-//            valid = false;
-//        }
-//        return valid;
-//    }
-
-
     /**
      * Initialize all other parts that could cause the fragment status change
      * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
@@ -159,12 +139,14 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
         selectedDayString = habit.getRepeat();
         times.setHint("Plan to complete " + habit.getPlan() + " events");
 
+        // handles the radio button, if the habit is set to private
         if (habit.getIsPrivate() == true) {
             radioGroup.check(R.id.radioYes);
         } else {
             radioGroup.check(R.id.radioNo);
         }
 
+        // handles the repeat selector
         selectedDay = new boolean[dayArray.length];
         repeatDay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,6 +223,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
             }
         });
 
+        // handle the date picker
         dateOfStarting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -250,6 +233,7 @@ public class HabitEditFragment extends Fragment implements DatePickerDialog.OnDa
 
         CollectionReference collectionReference = db.collection("Users").document(username).collection("HabitList");
 
+        // handles the submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override

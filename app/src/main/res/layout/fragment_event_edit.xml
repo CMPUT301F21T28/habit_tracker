@@ -16,7 +16,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:fontFamily="@font/raleway_italic"
-        android:hint="Have a comment, or no, it's optional"
+        android:hint="Leave a comment or not, its opitonal"
         android:maxLength="20"
         android:textColor="@color/add_button"
         android:textColorHint="@color/add_button"

@@ -101,7 +101,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:fontFamily="@font/raleway_italic"
-        android:hint="And a comment, but it's optional"
+        android:hint="Leave a comment or not, its opitonal"
         android:inputType="textPersonName"
         android:maxLength="19"
         android:textColor="@color/add_button"

@@ -9,6 +9,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController);
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.general, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         navController.navigateUp();

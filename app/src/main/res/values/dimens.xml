@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="recyclerView_text_size">14sp</dimen>
+    <dimen name="button_text_size">10sp</dimen>
+    <dimen name="editText_text_size">14sp</dimen>
+    <dimen name="title_text_size">24sp</dimen>
+</resources>

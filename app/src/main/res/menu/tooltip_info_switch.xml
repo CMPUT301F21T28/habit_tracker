@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <item-->
+<!--        android:id="@+id/today_switch"-->
+<!--        android:title=""-->
+<!--        app:showAsAction="always"-->
+<!--        android:actionLayout="@layout/today_habit_row"-->
+<!--        />-->
+
+<!--    <item-->
+<!--        android:id="@+id/myswitch"-->
+<!--        android:title=""-->
+<!--        app:showAsAction="always"-->
+<!--        app:actionLayout="@layout/today_habit_switch"-->
+<!--        andro-->
+<!--        />-->
+    <item
+        android:id="@+id/toggle"
+        app:actionViewClass="android.widget.Switch"
+        app:showAsAction="always"
+        android:title=""/>
+
+    <item
+        app:actionViewClass="android.widget.TextView"
+        android:title="Today"
+        app:showAsAction="always"
+        android:id="@+id/today" />
+
+    <item
+        android:id="@+id/tooltip_info_button"
+        android:icon="@drawable/ic_tooltip"
+        android:title="tooltip_info"
+        app:showAsAction="always"/>
+
+
+</menu>

@@ -5,6 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.habit_tracker.viewholders.TextSearchViewHolder;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -95,6 +101,8 @@ public class FriendSearchFragment extends Fragment {
         searchList.setAdapter(searchAdapter);
         searchList.setLayoutManager(new LinearLayoutManager(getActivity()));
         db = FirebaseFirestore.getInstance();
+
+        searchList.addItemDecoration(new DividerItemDecoration(this.getActivity(), LinearLayout.VERTICAL));
 
         return rootView;
     }

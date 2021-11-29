@@ -125,6 +125,7 @@
         android:id="@+id/textView_isPrivate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/raleway"
         android:text="Followers"
@@ -153,7 +154,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/raleway_italic"
             android:minHeight="0dp"
-            android:text="can"
+            android:text="cannot"
             android:textColor="@color/add_button"
             android:textSize="@dimen/editText_text_size" />
 
@@ -163,7 +164,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/raleway_italic"
             android:minHeight="0dp"
-            android:text="cannot"
+            android:text="can"
             android:textColor="@color/add_button"
             android:textSize="@dimen/editText_text_size" />
 
@@ -173,6 +174,7 @@
         android:id="@+id/textDateStarting"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:clickable="true"
         android:fontFamily="@font/raleway_italic"
         android:textColor="@color/add_button"

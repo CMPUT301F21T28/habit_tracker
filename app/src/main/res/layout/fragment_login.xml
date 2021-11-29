@@ -20,6 +20,7 @@
         android:layout_marginBottom="10pt"
         android:fontFamily="@font/damion"
         android:text="Habit Tracker"
+        android:textColor="@color/add_button"
         android:textSize="34sp"
         android:textStyle="bold" />
 

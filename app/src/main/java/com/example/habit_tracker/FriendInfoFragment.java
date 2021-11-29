@@ -92,6 +92,7 @@ public class FriendInfoFragment extends Fragment {
             public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
                 ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
                 ((TextProgressViewHolder) holder).getProgressButton().setText(Math.round(val.getProgress()) + "%");
+                ((TextProgressViewHolder) holder).getProgressBar().setProgress(Math.round(val.getProgress()));
             }
         };
         habitList.setAdapter(habitAdapter);

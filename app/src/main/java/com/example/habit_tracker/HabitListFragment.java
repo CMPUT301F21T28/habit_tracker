@@ -150,6 +150,7 @@ public class HabitListFragment extends Fragment {
             public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
                 ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
                 ((TextProgressViewHolder) holder).getProgressButton().setText(Math.round(val.getProgress()) + "%");
+                ((TextProgressViewHolder) holder).getProgressBar().setProgress(Math.round(val.getProgress()));
                 ((TextProgressViewHolder) holder).getProgressButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -166,7 +167,7 @@ public class HabitListFragment extends Fragment {
                     public boolean onLongClick(View view) {
                         Bundle bundle = new Bundle();
                         bundle.putString("username", username);
-                        bundle.putParcelable("Habit", val);
+                        bundle.putString("habitID", val.getHabitID());
 
                         NavController controller = Navigation.findNavController(view);
                         controller.navigate(R.id.action_habitListFragment_to_eventAddFragment, bundle);
@@ -199,6 +200,7 @@ public class HabitListFragment extends Fragment {
             public void onBindData(RecyclerView.ViewHolder holder, Habit val) {
                 ((TextProgressViewHolder) holder).getTextView().setText(val.getName());
                 ((TextProgressViewHolder) holder).getProgressButton().setText(Math.round(val.getProgress()) + "%");
+                ((TextProgressViewHolder) holder).getProgressBar().setProgress(Math.round(val.getProgress()));
                 ((TextProgressViewHolder) holder).getProgressButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

@@ -32,6 +32,7 @@
         android:id="@+id/floatingActionButtonAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/friends"
         android:clickable="true"
         android:focusable="true"
         app:backgroundTint="@color/add_button"
@@ -39,6 +40,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toTopOf="@+id/guideline222"
+        app:rippleColor="@color/friends"
         app:srcCompat="@android:drawable/ic_input_add"
         tools:ignore="SpeakableTextPresentCheck" />
 

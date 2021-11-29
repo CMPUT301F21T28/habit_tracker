@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,13 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.habit_tracker.adapters.FriendListAdapter;
-import com.example.habit_tracker.adapters.FriendRequestAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.example.habit_tracker.viewholders.TextGrantViewHolder;
+import com.example.habit_tracker.viewholders.TextViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,23 +32,22 @@ import java.util.Map;
 public class FriendListFragment extends Fragment {
 
     RecyclerView friendList;
-    FriendListAdapter friendRecyclerAdapter;
+    GenericAdapter<Friend> friendAdapter;
     ArrayList<Friend> friendDataList;
 
     RecyclerView requestList;
-    FriendRequestAdapter requestRecyclerAdapter;
+    GenericAdapter<Friend> requestAdapter;
     ArrayList<Friend> requestDataList;
 
     FloatingActionButton add_friend;
 
-    Friend deletedFriend;
     String username;
     String realname;
 
+    Utility firebaseUtils = new Utility();
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionReference;
-
-    private static final String TAG = "MyActivity";
 
     public FriendListFragment() {
         // Required empty public constructor
@@ -77,14 +71,59 @@ public class FriendListFragment extends Fragment {
 
         friendDataList = new ArrayList<>();
         friendList = (RecyclerView) rootView.findViewById(R.id.recyclerView_friend);
-        friendRecyclerAdapter = new FriendListAdapter(getActivity(), friendDataList, username, realname);
-        friendList.setAdapter(friendRecyclerAdapter);
+        friendAdapter = new GenericAdapter<Friend>(getActivity(), friendDataList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                return new TextViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.general_list_row, parent, false));
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, Friend val) {
+                ((TextViewHolder) holder).getTextView().setText(val.getActualName());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username);
+                        bundle.putParcelable("friend", val);
+                        bundle.putString("realname", realname);
+
+                        NavController controller = Navigation.findNavController(view);
+                        controller.navigate(R.id.action_friendListFragment_to_friendInfoFragment, bundle);
+                    }
+                });
+            }
+        };
+        friendList.setAdapter(friendAdapter);
         friendList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         requestDataList = new ArrayList<>();
         requestList = (RecyclerView) rootView.findViewById(R.id.recyclerView_request);
-        requestRecyclerAdapter = new FriendRequestAdapter(getActivity(), requestDataList, username, realname);
-        requestList.setAdapter(requestRecyclerAdapter);
+        requestAdapter = new GenericAdapter<Friend>(getActivity(), requestDataList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                return new TextGrantViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.grant_list_row, parent, false));
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, Friend val) {
+                ((TextGrantViewHolder) holder).getFriendName().setText(val.getActualName());
+                ((TextGrantViewHolder) holder).getAccept().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d("DEBUG", val.getActualName().toString());
+                        Log.d("DEBUG", val.getUserName().toString());
+                        Log.d("DEBUG", username.toString());
+                        Log.d("DEBUG", username.toString());
+                        firebaseUtils.addFriend(username, val);
+                        firebaseUtils.removeRequest(username, val);
+                        friendDataList.remove(val);
+                        friendAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        };
+        requestList.setAdapter(requestAdapter);
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateFriendList(username);
@@ -109,6 +148,30 @@ public class FriendListFragment extends Fragment {
                 controller.navigate(R.id.action_friendListFragment_to_friendSearchFragment, bundle);
             }
         });
+    }
+
+    public void removeRequest(String username, Friend targetFriend) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.update("requests", FieldValue.arrayRemove(targetFriend));
+        updateFriendList(username);
+    }
+
+    public void addRequest(String username, Friend targetFriend) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.update("requests", FieldValue.arrayUnion(targetFriend));
+        updateFriendList(username);
+    }
+
+    public void removeFriend(String username, Friend targetFriend) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
+        updateFriendList(username);
+    }
+
+    public void addFriend(String username, Friend targetFriend) {
+        DocumentReference usersRef = db.collection("Users").document(username);
+        usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
+        updateFriendList(username);
     }
 
     // get friends and friend requests from the user that is passed in
@@ -145,8 +208,8 @@ public class FriendListFragment extends Fragment {
 
 
                     // Update the adapaters
-                    friendRecyclerAdapter.notifyDataSetChanged();
-                    requestRecyclerAdapter.notifyDataSetChanged();
+                    friendAdapter.notifyDataSetChanged();
+                    requestAdapter.notifyDataSetChanged();
                 }
         });
     }

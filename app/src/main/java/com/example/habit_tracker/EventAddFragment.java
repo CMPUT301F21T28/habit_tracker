@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -49,6 +51,10 @@ import java.io.File;
 import java.util.Base64;
 import java.util.HashMap;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
+ */
 public class EventAddFragment extends Fragment {
 
     private static final String TAG = "MyActivity";
@@ -71,14 +77,15 @@ public class EventAddFragment extends Fragment {
 
 
 
-    /*public void onLocationChanged(Task<Location> location){
 
-        LocationHelper helper = new LocationHelper(
-                location.getResult().getLongitude();
-                location.getResult().getLatitude();
-    }*/
-
-
+    /**
+     * Create view for EventDetailFragment
+     * Extract necessities (e.g. username, instance of Habit class) from bundle, set TextViews to their corresponding values
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,6 +104,13 @@ public class EventAddFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -123,7 +137,6 @@ public class EventAddFragment extends Fragment {
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
         ActivityResultLauncher<Intent> activityResultLauncher;
         Bitmap bit = null;
-        //Boolean needImage;
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
         Toast.makeText(getContext(),"long click image to delete",Toast.LENGTH_SHORT).show();
 
@@ -135,31 +148,17 @@ public class EventAddFragment extends Fragment {
                         if (result.getData() != null) {
                             Bundle b = result.getData().getExtras();
                             Bitmap bitmap = (Bitmap) b.get("data");
-                            //bit = (Bitmap) b.get("data");
-                            //imageBitmap = (Bitmap) b.get("data");
                             imageButton.setImageBitmap(bitmap);
                         }
                     }
                 });
 
 
-        /* TODO image adding*/
-        //ImageButton imageButton = getView().findViewById(R.id.imageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //file[0] = new File(Environment.getExternalStorageDirectory(),System.currentTimeMillis()+habit+".jpg")
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//EXTRA_OUTPUT, Uri.fromFile(file[0]));
                 activityResultLauncher.launch(intent);
-                //getActivity().startActivityForResult(intent,100);
-                /*
-                ActivityResultLauncher<Image> imageResult = registerForActivityResult(new ActivityResultContracts.GetContent(),
-                        new ActivityResultCallback<Uri>() {
-                            @Override
-                            public void onActivityResult(Uri result) {
-                                //
-                            }
-                        })*/
             }
         });
         imageButton.setOnLongClickListener(new View.OnLongClickListener() {
@@ -190,15 +189,12 @@ public class EventAddFragment extends Fragment {
 
                 AlertDialog alert = builder.create();
                 alert.show();
-                //imageButton.setImageBitmap(originBitmap);
 
                 return true;
             }
         });
 
 
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,this);
-        //Location loaction = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("habit");
@@ -213,17 +209,11 @@ public class EventAddFragment extends Fragment {
 
                 String event_name = editTextEventName.getText().toString();
                 String event_commit = editTextEventCommit.getText().toString();
-                //Matrix image_matrix = imageButton.getImageMatrix()
 
                 Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
                 String imageString;
                 if (imageBitmap != originBitmap) {
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                    byte[] imageByte = byteArrayOutputStream.toByteArray();
-                    //String imageString = imageByte.toString();
-                    //imageString.
-                    imageString = Base64.getEncoder().encodeToString(imageByte);
+                    imageString = imageToString(imageBitmap);
                 }else {
                     imageString = null;
                 }
@@ -236,11 +226,8 @@ public class EventAddFragment extends Fragment {
                     data.put("Longitude", currentLongitude[0]);
                     data.put("Latitude", currentLatitude[0]);
                     data.put("event image",imageString);
-                    //data.put("event image",image);
-                    //System.currentTimeMillis() return long
 
                     Log.d(TAG, "onClick: " + habitID);
-                    //String eventID = event_name + String.valueOf(System.currentTimeMillis());
                     String eventID = String.valueOf(System.currentTimeMillis()) + event_name;
 
                     collectionReference.document(habitID).collection("EventList")
@@ -300,24 +287,6 @@ public class EventAddFragment extends Fragment {
                             removeLocationButton.setVisibility(View.VISIBLE);
 
 
-                            /*data.put("Longitude", location.getLongitude());
-                            data.put("Latitude", location.getLatitude());
-                            Log.d(TAG, "onClick: " + habitID);
-                            collectionReference.document(habitID).collection("EventList")
-                                    .document(event_name + String.valueOf(System.currentTimeMillis()))
-                                    .set(data)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Toast.makeText(getContext(), "submit success", Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getContext(), "submit fail", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });*/
                         }
 
                     }
@@ -340,15 +309,17 @@ public class EventAddFragment extends Fragment {
                 currentLatitude[0] = null ;
                 removeLocationButton.setVisibility(View.GONE);
                 locationButton.setVisibility(View.VISIBLE);
-
             }
-
-
         });
-
-
-
-
+        }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String imageToString(Bitmap imageBitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imageByte = byteArrayOutputStream.toByteArray();
+        String imageString;
+        imageString = Base64.getEncoder().encodeToString(imageByte);
+        return imageString;
     }
-    }
+}
 

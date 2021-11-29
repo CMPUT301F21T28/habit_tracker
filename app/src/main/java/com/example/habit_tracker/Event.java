@@ -96,9 +96,9 @@ public class Event implements Parcelable, Info
         parcel.writeString(habitID);
         parcel.writeString(eventID);
         parcel.writeString(eventName);
-        parcel.writeString(eventComment);
-        parcel.writeDouble(locationLongitude);
-        parcel.writeDouble(locationLatitude);
+        parcel.writeString(eventComment);;
+        //parcel.writeDouble(locationLongitude);
+        //parcel.writeDouble(locationLatitude);
         //parcel.writeString(eventLocation);
         parcel.writeString(eventImage);
     }

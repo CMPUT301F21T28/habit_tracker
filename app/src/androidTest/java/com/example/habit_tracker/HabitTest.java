@@ -94,7 +94,7 @@ public class HabitTest {
         view = (TextView)solo.getView(R.id.textView_dateOfStarting);
         assertEquals("Starts on 2012-3-16",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_repeat);
-        assertEquals("Monday",view.getText().toString());
+        assertEquals("Repeat on everyMonday",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_private);
         assertEquals("true",view.getText().toString());
     }
@@ -151,9 +151,9 @@ public class HabitTest {
         view = (TextView)solo.getView(R.id.textView_habitReason);
         assertEquals("robotiumHabitReasonNew",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_dateOfStarting);
-        assertEquals("2013-3-16",view.getText().toString());
+        assertEquals("Starts on 2013-3-16",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_repeat);
-        assertEquals("Tuesday",view.getText().toString());
+        assertEquals("Repeat on everyTuesday",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_private);
         assertEquals("false",view.getText().toString());
     }

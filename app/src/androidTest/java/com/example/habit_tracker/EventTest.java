@@ -51,8 +51,6 @@ public class EventTest {
         // Add event detail
         solo.enterText((EditText) solo.getView(R.id.editTextName), "robotiumHabitEvent");
 
-        //TODO: Test adding location and image
-
         solo.clickOnButton("SUBMIT");
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumHabitEvent"));

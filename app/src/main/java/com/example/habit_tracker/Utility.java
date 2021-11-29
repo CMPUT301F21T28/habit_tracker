@@ -1,10 +1,17 @@
 package com.example.habit_tracker;
 
+import android.graphics.Bitmap;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
 import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Random;
 
 public class Utility {
@@ -42,5 +49,15 @@ public class Utility {
         _random.nextBytes(salt);
         String saltString = new String(salt);
         return saltString;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String convertImageToString(Bitmap imageBitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imageByte = byteArrayOutputStream.toByteArray();
+        String imageString;
+        imageString = Base64.getEncoder().encodeToString(imageByte);
+        return imageString;
     }
 }

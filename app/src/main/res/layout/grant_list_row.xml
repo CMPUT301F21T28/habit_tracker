@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/friend_name_request"
+                android:id="@+id/friend_name_grant"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="TextView"

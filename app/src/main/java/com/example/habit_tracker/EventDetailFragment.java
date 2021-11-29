@@ -77,35 +77,19 @@ public class EventDetailFragment extends Fragment {
 
         eventName= rootView.findViewById(R.id.textView_detail_eventName_view);
         commentContent = rootView.findViewById(R.id.nameContent);
-        /* TODO image & location
-        location= rootView.findViewById(R.id.Location);
-        locationContent = rootView.findViewById(R.id.LocationContent);
-        picture= rootView.findViewById(R.id.Picture);
-        Image = rootView.findViewById(R.id.PictureContent);
-        */
 
         eventName.setText(event.getName());
         commentContent.setText(event.getComment());
         locationLongitude = event.getLocationLongitude();
         locationLatitude = event.getLocationLatitude();
-        //locationContent.setText(habitevent.getEventLocation());
 
         imageView = rootView.findViewById(R.id.imageView);
-        //imageView.getDrawable().
 
         String imageString = event.getEventImage();
         if (imageString != null) {
             Bitmap bitmap = stringToBitmap(imageString);
             imageView.setImageBitmap(bitmap);
         }
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        final CollectionReference collectionReference = db.collection("habit");
-//        DocumentReference documentReference = collectionReference.document(habitID)
-//                .collection("EventList").document(event.getEventID());
-        //documentReference;
-
-        //String eventID = event.getEventID();
-        //String imageString =
 
         return rootView;
 
@@ -162,15 +146,6 @@ public class EventDetailFragment extends Fragment {
         //imageView.setImageBitmap(bitmap);
         return bitmap;
     }
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    public String imageToString(Bitmap imageBitmap){
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-//        byte[] imageByte = byteArrayOutputStream.toByteArray();
-//        String imageString;
-//        imageString = Base64.getEncoder().encodeToString(imageByte);
-//        return imageString;
-//    }
 }
 
 

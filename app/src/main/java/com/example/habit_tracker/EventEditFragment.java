@@ -78,7 +78,7 @@ public class EventEditFragment extends Fragment {
     }
 
     /**
-     * Create view for EventAddFragment, extract necessities (e.g. username, instance of Habit class) from the bundle
+     * Create view for EventEditFragment, extract necessities (e.g. username, instance of Habit class) from the bundle
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -115,7 +115,6 @@ public class EventEditFragment extends Fragment {
         final Double[] currentLatitude = {null};
 
         commentContent = (EditText)getView().findViewById(R.id.commentContent);
-        //locationContent = (EditText)getView().findViewById(R.id.LocationContent);
         submit= (Button) getView().findViewById(R.id.Submit);
         Button locationButton = view.findViewById(R.id.locationButton);
         Button removeLocationButton = view.findViewById(R.id.removeLocationButton);
@@ -127,9 +126,6 @@ public class EventEditFragment extends Fragment {
         String imageString = event.getEventImage();
         if (imageString != null) {
             Bitmap bitmap = stringToBitmap(imageString);
-//            byte[] bitmapArray;
-//            bitmapArray = Base64.getDecoder().decode(imageString);
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
             imageButton.setImageBitmap(bitmap);
         }
 
@@ -154,8 +150,6 @@ public class EventEditFragment extends Fragment {
                         if (result.getData() != null) {
                             Bundle b = result.getData().getExtras();
                             Bitmap bitmap = (Bitmap) b.get("data");
-                            //bit = (Bitmap) b.get("data");
-                            //imageBitmap = (Bitmap) b.get("data");
                             imageButton.setImageBitmap(bitmap);
                         }
                     }
@@ -163,8 +157,7 @@ public class EventEditFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //file[0] = new File(Environment.getExternalStorageDirectory(),System.currentTimeMillis()+habit+".jpg")
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//EXTRA_OUTPUT, Uri.fromFile(file[0]));
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 activityResultLauncher.launch(intent);
 
             }
@@ -203,30 +196,11 @@ public class EventEditFragment extends Fragment {
             }
         });
 
-        //locationContent.setText(habitevent.getEventLocation());
 
 
         CollectionReference collectionReference = db.collection("habit").document(habitID).collection("EventList");
 
 
-        /*collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                currentLongitude = event.getLocationLongitude()
-
-                if (currentLongitude[0] == null && currentLatitude[0] == null) {
-                    removeLocationButton.setVisibility(View.GONE);
-                    locationButton.setVisibility(View.VISIBLE);
-
-                }
-                else{
-                    locationButton.setVisibility(View.GONE);
-                    removeLocationButton.setVisibility(View.VISIBLE);
-                }
-
-
-            }
-        });*/
 
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -246,12 +220,6 @@ public class EventEditFragment extends Fragment {
                     nameContent.requestFocus();
                     return;
                 }
-//                TODO location
-//                if (20 <= locationContent.getText().toString().length()) {
-//                    isValid[0] = false;
-//                    locationContent.setError("Location may not valid. Please ensure that it is between 0 and 20 characters.");
-//                    return;
-//                }
 
                 HashMap<String, Object> data = new HashMap<>();
 
@@ -260,21 +228,15 @@ public class EventEditFragment extends Fragment {
                     data.put("event comment", commentContent.getText().toString());
                     data.put("Longitude", currentLongitude[0]);
                     data.put("Latitude", currentLatitude[0]);
-                    //data.put("Location", locationContent.getText().toString());
                     data.put("event name",nameContent.getText().toString());
 
                     event.setEventComment(commentContent.getText().toString());
-                    //habitevent.setEventLocation(locationContent.getText().toString());
                     Bitmap imageBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
                     String imageString = event.getEventImage();
                     if (imageBitmap == originBitmap){
                         imageString = null;
                     }else {
                         imageString = imageToString(imageBitmap);
-//                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-//                        byte[] imageByte = byteArrayOutputStream.toByteArray();
-//                        imageString = Base64.getEncoder().encodeToString(imageByte);
                     }
                     event.setEventImage(imageString);
                     data.put("event image", imageString);
@@ -355,25 +317,6 @@ public class EventEditFragment extends Fragment {
 
 
 
-
-                            /*data.put("Longitude", location.getLongitude());
-                            data.put("Latitude", location.getLatitude());
-                            Log.d(TAG, "onClick: " + habitID);
-                            collectionReference.document(habitID).collection("EventList")
-                                    .document(event_name + String.valueOf(System.currentTimeMillis()))
-                                    .set(data)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Toast.makeText(getContext(), "submit success", Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getContext(), "submit fail", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });*/
                             }
 
                         }

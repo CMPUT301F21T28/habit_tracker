@@ -37,6 +37,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
+ */
 public class EventListFragment extends Fragment {
 
     private static final String TAG = "MyActivity";
@@ -65,6 +69,13 @@ public class EventListFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create view for HabitAddFragment, extract necessities (e.g. username) from bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,6 +128,13 @@ public class EventListFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Initialize all other parts that could cause the fragment status change
+     * Connect to firebase DB, retrieve habits fields to local and store in Habit instance and pass to recyclerView
+     * Fragment change by navigation
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -142,57 +160,7 @@ public class EventListFragment extends Fragment {
             }
         });
 
-        /*
-        //long click list item to delete. return true will not triger clickListener
-        ArrayList<String> id_list = new ArrayList<>();
-        db.collection("habit").document(testHabitId).collection("EventList")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            id_list.add(document.getId());
-                            //Log.d("data from fire", document.getId() + " => " + document.getData());
-                        }
 
-                    }
-                });
-        */
-        /*
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Toast.makeText(getContext(),id_list.get(i),Toast.LENGTH_SHORT).show();
-                //parameter i should be the position of long click happened.
-                db.collection("habit").document(testHabitId)
-                        .collection("EventList")
-                        .document(id_list.get(i))
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(getContext(),id_list.get(i)+" deleted",Toast.LENGTH_SHORT).show();
-                                listViewAdapter.notifyDataSetChanged();
-                            }
-                        });
-                /*
-                db.collection("habit").document(testHabitId).collection("EventList")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d("data from fire", document.getId() + " => " + document.getData());
-                                }
-
-                            }
-                        });
-                return true;
-                //return false;
-            }
-        });
-
-        */
 
         //press add button to add
         FloatingActionButton add_event = getView().findViewById(R.id.floatingActionButtonAdd);

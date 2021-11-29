@@ -20,13 +20,13 @@ public class EventDetailFragmentTest {
         EventDetailFragment mockEventDetail = new EventDetailFragment();
     }
 
-    @Test
-    public void testConvertStringToBitmap() {
-
-        byte[] bitmapArray;
-        bitmapArray = Base64.getDecoder().decode(mockImageString);
-        Bitmap mockImage = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
-        //imageView.setImageBitmap(bitmap);
-        assertEquals(mockImage,mockEventDetail.stringToBitmap(mockImageString));
-    }
+//    @Test
+//    public void testConvertStringToBitmap() {
+//
+//        byte[] bitmapArray;
+//        bitmapArray = Base64.getDecoder().decode(mockImageString);
+//        Bitmap mockImage = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+//        //imageView.setImageBitmap(bitmap);
+//        assertEquals(mockImage,mockEventDetail.stringToBitmap(mockImageString));
+//    }
 }

@@ -394,5 +394,8 @@ public class EventAddFragment extends Fragment {
         imageString = Base64.getEncoder().encodeToString(imageByte);
         return imageString;
     }
+    boolean isStringValid(String string, int lower, int upper) {
+        return (string.length() > lower && string.length() <= upper);
+    }
 }
 

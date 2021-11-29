@@ -58,6 +58,7 @@ public class EventAddFragment extends Fragment {
     FusedLocationProviderClient client;
 
     Bitmap originBitmap;
+    Boolean isFromHabitList= false;
 
     public EventAddFragment() {
         // Required empty public constructor
@@ -86,6 +87,10 @@ public class EventAddFragment extends Fragment {
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
         habitID = bundle.getString("habitID");
+        if (bundle.containsKey("from_habitListFragment")) {
+            isFromHabitList = true;
+        }
+
 
         Log.d(TAG, "onCreateView: habit id" + habitID);
 
@@ -252,8 +257,13 @@ public class EventAddFragment extends Fragment {
                                     bundle.putString("username", username);
                                     bundle.putString("habitID", habitID);
 
-                                    NavController controller = Navigation.findNavController(view);
-                                    controller.navigate(R.id.action_eventAddFragment_to_eventListFragment, bundle);
+                                    if (isFromHabitList) {
+                                        NavController controller = Navigation.findNavController(view);
+                                        controller.navigate(R.id.action_eventAddFragment_to_habitListFragment, bundle);
+                                    } else {
+                                        NavController controller = Navigation.findNavController(view);
+                                        controller.navigate(R.id.action_eventAddFragment_to_eventListFragment, bundle);
+                                    }
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

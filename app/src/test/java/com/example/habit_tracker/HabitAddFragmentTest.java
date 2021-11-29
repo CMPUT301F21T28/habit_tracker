@@ -16,6 +16,22 @@ public class HabitAddFragmentTest {
         mockHabitAdd = new HabitAddFragment();
     }
 
+    @Test
+    public void testCheckInputValiditySuccess(){
+        String habitTitle = "habitA";
+        String habitReason = "";
+        assertEquals(true, mockHabitAdd.isStringValid(habitTitle, 0, 20));
+        assertEquals(true, mockHabitAdd.isStringValid(habitReason, -1, 30));
+    }
+
+    @Test
+    public void testCheckInputValidityFailure(){
+        String habitTitle = "";
+        String habitReason = "12345678901234567890123456789012345";
+        assertEquals(false, mockHabitAdd.isStringValid(habitTitle, 0, 20));
+        assertEquals(false, mockHabitAdd.isStringValid(habitReason, -1, 30));
+    }
+
 //    @Test
 //    public void testCheckDateValiditySuccess(){
 //        String mockDate = "2020/10/30";

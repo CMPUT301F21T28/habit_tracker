@@ -93,6 +93,7 @@ public class HabitListAdapter extends RecyclerView.Adapter<HabitListAdapter.View
                 Bundle bundle = new Bundle();
                 bundle.putString("username", habit.getUsername());
                 bundle.putString("habitID", habit.getHabitID());
+                bundle.putString("from_habitListFragment", "ture");
 
                 NavController controller = Navigation.findNavController(view);
                 controller.navigate(R.id.action_habitListFragment_to_eventAddFragment, bundle);

@@ -146,7 +146,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toStartOf="@+id/guideline29"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline8" />
+        app:layout_constraintTop_toTopOf="@+id/guideline8"
+        android:backgroundTint="@android:color/holo_blue_dark"/>
 
     <ImageButton
         android:id="@+id/editImageButton"

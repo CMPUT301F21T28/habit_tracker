@@ -28,7 +28,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:layout_editor_absoluteX="294dp" />
+                tools:layout_editor_absoluteX="294dp"
+                android:backgroundTint="@android:color/holo_blue_dark"/>
 
             <TextView
                 android:id="@+id/friend_name_search"

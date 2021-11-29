@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
@@ -142,6 +144,7 @@ public class HabitListFragment extends Fragment {
                 }
                 recyclerAdapter.notifyDataSetChanged();
 
+                //get today's habit list.
                 todayHabitDataList.clear();
                 for (Habit habit: habitDataList){
                     String repeatString = habit.getRepeat();
@@ -185,6 +188,7 @@ public class HabitListFragment extends Fragment {
             }
         });
 
+        //Navigate to friend page if the friend button is clicked
         getView().findViewById(R.id.friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -219,6 +223,7 @@ public class HabitListFragment extends Fragment {
         getView().findViewById(R.id.tooltip_floatingactionbutton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Log.d(TAG, "onClick: Tooltip");
                 Toast.makeText(getContext(), "Swipe Right to Delete\nShort Tap to View Details\nTap Progress to View Events", Toast.LENGTH_LONG).show();
             }
         });
@@ -248,6 +253,11 @@ public class HabitListFragment extends Fragment {
             return false;
         }
 
+        /**
+         * swipe right to delete, a dialog will pop up to ask the user to confirm
+         * @param viewHolder
+         * @param direction
+         */
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 

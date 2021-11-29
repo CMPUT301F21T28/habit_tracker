@@ -36,7 +36,7 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="@color/purple_200"
+        app:backgroundTint="@color/add_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add"
@@ -54,10 +54,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
         android:clickable="true"
         android:src="@drawable/ic_friends"
+        app:layout_constraintBottom_toTopOf="@+id/add_habit_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline20" />
+        app:layout_constraintTop_toTopOf="@+id/guideline20"
+        android:backgroundTint="@color/friends"
+        app:borderWidth="0dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/tooltip_floatingactionbutton"
@@ -66,8 +70,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:src="@android:drawable/ic_menu_help"
+        android:src="@drawable/ic_tooltip"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="@color/tooltip"
+        app:borderWidth="0dp"
+        android:elevation="0dp"
+        app:elevation="0dp"
+        app:fabCustomSize="40dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

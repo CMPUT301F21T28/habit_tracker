@@ -143,7 +143,11 @@ public class FriendSearchFragment extends Fragment {
         });
     }
 
-    // class function for searching the match user
+    /**
+     * update the list if the user is searched successfully
+     * @param username
+     * @return
+     */
     public void updateSearchList(String username) {
         final CollectionReference usernameRef = db.collection("Users");
         Query query = usernameRef.whereEqualTo("username", username);
@@ -179,6 +183,11 @@ public class FriendSearchFragment extends Fragment {
 
     }
 
+    /**
+     * Get the friend list of the user
+     * @param username
+     * @return
+     */
     public void getFriendList(String username) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

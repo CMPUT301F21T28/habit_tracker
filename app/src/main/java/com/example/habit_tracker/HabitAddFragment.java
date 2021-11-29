@@ -1,5 +1,7 @@
 package com.example.habit_tracker;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -42,7 +44,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
 
-    private Button submitButton;
+    private FloatingActionButton submitButton;
     private RadioGroup radioGroup;
     private EditText habitTitle;
     private EditText habitReason;
@@ -81,9 +83,9 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         // get the bundle passed from the previous fragment
         Bundle bundle = this.getArguments();
         username = bundle.getString("username");
-//        if (bundle.containsKey("habitsSize")) {
-//            Log.d(TAG, "onCreateView: yes");
-//        }
+        if (bundle.containsKey("habitsSize")) {
+            Log.d(TAG, "onCreateView: yes");
+        }
         habitsSize = bundle.getInt("habitsSize");
         return rootView;
 
@@ -131,7 +133,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
         editTextDate = (TextView) getView().findViewById(R.id.textDatePicker);
         repeatDay = (TextView) getView().findViewById(R.id.textView_select_day);
         radioGroup = getView().findViewById(R.id.radioGroup);
-        submitButton = (Button) getView().findViewById(R.id.submit_button);
+        submitButton = (FloatingActionButton) getView().findViewById(R.id.submit_button);
         plan = (EditText) getView().findViewById(R.id.habit_times);
 
         //Initialize selected repeat day
@@ -263,7 +265,7 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                     Toast.makeText(getActivity(), "the isPrivate is set to null, please choose one", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                
+
                 boolean isTimesValid = true;
                 Integer times = 0;
                 if (plan.getText().toString().length() == 0) {
@@ -281,24 +283,6 @@ public class HabitAddFragment extends Fragment implements DatePickerDialog.OnDat
                     Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                
-//                final boolean[] isValid = {true};
-//                isValid[0] = checkInputValidity(habitTitle, 0, 20);
-//                isValid[0] = checkInputValidity(habitReason, -1, 30);
-//                if (0 >= habitTitle.getText().toString().length() || 20 <= habitTitle.getText().toString().length()) {
-//                    isValid[0] = false;
-//                    habitTitle.setError("Habit name not valid. Please ensure that it is between 0 and 20 characters.");
-//                    return;
-//                }
-//
-//                if (30 <= habitReason.getText().toString().length()) {
-//                    isValid[0] = false;
-//                    habitReason.setError("The reason should be less than 30 characters.");
-//                    return;
-//                }
-//
-
-
 
                 HashMap<String, Object> data = new HashMap<>();
 

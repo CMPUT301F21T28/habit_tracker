@@ -385,6 +385,15 @@ public class EventEditFragment extends Fragment {
         });
     }
 
+    public Boolean goodString(String string){
+        if (string.length() > 0 && string.length() < 20){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
     // class function to help with the image translation
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String imageToString(Bitmap imageBitmap){
@@ -402,5 +411,8 @@ public class EventEditFragment extends Fragment {
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
         //imageView.setImageBitmap(bitmap);
         return bitmap;
+    }
+    boolean isStringValid(String string, int lower, int upper) {
+        return (string.length() > lower && string.length() <= upper);
     }
 }

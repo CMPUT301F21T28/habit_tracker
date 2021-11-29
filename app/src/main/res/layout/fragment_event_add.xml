@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_add_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventAddFragment">
@@ -100,7 +101,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:fontFamily="@font/raleway_italic"
-        android:hint="And a comment, but it's optional"
+        android:hint="Leave a comment or not, its opitonal"
         android:inputType="textPersonName"
         android:maxLength="19"
         android:textColor="@color/add_button"

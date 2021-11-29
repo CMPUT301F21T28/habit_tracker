@@ -1,5 +1,8 @@
 package com.example.habit_tracker;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import android.os.Build;
@@ -7,7 +10,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -319,8 +321,8 @@ public class HabitListFragment extends Fragment {
             }
         });
 
-        // go to friend list
         //Navigate to friend page if the friend button is clicked
+        // go to friend list
         getView().findViewById(R.id.friend_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

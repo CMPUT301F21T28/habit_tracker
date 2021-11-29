@@ -11,14 +11,21 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
-import android.location.LocationManager;
 import android.media.Image;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -26,9 +33,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -57,7 +64,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.api.Context;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -114,6 +120,7 @@ public class EventAddFragment extends Fragment {
     /**
      * Create view for EventDetailFragment
      * Extract necessities (e.g. username, instance of Habit class) from bundle, set TextViews to their corresponding values
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -141,13 +148,13 @@ public class EventAddFragment extends Fragment {
      * Initialize all other parts that could cause the fragment status change
      * Connect to firebase DB, check the validity for all other inputs, send the fields to DB
      * Fragment change by navigation
+     *
      * @param view
      * @param savedInstanceState
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
 
         EditText editTextEventName = view.findViewById(R.id.editTextName);
@@ -163,12 +170,11 @@ public class EventAddFragment extends Fragment {
         ImageView imageView;
         final File[] file = new File[1];
 
-
         ImageButton imageButton = getView().findViewById(R.id.imageButton);
         ActivityResultLauncher<Intent> activityResultLauncher;
         Bitmap bit = null;
         originBitmap = ((BitmapDrawable) imageButton.getDrawable()).getBitmap();
-        Toast.makeText(getContext(),"long click image to delete",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "long click image to delete", Toast.LENGTH_SHORT).show();
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -225,7 +231,6 @@ public class EventAddFragment extends Fragment {
         });
 
 
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("habit");
 
@@ -244,18 +249,18 @@ public class EventAddFragment extends Fragment {
                 String imageString;
                 if (imageBitmap != originBitmap) {
                     imageString = imageToString(imageBitmap);
-                }else {
+                } else {
                     imageString = null;
                 }
 
 
                 HashMap<String, Object> data = new HashMap<>();
-                if (event_name.length() > 0 && event_commit.length() <= 20 ) {
+                if (event_name.length() > 0 && event_commit.length() <= 20) {
                     data.put("event name", event_name);
                     data.put("event comment", event_commit);
                     data.put("Longitude", currentLongitude);
                     data.put("Latitude", currentLatitude);
-                    data.put("event image",imageString);
+                    data.put("event image", imageString);
 
                     Log.d(TAG, "onClick: " + habitID);
                     String eventID = String.valueOf(System.currentTimeMillis()) + event_name;
@@ -362,7 +367,7 @@ public class EventAddFragment extends Fragment {
                 else{
                     ActivityCompat.requestPermissions((Activity) view.getContext(),
                             new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44
-                           );
+                    );
 
                 }
             }
@@ -377,15 +382,19 @@ public class EventAddFragment extends Fragment {
                 locationButton.setVisibility(View.VISIBLE);
             }
         });
-        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public String imageToString(Bitmap imageBitmap){
+    public String imageToString(Bitmap imageBitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
         String imageString;
         imageString = Base64.getEncoder().encodeToString(imageByte);
         return imageString;
+    }
+    boolean isStringValid(String string, int lower, int upper) {
+        return (string.length() > lower && string.length() <= upper);
     }
 }
 

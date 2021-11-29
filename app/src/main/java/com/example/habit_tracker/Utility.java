@@ -10,6 +10,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Random;
@@ -19,49 +23,54 @@ import java.util.Random;
  */
 
 public class Utility {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static Random _random = new SecureRandom();
 
-    public void removeRequest(String username, Friend targetFriend) {
+    /**
+     * Removes a request from the user's request list
+     * @param username
+     *      User to remove the request from
+     * @param targetFriend
+     *      Request to remove from the user's request list
+     */
+    public static void removeRequest(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("requests", FieldValue.arrayRemove(targetFriend));
     }
 
-    public void addRequest(String username, Friend targetFriend) {
+    /**
+     * Adds a request to the user's request list
+     * @param username
+     *      User to add the request to
+     * @param targetFriend
+     *      The friend object request to add
+     */
+    public static void addRequest(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("requests", FieldValue.arrayUnion(targetFriend));
     }
 
-
-    public void removeFriend(String username, Friend targetFriend) {
+    /**
+     * Removes a friend from the user's friend list
+     * @param username
+     *      User to remove friend from
+     * @param targetFriend
+     *      Friend to remove
+     */
+    public static void removeFriend(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayRemove(targetFriend));
     }
 
-    public void addFriend(String username, Friend targetFriend) {
+    /**
+     * Adds a friend from the user's friend list
+     * @param username
+     *      User to add friend from
+     * @param targetFriend
+     *      Friend to add
+     */
+    public static void addFriend(String username, Friend targetFriend) {
         DocumentReference usersRef = db.collection("Users").document(username);
         usersRef.update("friends", FieldValue.arrayUnion(targetFriend));
-    }
-
-    /**
-     * Returns a random salt to be used to hash a password.
-     * Credit: https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string
-     * @return a 16 bytes random salt
-     */
-    public static String getNextSalt() {
-        byte[] salt = new byte[16];
-        _random.nextBytes(salt);
-        String saltString = new String(salt);
-        return saltString;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static String convertImageToString(Bitmap imageBitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte[] imageByte = byteArrayOutputStream.toByteArray();
-        String imageString;
-        imageString = Base64.getEncoder().encodeToString(imageByte);
-        return imageString;
     }
 }

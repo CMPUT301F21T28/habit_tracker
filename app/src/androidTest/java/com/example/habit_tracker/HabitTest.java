@@ -96,7 +96,7 @@ public class HabitTest {
         view = (TextView)solo.getView(R.id.textView_repeat);
         assertEquals("Repeat on everyMonday",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_private);
-        assertEquals("true",view.getText().toString());
+        assertEquals("Followers cannot see this habit",view.getText().toString());
     }
 
     @Test
@@ -155,7 +155,7 @@ public class HabitTest {
         view = (TextView)solo.getView(R.id.textView_repeat);
         assertEquals("Repeat on everyTuesday",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_private);
-        assertEquals("false",view.getText().toString());
+        assertEquals("Followers can see this habit",view.getText().toString());
     }
 
     @Test
@@ -193,6 +193,8 @@ public class HabitTest {
 
         solo.drag(fromX, toX, fromY, toY, 10);
 
+        solo.sleep(1000);
+
         solo.clickOnText("YES");
         // Confirm habit is deleted from list
         assertFalse(solo.waitForText("robotiumHabit", 1, 5));
@@ -206,6 +208,8 @@ public class HabitTest {
          */
     @Before
     public void setUp() throws Exception {
+        removeAccount("robotiumUser");
+        removeAccount("robotiumFriend");
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.assertCurrentActivity("WrongActivity", MainActivity.class);
 

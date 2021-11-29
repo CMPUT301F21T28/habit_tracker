@@ -165,6 +165,8 @@ public class FriendTest {
      */
     @Before
     public void setUp() throws Exception {
+        removeAccount("robotiumUser");
+        removeAccount("robotiumFriend");
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.assertCurrentActivity("WrongActivity", MainActivity.class);
 

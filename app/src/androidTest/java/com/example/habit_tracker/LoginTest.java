@@ -44,6 +44,8 @@ public class LoginTest {
     @Before
     public void setUp() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        removeAccount("robotiumUser");
+        removeAccount("robotiumFriend");
     }
 
     /**

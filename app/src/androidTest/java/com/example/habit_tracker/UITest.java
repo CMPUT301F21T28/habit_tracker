@@ -33,8 +33,6 @@ import org.junit.Test;
 public class UITest {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Solo solo;
-    LoginTest loginTest = new LoginTest();
-    HabitTest habitTest = new HabitTest();
 
     @Rule
     public ActivityTestRule<MainActivity> rule =
@@ -91,7 +89,7 @@ public class UITest {
         solo.enterText((EditText) solo.getView(R.id.password), "robotiumPw");
 
         // Click log in
-        solo.clickOnButton("LOG IN");
+        solo.clickOnButton("Log in");
 
         // Check if entered into habitlistfragment
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));
@@ -124,14 +122,15 @@ public class UITest {
         view = (TextView)solo.getView(R.id.textView_habitReason);
         assertEquals("robotiumHabitReason",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_dateOfStarting);
-        assertEquals("2012-3-16",view.getText().toString());
+        assertEquals("Starts on 2012-3-16",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_repeat);
-        assertEquals("Monday",view.getText().toString());
+        assertEquals("Repeat on everyMonday",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_private);
-        assertEquals("true",view.getText().toString());
+        assertEquals("Followers cannot see this habit",view.getText().toString());
 
         // Editing habit
-        solo.clickOnButton("Edit");
+//       TODO: solo.clickOnButton("Edit");
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.button_edit));
         solo.clearEditText((EditText) solo.getView(R.id.editText_habitReason2));
         solo.enterText((EditText) solo.getView(R.id.editText_habitReason2), "robotiumHabitReasonNew");
         solo.clickOnView(solo.getView(R.id.textDateStarting));
@@ -158,11 +157,11 @@ public class UITest {
         view = (TextView)solo.getView(R.id.textView_habitReason);
         assertEquals("robotiumHabitReasonNew",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_dateOfStarting);
-        assertEquals("2013-3-16",view.getText().toString());
+        assertEquals("Starts on 2013-3-16",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_repeat);
-        assertEquals("Tuesday",view.getText().toString());
+        assertEquals("Repeat on everyTuesday",view.getText().toString());
         view = (TextView)solo.getView(R.id.textView_private);
-        assertEquals("false",view.getText().toString());
+        assertEquals("Followers can see this habit",view.getText().toString());
         // back out from habit details
         solo.clickOnActionBarHomeButton();
 
@@ -180,7 +179,8 @@ public class UITest {
         // Add event detail
         solo.enterText((EditText) solo.getView(R.id.editTextName), "robotiumHabitEvent");
 
-        solo.clickOnButton("SUBMIT");
+        // TODO: solo.clickOnButton("SUBMIT");
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.submitButton));
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumHabitEvent", 1 ,5));
 
@@ -192,12 +192,15 @@ public class UITest {
         assertEquals("robotiumHabitEvent",view.getText().toString());
 
         // Edit event
-        solo.clickOnButton("Edit");
+        //TODO: solo.clickOnButton("Edit");
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.Edit));
         assertNotNull(solo.getView(R.id.event_edit_constraint_layout));
         // Add event detail
         solo.clearEditText((EditText) solo.getView(R.id.nameContent));
         solo.enterText((EditText) solo.getView(R.id.nameContent), "robotiumEventNew");
-        solo.clickOnButton("Submit");
+        //TODO: solo.clickOnButton("Submit");
+        solo.clickOnView((FloatingActionButton) solo.getView(R.id.Submit));
+
         assertNotNull(solo.getView(R.id.event_list_layout));
         assertTrue(solo.waitForText("robotiumEventNew"));
 
@@ -273,7 +276,7 @@ public class UITest {
         solo.clearEditText((EditText) solo.getView(R.id.password));
         solo.enterText((EditText) solo.getView(R.id.username), "robotiumFriend");
         solo.enterText((EditText) solo.getView(R.id.password), "robotiumPw");
-        solo.clickOnButton("LOG IN");
+        solo.clickOnButton("Log in");
         assertNotNull(solo.getView(R.id.habit_list_constraint_layout));
         solo.clickOnView((FloatingActionButton) solo.getView(R.id.friend_button));
         assertNotNull(solo.getView(R.id.friend_list_constraint_layout));

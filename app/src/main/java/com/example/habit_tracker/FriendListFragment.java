@@ -113,6 +113,7 @@ public class FriendListFragment extends Fragment {
                     public void onClick(View view) {
                         Utility.addFriend(username, val);
                         Utility.removeRequest(username, val);
+                        Utility.addFriend(val.getUserName(), new Friend(username, realname));
                         friendDataList.remove(val);
                         friendAdapter.notifyDataSetChanged();
                     }

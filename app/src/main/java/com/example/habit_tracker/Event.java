@@ -101,8 +101,10 @@ public class Event implements Parcelable, Info
         parcel.writeString(eventID);
         parcel.writeString(eventName);
         parcel.writeString(eventComment);;
-        parcel.writeDouble(locationLongitude);
-        parcel.writeDouble(locationLatitude);
+        if (locationLatitude != null && locationLatitude != null){
+            parcel.writeDouble(locationLongitude);
+            parcel.writeDouble(locationLatitude);
+        }
         parcel.writeString(eventImage);
     }
 }
